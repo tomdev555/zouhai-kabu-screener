@@ -9,6 +9,7 @@
     "lint": "eslint",
     "refresh": "tsx scripts/refresh-data.ts",
     "export:data": "tsx scripts/export-static.ts",
+    "update": "npm run refresh && npm run export:data",
     "build:site": "npm run refresh && npm run export:data && next build",
     "edinet:index": "tsx scripts/edinet-index.ts",
     "db:migrate": "prisma migrate dev",

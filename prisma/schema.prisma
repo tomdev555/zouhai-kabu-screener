@@ -26,7 +26,9 @@ model Stock {
   dividends      DividendRecord[]
   screeningRuns  ScreeningResult[]
   watchlist      WatchlistItem[]
-  holdings       Holding[]
+  trades         Trade[]
+  dividendReceipts DividendReceipt[]
+  note           StockNote?
 
   @@index([sector33])
 }
@@ -131,34 +133,49 @@ model WatchlistItem {
   @@unique([stockCode])
 }
 
-// 手動入力の保有銘柄 (運用実績トラッキング用)
-model Holding {
+// ---------------------------------------------------------------------------
+// 以下は個人モード(PERSONAL_MODE=1)専用。このPCのSQLiteにだけ保存され、公開サイトには含まれない。
+// ---------------------------------------------------------------------------
+
+// 取引台帳。買い/売りを1件ずつ記録し、ポジション・平均取得単価・実現損益はここから計算する。
+model Trade {
   id          Int       @id @default(autoincrement())
   stockCode   String
-  accountName String? // 証券会社・口座名 (任意のラベル)
-  buyDate     DateTime
+  side        String // "BUY" | "SELL"
+  tradeDate   DateTime
   quantity    Int
-  buyPrice    Decimal
+  price       Decimal // 約定単価
+  fee         Decimal   @default(0) // 手数料
+  accountName String? // 証券会社・口座名 (任意のラベル)
   note        String?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
 
   stock       Stock     @relation(fields: [stockCode], references: [code], onDelete: Cascade)
-  dividends   DividendReceipt[]
 
-  @@index([stockCode])
+  @@index([stockCode, tradeDate])
 }
 
-// 手動入力の受取配当 (実績記録)
+// 受取配当の記録
 model DividendReceipt {
-  id            Int      @id @default(autoincrement())
-  holdingId     Int
-  paidDate      DateTime
+  id             Int      @id @default(autoincrement())
+  stockCode      String
+  paidDate       DateTime
   amountPerShare Decimal
-  totalAmount   Decimal
-  note          String?
+  quantity       Int
+  totalAmount    Decimal // 税引後の実受取額
+  note           String?
+  createdAt      DateTime @default(now())
 
-  holding       Holding  @relation(fields: [holdingId], references: [id], onDelete: Cascade)
+  stock          Stock    @relation(fields: [stockCode], references: [code], onDelete: Cascade)
 
-  @@index([holdingId])
+  @@index([stockCode, paidDate])
+}
+
+// 銘柄ごとの自分用メモ
+model StockNote {
+  stockCode String   @id
+  body      String
+  updatedAt DateTime @updatedAt
+
+  stock     Stock    @relation(fields: [stockCode], references: [code], onDelete: Cascade)
 }

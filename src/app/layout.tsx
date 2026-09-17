@@ -22,6 +22,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   const isMock = isUsingMockData();
+  // 静的書き出し時はビルド時に評価されるため、公開サイトでは必ず false になる
+  const personal = process.env.PERSONAL_MODE === "1";
 
   return (
     <html
@@ -31,7 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
         <MockDataBanner isMock={isMock} />
         <div className="flex flex-1">
-          <SidebarNav />
+          <SidebarNav personal={personal} />
           <main className="flex-1 overflow-x-hidden">{children}</main>
         </div>
       </body>
