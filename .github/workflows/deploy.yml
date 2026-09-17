@@ -34,7 +34,9 @@ jobs:
 
       # SQLiteは各実行内で作り直す一時的な作業用DB (成果物はJSONのみ)
       - name: データベースを初期化
-        run: npx prisma migrate deploy
+        run: |
+          npx prisma generate
+          npx prisma migrate deploy
         env:
           DATABASE_URL: file:./dev.db
 
