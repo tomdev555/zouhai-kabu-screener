@@ -1,0 +1,75 @@
+name: データ更新とデプロイ
+
+on:
+  # 毎日 日本時間 朝7時 (UTC 22:00) に自動実行
+  schedule:
+    - cron: "0 22 * * *"
+  # 手動実行も可能にする (Actionsタブの "Run workflow")
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 実行中に次が始まらないようにする
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # SQLiteは各実行内で作り直す一時的な作業用DB (成果物はJSONのみ)
+      - name: データベースを初期化
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: file:./dev.db
+
+      - name: 株価・配当データを取得してスクリーニング
+        run: npm run refresh
+        env:
+          DATABASE_URL: file:./dev.db
+          # 動作確認時は UNIVERSE_LIMIT で絞ると速い (例: 100)
+          UNIVERSE_MARKET: ${{ vars.UNIVERSE_MARKET }}
+          UNIVERSE_LIMIT: ${{ vars.UNIVERSE_LIMIT }}
+          FETCH_CONCURRENCY: "4"
+
+      - name: 静的サイト用のJSONを書き出し
+        run: npm run export:data
+        env:
+          DATABASE_URL: file:./dev.db
+
+      - name: サイトをビルド
+        run: npm run build
+        env:
+          DATABASE_URL: file:./dev.db
+          # GitHub Pagesでリポジトリ名のサブパス配下に公開する場合に必要
+          NEXT_PUBLIC_BASE_PATH: ${{ vars.NEXT_PUBLIC_BASE_PATH }}
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

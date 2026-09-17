@@ -1,0 +1,133 @@
+# 増配株ナビ
+
+優良な増配株(連続増配・減配なし・EPS成長・健全な財務体質)を国内株式市場からスクリーニングし、
+上位50社を一覧表示するサイト。株価・EPS・配当のチャート、ウォッチリスト、
+運用実績の手動トラッキング機能を備える。
+
+**サーバーもデータベースも不要な静的サイト**として公開できる。
+定期実行でデータを取得してJSONに書き出し、それを静的HTMLとして配信する構成。
+
+## ローカルで動かす
+
+APIキーの登録は不要。
+
+```bash
+npm install
+npx prisma migrate dev            # 初回のみ: 作業用SQLiteを作成
+UNIVERSE_LIMIT=50 npm run refresh # データ取得 + スクリーニング (まず50銘柄で試す)
+npm run export:data               # 静的サイト用のJSONを書き出し
+npm run dev
+```
+
+http://localhost:3000 を開く。全銘柄を対象にするときは `UNIVERSE_LIMIT` を外す。
+
+## 公開する (無料)
+
+GitHub Actions でデータを毎日更新し、GitHub Pages で配信する。
+サーバーを持たないので無料枠の制限や障害の心配がない。
+
+1. このプロジェクトをGitHubのリポジトリにpushする(Pagesを無料で使うにはpublicリポジトリにする)
+2. リポジトリの **Settings → Pages → Source** を **GitHub Actions** にする
+3. **Settings → Secrets and variables → Actions → Variables** に以下を追加する
+
+   | 変数名 | 値 | 用途 |
+   |---|---|---|
+   | `NEXT_PUBLIC_BASE_PATH` | `/リポジトリ名` | サブパス配下で公開するため(必須) |
+   | `UNIVERSE_LIMIT` | 例: `300` | 対象銘柄数の上限(任意。まず動作確認するとき) |
+   | `UNIVERSE_MARKET` | 例: `プライム` | 市場区分で絞る(任意) |
+
+4. **Actions** タブから `データ更新とデプロイ` を手動実行する(以降は毎朝7時に自動実行)
+
+`https://<ユーザー名>.github.io/<リポジトリ名>/` で公開される。
+
+GitHub Pages以外(Cloudflare Pages / Netlify / Vercel)を使う場合は、
+`.github/workflows/deploy.yml` のデータ生成部分をそのまま使い、
+`out/` ディレクトリを各サービスにアップロードする。ルート直下で公開するなら
+`NEXT_PUBLIC_BASE_PATH` は不要。
+
+### 閲覧者のデータの扱い
+
+ウォッチリストと運用実績の入力内容は、閲覧者のブラウザのlocalStorageにのみ保存される。
+サーバーに送信されないため、ログインも不要で、他の閲覧者に見えることもない。
+
+## データソース
+
+APIキーなしで使える組み合わせが既定。優先順位は次のとおり。
+
+| 優先 | データソース | 設定 | 内容 |
+|---|---|---|---|
+| 1 | J-Quants API | `JQUANTS_API_KEY` | 公式データ。設定すると自動でこちらが使われる |
+| 2 | **JPX + Yahoo Finance** | **不要 (既定)** | 銘柄一覧はJPX公式Excel、株価・配当・財務はYahoo Finance |
+| 3 | モックデータ | `USE_MOCK_DATA=1` | 架空企業70社。UI確認・デモ用 |
+
+**既定(設定不要)の構成で取得できるもの:**
+
+- 全上場銘柄一覧と業種 … JPXが公開しているExcel(`data_j.xlsx`)を直接ダウンロード
+- 株価(日足5年分) … チャート表示用
+- **配当履歴20年以上** … 「減配なし10年以上」の判定に使う
+- EPS(直近4年分)・D/E比率・BPS
+
+**注意点:**
+
+- Yahoo Financeのエンドポイントは公式APIではない(Pythonの `yfinance` が使っているのと同じ方式)。
+  先方の仕様変更で取得できなくなる可能性がある。
+- 年度別EPSは直近4年分のみ。それ以前は年次純利益から1株あたりに換算した近似値。
+- 自己資本比率が取れないため、負債チェックはD/E比率(有利子負債÷自己資本)で代替する。
+
+**より正確な公式データを使いたい場合:**
+
+- [J-Quants API](https://jpx-jquants.com/) のAPIキーを `.env.local` の `JQUANTS_API_KEY` に設定する。
+  財務データはFreeプランで直近12週間を除く2年分、Standardプラン(月額¥3,300)で10年分。
+  契約前に[公式ページ](https://jpx-jquants.com/ja/spec/data-spec)で最新の条件を確認すること。
+- [EDINET API](https://disclosure2.edinet-fsa.go.jp/) (金融庁、無料)で長期の財務履歴を補完することもできる。
+  `.env.local` に `EDINET_API_KEY` を設定し、`npm run edinet:index` で提出書類インデックスを
+  構築(初回のみ、数分〜十数分)してから `npm run refresh` を実行する。
+
+### 所要時間の目安
+
+全銘柄(約3,800社)で初回は1時間前後、2回目以降は差分のみ取得するため約20分。
+`FETCH_CONCURRENCY`(既定4)で並列数、`PRICE_HISTORY_RANGE`(既定 `5y`)で株価の保存期間を調整できる。
+
+## スクリーニング条件
+
+`src/lib/screening/types.ts` の `DEFAULT_CRITERIA` で定義。以下の4条件を全て満たす銘柄を
+「条件クリア」とし、総合スコア順に上位50社をランキングする(満たない場合はスコア上位で埋める)。
+
+1. 配当利回り 2.0%〜7.0% (低すぎ=買われすぎ、高すぎ=減配リスクのサインとみなす)
+2. 減配なし年数 10年以上 (特別配当による一時的な急増は自動検出して除外して判定)
+3. 財務健全性: 自己資本比率30%以上。自己資本比率が取れないデータソースではD/E比率150%以下で代替
+4. EPS成長性スコア 55点以上 (過去のEPS推移から算出、下降年はペナルティ)
+
+判定ロジックは `src/lib/screening/rules.ts`、実行エンジンは `src/lib/screening/engine.ts`。
+
+## コマンド
+
+| コマンド | 内容 |
+|---|---|
+| `npm run dev` | 開発サーバー |
+| `npm run refresh` | データ取得 + スクリーニング実行 (作業用SQLiteに保存) |
+| `npm run export:data` | DBの内容を `public/data/*.json` に書き出し |
+| `npm run build` | 静的サイトを `out/` に書き出し |
+| `npm run build:site` | 上記3つをまとめて実行 |
+| `npm run edinet:index` | EDINET提出書類インデックスの構築(任意) |
+
+## アーキテクチャ
+
+- Next.js (App Router) の静的書き出し(`output: "export"`) + TypeScript + Tailwind CSS
+- データ取得パイプライン: `scripts/` + `src/lib/data-sources/` → 作業用SQLite(Prisma) → `public/data/*.json`
+- 公開サイトはJSONだけを読むため、サーバー・DB・APIルートを一切持たない
+- チャート: 株価は `lightweight-charts` (ローソク足+出来高)、EPS/配当履歴は `recharts`
+- ウォッチリスト・運用実績: 閲覧者のブラウザのlocalStorage
+
+## 免責
+
+本ツールは機械的なスクリーニング結果を表示するものであり、特定銘柄の購入を推奨するものではない。
+データの正確性も保証できないため、実際の投資判断は必ず一次情報を確認した上で行うこと。
+
+## 既知の制約・今後の課題
+
+- 証券口座との自動連携(残高・約定履歴の自動取得)は未実装。手動入力のみ。
+- 年度別EPSがYahoo Finance経由では4年分しか取れない(J-Quants/EDINETを設定すれば改善する)。
+- EDINET長期履歴補完は、有価証券報告書XBRLのタグ名とコンテキストID命名規則を前提にしており、
+  非連結決算のみの会社や古い年度でタグが見つからない場合がある。
+- スクリーニング条件は現状コード上の定数のみで、画面からの変更には未対応。

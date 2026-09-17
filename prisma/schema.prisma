@@ -1,0 +1,164 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// 上場銘柄マスタ
+model Stock {
+  code           String   @id // 銘柄コード (例: 7203)
+  name           String
+  nameEnglish    String?
+  market         String? // 市場区分 (プライム/スタンダード/グロース)
+  sector33       String? // 33業種区分
+  sector17       String? // 17業種区分
+  currentPrice   Decimal?
+  per            Decimal?
+  pbr            Decimal?
+  marketCap      Decimal?
+  updatedAt      DateTime @updatedAt
+
+  prices         PriceDaily[]
+  financials     FinancialStatement[]
+  dividends      DividendRecord[]
+  screeningRuns  ScreeningResult[]
+  watchlist      WatchlistItem[]
+  holdings       Holding[]
+
+  @@index([sector33])
+}
+
+// 日次株価 (四本値) - チャート表示用
+model PriceDaily {
+  id        Int      @id @default(autoincrement())
+  stockCode String
+  date      DateTime
+  open      Decimal
+  high      Decimal
+  low       Decimal
+  close     Decimal
+  volume    BigInt
+
+  stock     Stock    @relation(fields: [stockCode], references: [code], onDelete: Cascade)
+
+  @@unique([stockCode, date])
+  @@index([stockCode, date])
+}
+
+// 決算・財務情報 (年次)
+model FinancialStatement {
+  id                    Int      @id @default(autoincrement())
+  stockCode             String
+  fiscalYear            Int // 決算年度 (例: 2025)
+  fiscalPeriodEndDate   DateTime
+  eps                   Decimal? // 1株当たり利益
+  bps                   Decimal? // 1株当たり純資産
+  netSales              Decimal?
+  operatingProfit       Decimal?
+  ordinaryProfit        Decimal?
+  netIncome             Decimal?
+  totalAssets           Decimal?
+  netAssets             Decimal?
+  equityRatio           Decimal? // 自己資本比率 (%)
+  debtToEquity          Decimal? // 有利子負債÷自己資本 (%)。自己資本比率が取れないデータソース用
+  interestBearingDebt   Decimal? // 有利子負債
+  isForecast            Boolean  @default(false)
+
+  stock                 Stock    @relation(fields: [stockCode], references: [code], onDelete: Cascade)
+
+  @@unique([stockCode, fiscalYear])
+  @@index([stockCode, fiscalYear])
+}
+
+// 配当履歴 (年次、1株当たり配当)
+model DividendRecord {
+  id                Int      @id @default(autoincrement())
+  stockCode         String
+  fiscalYear        Int
+  dividendPerShare  Decimal // 年間合計 (中間+期末)
+  isSpecial         Boolean  @default(false) // 特別配当・一時的な配当と判定されたか
+  note              String?
+
+  stock             Stock    @relation(fields: [stockCode], references: [code], onDelete: Cascade)
+
+  @@unique([stockCode, fiscalYear])
+  @@index([stockCode, fiscalYear])
+}
+
+// スクリーニング実行のスナップショット (いつ・どの条件で実行したか)
+model ScreeningRun {
+  id          Int      @id @default(autoincrement())
+  runAt       DateTime @default(now())
+  criteria    String // JSON文字列化した条件設定
+  results     ScreeningResult[]
+}
+
+// 個別銘柄のスクリーニング結果
+model ScreeningResult {
+  id                    Int      @id @default(autoincrement())
+  screeningRunId        Int
+  stockCode             String
+  dividendYield         Decimal?
+  epsTrendScore         Decimal? // EPS成長性スコア (回帰係数などから算出)
+  dividendCutFreeYears  Int? // 減配せず経過した年数
+  equityRatio           Decimal?
+  debtToEquity          Decimal?
+  yieldRangePercentile  Decimal? // 直近3年配当利回りレンジの中での現在位置 (0-100)
+  passedAllRules        Boolean  @default(false)
+  compositeScore        Decimal? // 総合スコア (ランキング用)
+  rank                  Int? // 上位50社の順位 (対象外はnull)
+  ruleBreakdown         String? // JSON文字列 (各ルールの合否・詳細)
+
+  screeningRun          ScreeningRun @relation(fields: [screeningRunId], references: [id], onDelete: Cascade)
+  stock                 Stock        @relation(fields: [stockCode], references: [code], onDelete: Cascade)
+
+  @@index([screeningRunId, rank])
+  @@index([stockCode])
+}
+
+// ウォッチリスト
+model WatchlistItem {
+  id         Int      @id @default(autoincrement())
+  stockCode  String
+  addedAt    DateTime @default(now())
+  note       String?
+
+  stock      Stock    @relation(fields: [stockCode], references: [code], onDelete: Cascade)
+
+  @@unique([stockCode])
+}
+
+// 手動入力の保有銘柄 (運用実績トラッキング用)
+model Holding {
+  id          Int       @id @default(autoincrement())
+  stockCode   String
+  accountName String? // 証券会社・口座名 (任意のラベル)
+  buyDate     DateTime
+  quantity    Int
+  buyPrice    Decimal
+  note        String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  stock       Stock     @relation(fields: [stockCode], references: [code], onDelete: Cascade)
+  dividends   DividendReceipt[]
+
+  @@index([stockCode])
+}
+
+// 手動入力の受取配当 (実績記録)
+model DividendReceipt {
+  id            Int      @id @default(autoincrement())
+  holdingId     Int
+  paidDate      DateTime
+  amountPerShare Decimal
+  totalAmount   Decimal
+  note          String?
+
+  holding       Holding  @relation(fields: [holdingId], references: [id], onDelete: Cascade)
+
+  @@index([holdingId])
+}
