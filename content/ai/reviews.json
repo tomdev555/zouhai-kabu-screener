@@ -1,0 +1,1522 @@
+{
+ "publishedAt": "2026-09-20T08:09:17.507Z",
+ "reviews": [
+  {
+   "stockCode": "9799",
+   "stockName": "旭情報サービス",
+   "generatedAt": "2026-09-20T08:08:51.184Z",
+   "model": "gemini-3.5-flash",
+   "review": {
+    "headline": "16年減配なしのIT中堅、PER11倍台で割安もM&A効果を要確認",
+    "summary": "旭情報サービスは、16年間にわたり実質的な減配がなく、EPSもCAGR 11.85%と綺麗な右肩上がりを続けるITサービス企業です。直近の配当利回りは3.61%とユーザーの理想（4%前後）に近く、PERも11.44倍と基準の15倍を下回り割安感があります。D/E比率2.03%と財務は極めて健全ですが、スクリーニングデータで現預金比率が不明なため、実際のキャッシュ保有額の確認が必要です。直近では2026年9月にスィンク社の子会社化を完了しており、手元資金が成長投資へ活用されている点が注目されます。",
+    "strengths": [
+     "16年間実質減配なしの優れた配当実績と、2026年度に向けた増配基調（34円予想）",
+     "EPSが2023年度の58.84円から2026年度予想の82.33円まで、下降年なしで着実に成長",
+     "D/E比率2.03%という極めて強固な財務健全性",
+     "PER11.44倍と、目標基準である15倍を大きく下回る割安な水準"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "M&A（子会社化）に伴う統合リスクと資金流出",
+      "detail": "2026年9月に株式会社スィンクの株式取得（子会社化）を完了。買収シナジーが早期に発現するか、また買収に伴うのれん等の減損リスクがないか注視が必要です。",
+      "severity": "medium"
+     },
+     {
+      "title": "現預金データの欠損と資金使途の不透明さ",
+      "detail": "スクリーニングデータ上で現預金÷時価総額が算出されておらず、手元流動性の正確な規模が不明です。M&AやDX投資への資金配分により、還元余力が変化する可能性があります。",
+      "severity": "low"
+     },
+     {
+      "title": "IT人材不足による採用・人件費高騰リスク",
+      "detail": "DX・AI需要は旺盛であるものの、業界全体でエンジニア不足が深刻化しており、人件費の上昇が利益率を圧迫する懸念があります。",
+      "severity": "medium"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-09-01",
+      "title": "旭情報サービス[9799]：（開示事項の経過）株式会社スィンクの株式取得（子会社化）完了のお知らせ",
+      "takeaway": "M&Aによる事業拡大が完了。今後の業績上乗せが期待される一方、買収資金の規模や財務への影響を第一四半期以降の決算書で確認する必要があります。",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5vbEljSlh1Ykw1ODliUFRVLUtUcmo3RzZ4b0xZeExBODhIV1o4cUFSczRNcU4xLS1NekZldE55eWttSi1jRFJNblB0YkE1SWk2aXZEbUg3MU5tTFoydy1pREwzWnlPbWlGTnc?oc=5"
+     },
+     {
+      "date": "2026-05-01",
+      "title": "旭情報サービス[9799]：剰余金の配当（増配）に関するお知らせ",
+      "takeaway": "2026年5月に増配を発表しており、株主還元への積極的な姿勢が示されています。業績拡大に伴う増配の信頼性が高い裏付けとなります。",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE0xU3RKbGxLREJ0VmZlZHlKVHV2OGpIaXdISmpHUFVRdGN6YjJxOGplekFLeVRvcFlVOW1ocGF1TksyRDMwdmdXUEY0WDRPb3dkZVZrZXRtWlVwWUlkX2hrNC1LLUxIQnhQbkE?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "最新の決算短信における現預金残高および自己資本比率の具体的な数値",
+     "子会社化した株式会社スィンクの業績規模と、今期業績予想への連結影響",
+     "主要取引先（顧客業界）の偏りや、特定の大型案件への依存度"
+    ],
+    "stance": "条件付きで検討",
+    "stanceReason": "16年減配なしの実績と綺麗なEPS成長、PER11倍台の割安さは非常に魅力的です。ただし、スクリーニングで現預金スコアが算出されていない点と、直近のM&A（スィンク社買収）によるキャッシュアウトの影響を確認した上で投資判断を下すべきと考えます。",
+    "confidence": "medium",
+    "sources": [
+     {
+      "title": "旭情報サービス[9799]：（開示事項の経過）株式会社スィンクの株式取得（子会社化）完了のお知らせ 2026年9月1日(適時開示) ：日経会社情報DIGITAL",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5vbEljSlh1Ykw1ODliUFRVLUtUcmo3RzZ4b0xZeExBODhIV1o4cUFSczRNcU4xLS1NekZldE55eWttSi1jRFJNblB0YkE1SWk2aXZEbUg3MU5tTFoydy1pREwzWnlPbWlGTnc?oc=5"
+     },
+     {
+      "title": "旭情報サービス[9799]：剰余金の配当（増配）に関するお知らせ 2026年5月1日(適時開示) ：日経会社情報DIGITAL",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE0xU3RKbGxLREJ0VmZlZHlKVHV2OGpIaXdISmpHUFVRdGN6YjJxOGplekFLeVRvcFlVOW1ocGF1TksyRDMwdmdXUEY0WDRPb3dkZVZrZXRtWlVwWUlkX2hrNC1LLUxIQnhQbkE?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "4547",
+   "stockName": "キッセイ薬品工業",
+   "generatedAt": "2026-09-20T04:12:20.711Z",
+   "model": "gemini-3-flash-preview",
+   "review": {
+    "headline": "主力薬の安全性問題で業績下方修正、高還元維持も不透明感残る",
+    "summary": "17年連続で減配がなく、極めて強固な財務基盤を持つ製薬企業です。しかし、直近では主力製品である血管炎治療薬「タブネオス」の安全性懸念（国内死亡例の報告および米国での承認撤回提案）が浮上し、2027年3月期の業績予想を33%下方修正しました。株価は2026年5月の報道を受けて急落し、現在はPBR1倍を大きく割り込む水準で推移しています。会社側は大幅な増配方針を維持していますが、主力薬の販売制限や承認状況の行方が今後の配当原資に与える影響を注視する必要があります。",
+    "strengths": [
+     "D/E比率0.54%という実質無借金に近い極めて健全な財務体質",
+     "17年間にわたる非減配実績と、株主還元に対する強い経営姿勢",
+     "BPS 5525円に対し株価4005円と、資産価値から見て割安なPBR水準",
+     "自己株式取得を継続的に実施しており、需給の下支えがある"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "主力薬「タブネオス」の承認取消・販売停止リスク",
+      "detail": "日米で安全性問題が指摘されており、厚労省による新規投与中止の示唆や米国での承認撤回提案は、収益の柱を失う致命的なリスクとなり得る。",
+      "severity": "high"
+     },
+     {
+      "title": "業績下方修正に伴う配当維持への懸念",
+      "detail": "2026年度に1株160円への大幅増配を計画しているが、下方修正後の利益水準でこの配当性向を維持し続けられるかは不透明。",
+      "severity": "medium"
+     },
+     {
+      "title": "新薬パイプラインへの依存",
+      "detail": "急性骨髄性白血病治療薬などの申請は行っているが、タブネオスの減収分を早期に補填できる規模になるかは未知数。",
+      "severity": "medium"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-07-31",
+      "title": "キッセイ、今期経常を33％下方修正",
+      "takeaway": "主力薬タブネオスの販売減が業績を直撃。増配計画の前提となる利益成長に急ブレーキがかかった。",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE10WU9fT3JQX2RkeWR6S1UzNjRUaGM0dVRiS1oxNy1HcVRkUDExSmlXZjdObTNqVXJOZEQyNzdFc2lRUmNIZ0hsaVJZSmFLTVl3NkE?oc=5"
+     },
+     {
+      "date": "2026-05-18",
+      "title": "キッセイ薬品、株価ストップ安気配 治療薬タブネオス投与後20人死亡",
+      "takeaway": "重大な安全性問題の露呈により、市場の信頼が失墜。株価の調整局面が長引く要因となっている。",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9OZ2psVEtrTnE2RGNXd0pIY3BZMHdDbXA3UDB2bTdfQUJHelZvVGlUaEMtRWJoWUQtVGo1cUp4QTJIQkVESW5qdV9oUUhlTTJESmpRSEM4Z2pLUlZKeHpqaGlRNUdzMWxuRG0wVw?oc=5"
+     },
+     {
+      "date": "2026-09-03",
+      "title": "キッセイ薬品工業[4547]：自己株式の取得状況に関するお知らせ",
+      "takeaway": "業績悪化の中でも自社株買いを継続しており、株主還元姿勢そのものは崩れていない。",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5mcy04RmdHMnh2bGNTdXhjRURTQVQ5TU4wYVM0RGVjVkxjR19LQVdFYnItRGRDdWYxd3dZQnZhN3NWa0prSDlzOS1EcjhuYVJLV1Q5NjlRV1VCYnR4aUFtcUtZMDIzQUdrNXc?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "厚生労働省による「タブネオス」の最終的な安全対策判断（販売継続の可否）",
+     "2026年度の1株160円配当が、下方修正後のEPSで無理のない配当性向に収まるか",
+     "急性骨髄性白血病治療薬「オルタシデニブ」の国内承認時期と収益貢献見通し",
+     "米国での承認撤回提案に対するFDAの最終決定"
+    ],
+    "stance": "様子見",
+    "stanceReason": "財務健全性と還元意欲は非常に高いものの、主力製品の安全性問題という医薬品企業にとって最大級のリスクが現在進行形で顕在化しているため。行政の最終判断が出るまで、配当利回りの高さだけで飛び込むのは危険が伴います。",
+    "confidence": "high",
+    "sources": [
+     {
+      "title": "キッセイ、今期経常を33％下方修正 (株探)",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE10WU9fT3JQX2RkeWR6S1UzNjRUaGM0dVRiS1oxNy1HcVRkUDExSmlXZjdObTNqVXJOZEQyNzdFc2lRUmNIZ0hsaVJZSmFLTVl3NkE?oc=5"
+     },
+     {
+      "title": "キッセイ薬品、株価ストップ安気配 治療薬タブネオス投与後20人死亡 (日本経済新聞)",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9OZ2psVEtrTnE2RGNXd0pIY3BZMHdDbXA3UDB2bTdfQUJHelZvVGlUaEMtRWJoWUQtVGo1cUp4QTJIQkVESW5qdV9oUUhlTTJESmpRSEM4Z2pLUlZKeHpqaGlRNUdzMWxuRG0wVw?oc=5"
+     },
+     {
+      "title": "キッセイ薬品工業[4547]：自己株式の取得状況に関するお知らせ (日本経済新聞)",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5mcy04RmdHMnh2bGNTdXhjRURTQVQ5TU4wYVM0RGVjVkxjR19LQVdFYnItRGRDdWYxd3dZQnZhN3NWa0prSDlzOS1EcjhuYVJLV1Q5NjlRV1VCYnR4aUFtcUtZMDIzQUdrNXc?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "4709",
+   "stockName": "ＩＤホールディングス",
+   "generatedAt": "2026-09-20T04:11:57.326Z",
+   "model": "gemini-3-flash-preview",
+   "review": {
+    "headline": "18年減配なしの鉄壁財務、AI分野への注力で利益成長も加速中",
+    "summary": "18年間にわたり減配がない実績に加え、近年はEPS（1株当たり利益）が急成長しており、配当も25円から40円予定へと大幅に増配傾向にあります。自己資本比率の高さとD/E比率4%という極めて健全な財務基盤が、安定配当の強力な裏付けとなっています。直近では日本初となるAIマネジメントシステム等の国際認証を取得しており、単なるシステム保守・運用から、高付加価値なAI・イノベーション領域へのシフトによる利益率向上が推察されます。現在の配当利回りは過去3年間のレンジで最も高い水準にあり、指標面での割安感も強い状態です。",
+    "strengths": [
+     "18年連続で減配がないという極めて高い配当の安定性",
+     "D/E比率4%という、実質無借金に近い盤石な財務体質",
+     "直近数年で加速しているEPS成長（CAGR 27.95%）と増配ペース",
+     "AIマネジメントシステム（ISO/IEC 42001）等の先行取得による技術的信頼性"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "エンジニア確保に伴うコスト増",
+      "detail": "IT業界共通の課題として、人材獲得競争の激化による採用費・人件費の上昇が利益を圧迫する可能性があります。",
+      "severity": "medium"
+     },
+     {
+      "title": "配当性向の上昇",
+      "detail": "2026年度の配当予想40円に対しEPS予想が85.94円であり、配当性向は約46%まで上昇しています。過去より還元姿勢を強めていますが、成長投資とのバランスが今後の焦点となります。",
+      "severity": "low"
+     },
+     {
+      "title": "特定顧客への依存度",
+      "detail": "システム運用・保守が主力の企業は、特定の金融機関や大企業への依存度が高い傾向があり、顧客のIT投資方針に業績が左右されるリスクがあります。",
+      "severity": "medium"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-08-12",
+      "title": "ＩＤホールディングス、日本初となるISO/IEC 42001およびISO56001の両認証取得企業に",
+      "takeaway": "AI活用とイノベーション管理の国際標準をいち早く取得。ガバナンスの効いたAI導入支援など、高単価なコンサル・開発案件の獲得につながるポジティブな材料。",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE90S2xEYUNSX1ZpMFdNQ0o0Z3ZmbWR4d1FKa0g4b0IwZENsYS1YX1BKaE9iV3dkc3Y3Z1lTQnpWckc4Qmp2ZjBzZ0tvQWRMQnNyYWF4UHltZGtsQkM0akJzVnI1ZVdaQWJtTmc?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "中期経営計画における配当性向の目標値（40%以上を維持するか等）",
+     "売上高に占める主要顧客（金融・公共等）の割合と契約継続状況",
+     "M&Aによる成長戦略の有無と、それに伴う財務健全性の変化"
+    ],
+    "stance": "候補として有力",
+    "stanceReason": "18年の非減配実績という圧倒的な安心感に加え、足元の利益成長が非常に強く、増配余力が十分にあるため。財務が極めて健全で、利回りも過去比較で魅力的な水準にあります。",
+    "confidence": "high",
+    "sources": [
+     {
+      "title": "ＩＤホールディングス[4709]：ＩＤホールディングス、日本初となるISO/IEC 42001およびISO56001の両認証取得企業に 2026年8月12日(適時開示) ：日経会社情報DIGITAL",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE90S2xEYUNSX1ZpMFdNQ0o0Z3ZmbWR4d1FKa0g4b0IwZENsYS1YX1BKaE9iV3dkc3Y3Z1lTQnpWckc4Qmp2ZjBzZ0tvQWRMQnNyYWF4UHltZGtsQkM0akJzVnI1ZVdaQWJtTmc?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "7994",
+   "stockName": "オカムラ",
+   "generatedAt": "2026-09-20T04:11:27.616Z",
+   "model": "gemini-3.5-flash",
+   "review": {
+    "headline": "高利回り4.4%と16年非減配、本業は堅調も一過性要因の減益と子会社整理に注視",
+    "summary": "オカムラは16年連続で減配がなく、D/E比率約15%と極めて強固な財務基盤を持つオフィス家具・物流機器の大手です。直近の2027年3月期第1四半期決算では純利益が前年同期比38%減となりましたが、これは前年の株式売却益の反動によるもので、本業の急激な悪化を示すものではありません。一方で、製造子会社2社の解散や証券会社によるレーティング格下げなど、足元では構造改革や評価の見直しが進んでいます。配当利回りは4.45%と過去3年で最も割安な水準に達しており、中長期的なインカムゲイン狙いとしては魅力的な水準です。",
+    "strengths": [
+     "16年連続で減配がなく、株主還元への意識が極めて高い",
+     "D/E比率14.73%と実質無借金に近い極めて健全な財務体質",
+     "物流DX（AI自動ピッキングの遠隔操作など）への投資を進め、成長分野への布石を打っている",
+     "EPSが右肩上がりで成長しており、配当性向も40%台と無理のない範囲"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "一過性要因による利益のブレとレーティング格下げ",
+      "detail": "直近の第1四半期決算で純利益が38%減となったように、投資有価証券売却益などの一過性要因で最終利益が大きく変動する傾向があります。また、SMBC日興証券による格下げなど、プロのアナリストからの評価が慎重化している点は注意が必要です。",
+      "severity": "medium"
+     },
+     {
+      "title": "製造子会社の解散に伴う構造改革費用",
+      "detail": "2026年6月に山陽オカムラおよび砂畑産業の解散を発表しており、生産体制の効率化を進める一方で、一時的な整理費用や生産能力への影響が発生するリスクがあります。",
+      "severity": "medium"
+     },
+     {
+      "title": "オフィス需要や物流投資のサイクル依存",
+      "detail": "オフィス家具や物流システムは企業の設備投資動向に強く左右されます。景気後退期にはこれらの投資が抑制されやすく、業績が頭打ちになるリスクを内包しています。",
+      "severity": "high"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-08-07",
+      "title": "決算:オカムラの純利益38%減 4〜6月、株式売却益の反動で",
+      "takeaway": "減益は前年同期の株式売却益という特殊要因の反動であり、本業の致命的な悪化ではない。ただし、本業の営業利益ベースでの進捗を確認する必要がある。",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFByd2Q3WHhhSExWWjYwWnFIcGtzT01FV0hXbGNXZi1GQWFWeV82eUZhd2xad3FOZXBEdlczUXlHTmF3azd0Y2prd090Q3BxMHNyUUtDZTBTc0ZsMzdZb0lLWFdSS0syX3RFQVlYOA?oc=5"
+     },
+     {
+      "date": "2026-09-08",
+      "title": "オカムラ、AIの自動ピッキングを遠隔操作で補助 27年に事業化",
+      "takeaway": "物流分野でのAI・自動化技術の開発が着実に進んでおり、中長期的な成長ドライバーとしての期待が持てる。",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBfOHZMaDRWaVBISkk1R2t6eUpBZFZqUkxTdTFzNGNqSGRTYlQ1UVV5QmpSR0hUNXpCUzBzX3FEX04yc2c2NWFLUVNVa01icEpBY2s0YmRjaGo3RHFRaVR5czB3ZUw2SmNMZjM2TQ?oc=5"
+     },
+     {
+      "date": "2026-07-02",
+      "title": "オカムラ、ＳＭＢＣ日興が「２」へ格下げ 速報",
+      "takeaway": "証券会社による投資判断の引き下げが、直近の株価上値の重さ（52週高値からの下落）に影響している可能性がある。",
+      "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE9Sc0pBWHM4aFBQMTdiYndCdDZmQ1Q0YW15RW5mdVpSUm1kajZfNTlIV1BWZEducV9yV0pCTWl6M0VnYVNEZmlV?oc=5"
+     },
+     {
+      "date": "2026-06-24",
+      "title": "オカムラが製造子会社の「山陽オカムラ」「砂畑産業」を解散",
+      "takeaway": "不採算または非効率な製造子会社の整理を進めており、中長期的には効率化に繋がるが、短期的には特損発生などの影響を注視する必要がある。",
+      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1YTEZKM0RYa01sekpFLTJqbDdjTkRhZ3paVkZyM1VlWXJ1emw5TlltWmFjT3hSMVI4U0JCQU8td0M4QUEzbjdYVnR2cWNmSm1vOUM0YVVldjZ6YW5nREJ4Rm01THN6OGI1YWhWZHUyemtTM09IUVFwc0NhVQ?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "2027年3月期第1四半期決算における、株式売却益を除いた『営業利益』の増減傾向",
+     "子会社2社（山陽オカムラ、砂畑産業）の解散に伴う特別損失の有無と、今期業績予想への影響",
+     "オフィス家具市場の需給動向（首都圏のオフィスビル供給過剰懸念やハイブリッドワーク定着の影響）",
+     "※注意：ニュース一覧にある「オカムラ食品工業（2938）」は同名の別企業（水産業）であるため、混同して情報を収集しないこと"
+    ],
+    "stance": "条件付きで検討",
+    "stanceReason": "16年非減配の実績と極めて健全な財務、4.4%を超える利回りは非常に魅力的です。しかし、直近の純利益大幅減（一過性要因）や子会社解散、証券会社の格下げなど足元で逆風が吹いているため、本業の営業利益ベースでの進捗と今期業績予想の修正リスクがないかを確認した上でエントリーすべきと判断します。",
+    "confidence": "high",
+    "sources": [
+     {
+      "title": "決算:オカムラの純利益38%減 4〜6月、株式売却益の反動で",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFByd2Q3WHhhSExWWjYwWnFIcGtzT01FV0hXbGNXZi1GQWFWeV82eUZhd2xad3FOZXBEdlczUXlHTmF3azd0Y2prd090Q3BxMHNyUUtDZTBTc0ZsMzdZb0lLWFdSS0syX3RFQVlYOA?oc=5"
+     },
+     {
+      "title": "オカムラ、AIの自動ピッキングを遠隔操作で補助 27年に事業化",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBfOHZMaDRWaVBISkk1R2t6eUpBZFZqUkxTdTFzNGNqSGRTYlQ1UVV5QmpSR0hUNXpCUzBzX3FEX04yc2c2NWFLUVNVa01icEpBY2s0YmRjaGo3RHFRaVR5czB3ZUw2SmNMZjM2TQ?oc=5"
+     },
+     {
+      "title": "オカムラ、ＳＭＢＣ日興が「２」へ格下げ 速報",
+      "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE9Sc0pBWHM4aFBQMTdiYndCdDZmQ1Q0YW15RW5mdVpSUm1kajZfNTlIV1BWZEducV9yV0pCTWl6M0VnYVNEZmlV?oc=5"
+     },
+     {
+      "title": "オカムラが製造子会社の「山陽オカムラ」「砂畑産業」を解散",
+      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1YTEZKM0RYa01sekpFLTJqbDdjTkRhZ3paVkZyM1VlWXJ1emw5TlltWmFjT3hSMVI4U0JCQU8td0M4QUEzbjdYVnR2cWNmSm1vOUM0YVVldjZ6YW5nREJ4Rm01THN6OGI1YWhWZHUyemtTM09IUVFwc0NhVQ?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "7483",
+   "stockName": "ドウシシャ",
+   "generatedAt": "2026-09-20T04:10:53.302Z",
+   "model": "gemini-3-flash-preview",
+   "review": {
+    "headline": "独自商品のヒットと大幅増配が光る、財務鉄壁の開発型商社",
+    "summary": "卸売業の枠を超え、自社開発の「ゴリラシリーズ」等のニッチ商品が爆発的ヒットを記録し、利益率が向上しています。16年連続で減配がなく、2026年3月期には配当を110円（前々期比で約1.8倍）まで一気に引き上げるなど、還元姿勢が劇的に強化されました。無借金経営という極めて健全な財務基盤を背景に、高いEPS成長と高配当を両立させている稀有な銘柄です。",
+    "strengths": [
+     "「ゴリラシリーズ」に代表される、他社が真似しないニッチな商品企画力",
+     "D/E比率0%の無借金経営による圧倒的な財務健全性",
+     "16年連続非減配という実績と、直近の大幅な増配方針への転換",
+     "卸売だけでなくメーカー機能を併せ持つことによる高い利益率"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "ヒット商品のサイクル依存",
+      "detail": "「ゴリラシリーズ」や「ハンディファン」など流行に左右される商材が多く、次のヒットが出ない場合の成長鈍化リスクがある。",
+      "severity": "medium"
+     },
+     {
+      "title": "為替変動（円安）によるコスト増",
+      "detail": "輸入商材や海外生産比率が高い場合、円安が進行すると仕入れコストを圧迫する。価格転嫁の成否が利益を左右する。",
+      "severity": "medium"
+     },
+     {
+      "title": "原材料・物流費の高騰",
+      "detail": "独自開発商品が多い分、製造コストや国際物流費の変動がダイレクトに利益率へ影響する。",
+      "severity": "low"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-07-31",
+      "title": "ドウシシャ、4-6月期(1Q)経常は4％増益で着地",
+      "takeaway": "第1四半期から増益を確保しており、通期の最高益予想および大幅増配計画の達成に向けて順調な滑り出し。",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE12Nkd4WVh4WWZhMWwwVHFBNjFRTFVFMmZtTlVmOHowUndlTTE2NWg3TlkwZ1hweTczaEtHX0tWTzhVY2NhVUJKWnVOS0VNWWl0ekE?oc=5"
+     },
+     {
+      "date": "2026-06-19",
+      "title": "〈ニッチに商機〉謎の大ヒット｢ゴリラシリーズ｣で攻めるドウシシャ…業績は絶好調",
+      "takeaway": "自社開発商品のブランド化が成功しており、価格競争に巻き込まれにくい収益構造を構築できている。",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1lYUwyTU9sZTlJRUtwZlVhTDVIV0g4WTN1LU56NDJoeHF2RUlvNlAtTHE4TnFZN2QxWFlzQVV6TmlKMGwxZzNiT2JvYXRSa20wN29neGJ4OGZEbWc?oc=5"
+     },
+     {
+      "date": "2026-05-12",
+      "title": "ドウシシャ、今期経常は1％増で2期連続最高益、前期配当を10円増額・今期も110円継続へ",
+      "takeaway": "配当方針が従来の「安定配当」から「利益成長に合わせた積極還元」へシフトしたことを示す重要な開示。",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5rZ0ZNRDhtVWxfTXhDTjJkeXduS00zNFpOQjRyNkQwX2RGQTBCUDBKT2VvVzEwOHNTZXFiZ3l1STgwNzZWblJkQXh5cHhrenhjblE?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "2026年3月期のEPS予想241.8円に対する進捗率（特に下期の季節商品売上）",
+     "為替予約の状況と、想定レートから乖離した際の利益への影響度",
+     "「ゴリラシリーズ」に続く、新たなカテゴリーのヒット商品の有無"
+    ],
+    "stance": "候補として有力",
+    "stanceReason": "16年連続非減配という守りの実績に加え、直近では配当を大幅に引き上げる攻めの姿勢に転じています。財務が盤石で倒産リスクが極めて低く、独自商品の成功により卸売業の平均を上回る成長性と収益性を確保できているため、長期保有に適した銘柄と言えます。",
+    "confidence": "high",
+    "sources": [
+     {
+      "title": "ドウシシャ、今期経常は1％増で2期連続最高益、前期配当を10円増額・今期も110円継続へ (株探)",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5rZ0ZNRDhtVWxfTXhDTjJkeXduS00zNFpOQjRyNkQwX2RGQTBCUDBKT2VvVzEwOHNTZXFiZ3l1STgwNzZWblJkQXh5cHhrenhjblE?oc=5"
+     },
+     {
+      "title": "〈ニッチに商機〉謎の大ヒット｢ゴリラシリーズ｣で攻めるドウシシャ…業績は絶好調 (toyokeizai.net)",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1lYUwyTU9sZTlJRUtwZlVhTDVIV0g4WTN1LU56NDJoeHF2RUlvNlAtTHE4TnFZN2QxWFlzQVV6TmlKMGwxZzNiT2JvYXRSa20wN29neGJ4OGZEbWc?oc=5"
+     },
+     {
+      "title": "ドウシシャ、4-6月期(1Q)経常は4％増益で着地 (株探)",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE12Nkd4WVh4WWZhMWwwVHFBNjFRTFVFMmZtTlVmOHowUndlTTE2NWg3TlkwZ1hweTczaEtHX0tWTzhVY2NhVUJKWnVOS0VNWWl0ekE?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "7981",
+   "stockName": "タカラスタンダード",
+   "generatedAt": "2026-09-20T04:10:18.631Z",
+   "model": "gemini-3-flash-preview",
+   "review": {
+    "headline": "業績下方修正も還元方針を堅持、盤石な財務背景に高配当を維持",
+    "summary": "独自のホーロー技術で高いシェアを誇る住宅設備大手です。2027年3月期は中東情勢の影響による工事遅延で下方修正を発表しましたが、配当予想は据え置いており、配当性向55%という高い還元方針を維持しています。D/E比率2.22%という極めて健全な財務体質を背景に、積極的な自社株買いも継続しており、株主還元への姿勢は非常に強固です。短期的には外部環境の不透明感がありますが、中長期的な利益成長と還元強化の両立が期待できる銘柄です。",
+    "strengths": [
+     "高品位ホーローによる製品差別化と高いブランド力",
+     "D/E比率2.22%という実質無借金の極めて強固な財務基盤",
+     "配当性向55%を掲げる明確な株主還元方針と継続的な自社株買い"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "地政学リスクによる工期遅延",
+      "detail": "中東情勢の影響で住宅工事が遅延しており、自社でコントロールできない外部要因により売上計上が後ろ倒しになるリスクがあります。",
+      "severity": "medium"
+     },
+     {
+      "title": "国内市場の構造的縮小",
+      "detail": "新設住宅着工件数の減少が続いており、リフォーム需要の取り込みが計画通り進まない場合、長期的な成長が鈍化する懸念があります。",
+      "severity": "low"
+     },
+     {
+      "title": "原材料・物流コストの変動",
+      "detail": "鋼板等の原材料価格や物流費の上昇が、製品価格への転嫁を上回るスピードで進行した場合、利益率を圧迫します。",
+      "severity": "medium"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-09-14",
+      "title": "自己株式立会外買付取引（ToSTNeT-3）による自己株式の取得結果に関するお知らせ",
+      "takeaway": "機動的な自社株買いを実行しており、需給の引き締まりと一株当たり価値の向上に寄与している。",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5HWGQ3ME9BUVNieWl0Wk1BSHJfd3hJMkdZZVZsa0ViQ2tEaWZFN3Y2TW81cnhBSUhVUmdKS1lWQnFFNTlnVkNFVkRrZXlUNkxZYjJoMjdEd2tKMXI0NUNETm1iTE5lejQ1dHc?oc=5"
+     },
+     {
+      "date": "2026-08-03",
+      "title": "タカラスタンダード、中東情勢の影響を受けるも下期以降は回復に転じ、通期で増収増益を目指す 増配予想は維持し、配当性向は約55％",
+      "takeaway": "一時的な業績下振れがあっても、配当性向55%という還元方針を優先する姿勢が確認でき、インカムゲインの安定性が高い。",
+      "url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTE9CVzBkcUhUdXVWdTk5N2pKSXZubkl5UFRnWWxEUlowbjEyZnVmdmJMYXM5aXFjdzd6RDZHemNGRTV5WFU5cGc?oc=5"
+     },
+     {
+      "date": "2026-07-30",
+      "title": "タカラスタ、上期経常を一転11％減益に下方修正、通期も減額",
+      "takeaway": "中東情勢による工事遅延が主因。株価の調整局面だが、悪材料出尽くしとなるか注視が必要。",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9Oak5SMzQxeUZ0RFFtc2dJTG4wczdDWjRLdldwQ3lhNkJpcm1qTF9ZejJCVEZlX2NCQ29KRTBCc3FwTnROUzloekcyY3FWRmVnWHc?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "2027年3月期の下期において、遅延していた工事が計画通り進捗し売上が回復するか",
+     "リフォーム向け展示施設の刷新（長野など）が、実際の受注増に結びついているか",
+     "配当性向55%方針が、将来的な利益成長が鈍化した際も維持されるか"
+    ],
+    "stance": "候補として有力",
+    "stanceReason": "業績の下方修正はあったものの、配当予想の据え置きと積極的な自社株買いにより株主還元への信頼が厚い。財務が極めて健全で、配当利回り3.7%超かつ過去比で割安な水準は、長期投資の好機と捉えられるため。",
+    "confidence": "high",
+    "sources": [
+     {
+      "title": "タカラスタンダード、中東情勢の影響を受けるも下期以降は回復に転じ、通期で増収増益を目指す 増配予想は維持し、配当性向は約55％",
+      "url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTE9CVzBkcUhUdXVWdTk5N2pKSXZubkl5UFRnWWxEUlowbjEyZnVmdmJMYXM5aXFjdzd6RDZHemNGRTV5WFU5cGc?oc=5"
+     },
+     {
+      "title": "タカラスタ、上期経常を一転11％減益に下方修正、通期も減額",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9Oak5SMzQxeUZ0RFFtc2dJTG4wczdDWjRLdldwQ3lhNkJpcm1qTF9ZejJCVEZlX2NCQ29KRTBCc3FwTnROUzloekcyY3FWRmVnWHc?oc=5"
+     },
+     {
+      "title": "タカラスタンダード[7981]：自己株式立会外買付取引（ToSTNeT-3）による自己株式の取得結果に関するお知らせ",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5HWGQ3ME9BUVNieWl0Wk1BSHJfd3hJMkdZZVZsa0ViQ2tEaWZFN3Y2TW81cnhBSUhVUmdKS1lWQnFFNTlnVkNFVkRrZXlUNkxZYjJoMjdEd2tKMXI0NUNETm1iTE5lejQ1dHc?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "6333",
+   "stockName": "ＴＥＩＫＯＫＵ",
+   "generatedAt": "2026-09-20T04:09:53.715Z",
+   "model": "gemini-3.5-flash",
+   "review": {
+    "headline": "17年非減配と無借金経営が魅力も、直近1Qの大幅減益に要警戒",
+    "summary": "ＴＥＩＫＯＫＵ（帝国電機製作所）は、17年連続で減配がなく、D/E比率0%の無借金経営を維持する極めて財務健全な企業です。過去数年は高いEPS成長を遂げており、配当も右肩上がりで推移していますが、2023年には特別配当が含まれるなど一過性の要因もありました。直近の2027年3月期第1四半期決算では、純利益が前年同期比37.4%減の大幅減益となっており、足元の業績に陰りが見られます。今後の増配継続や通期業績予想の達成に向けては、この減益要因が一時的なものか、構造的なものかを見極める必要があります。",
+    "strengths": [
+     "17年連続で減配がない優れた配当実績",
+     "D/E比率0%という極めて強固な財務基盤（実質無借金経営）",
+     "過去数年間の高いEPS成長率（CAGR 35.35%）",
+     "3.79%という魅力的な配当利回り水準"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "直近1Qの大幅減益による通期計画への不透明感",
+      "detail": "2027年3月期第1四半期の純利益が前年同期比37.4%減と大きく落ち込んでおり、スクリーニング上の高いEPS成長が今期も維持できるか懸念が生じています。",
+      "severity": "high"
+     },
+     {
+      "title": "特別配当による配当金のブレ",
+      "detail": "2023年度に116円（特別配当含む）を出した翌年は92円に下がっており、業績や特別要因によって配当金が大きく変動する可能性があります。",
+      "severity": "medium"
+     },
+     {
+      "title": "景気敏感な機械セクターの特性",
+      "detail": "プラント向け等の特殊ポンプが主力製品であるため、主要顧客の設備投資動向や原材料価格の高騰、為替動向に業績が左右されやすい構造があります。",
+      "severity": "medium"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-08-06",
+      "title": "決算速報＞ＴＥＩＫＯＫＵ、２７年３月期第１四半期決算は純利益３７．４％減の大幅減益(ウエルスアドバイザー)",
+      "takeaway": "第1四半期の大幅減益はネガティブサプライズであり、通期のEPS成長シナリオや配当計画への影響を注視する必要があります。",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQUFF1cmRsM2ZaejBEX3pFMERhSDF5QVdQVFZaUGlXblRRZF83aTF2ZjVVQUoySEJCYVFna3pNWE53YUhPcjlHVWtSbEd1MEJRNzZLODk1VThBVlROcU93d0dLSXNRNWMtN1FoZEh4SXp4TExkNWpsekZJZzA3TFBPVndpVmRiUDQ?oc=5"
+     },
+     {
+      "date": "2026-08-06",
+      "title": "(株)帝国電機製作所【6333】：決算情報",
+      "takeaway": "決算短信等で減益の主因（部材高、受注のズレ、為替影響など）を詳細に確認する必要があります。",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBkVzl5R2NRYkE1RTZQemtpYWZ3WXdteVdvNFpXR0prZFVrWldIRk55OUNBSVNiMnNiQ21DcWxUQjJhTVF6YU5tQnpLd2ZtNDktd1NyNWZxbXdlOExCNDR2ag?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "2027年3月期第1四半期の大幅減益の具体的な理由（一時的な費用発生か、受注自体の減少か）",
+     "通期業績予想（EPS 265.71円、配当133円など）に対する進捗率と、下方修正リスクの有無",
+     "中期経営計画における配当性向の基準や株主還元方針の詳細"
+    ],
+    "stance": "条件付きで検討",
+    "stanceReason": "財務健全性は抜群で長期の非減配実績も魅力的ですが、直近1Q決算での大幅減益が懸念材料です。通期業績予想の達成度や減益の背景がクリアになり、配当維持・増配への懸念が払拭されるまでは、慎重に見極めるべきだと判断します。",
+    "confidence": "medium",
+    "sources": [
+     {
+      "title": "決算速報＞ＴＥＩＫＯＫＵ、２７年３月期第１四半期決算は純利益３７．４％減の大幅減益(ウエルスアドバイザー)",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQUFF1cmRsM2ZaejBEX3pFMERhSDF5QVdQVFZaUGlXblRRZF83aTF2ZjVVQUoySEJCYVFna3pNWE53YUhPcjlHVWtSbEd1MEJRNzZLODk1VThBVlROcU93d0dLSXNRNWMtN1FoZEh4SXp4TExkNWpsekZJZzA3TFBPVndpVmRiUDQ?oc=5"
+     },
+     {
+      "title": "(株)帝国電機製作所【6333】：決算情報",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBkVzl5R2NRYkE1RTZQemtpYWZ3WXdteVdvNFpXR0prZFVrWldIRk55OUNBSVNiMnNiQ21DcWxUQjJhTVF6YU5tQnpLd2ZtNDktd1NyNWZxbXdlOExCNDR2ag?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "6947",
+   "stockName": "図研",
+   "generatedAt": "2026-09-20T04:09:24.131Z",
+   "model": "gemini-3.5-flash",
+   "review": {
+    "headline": "TSMCアライアンス参画と大幅増配で注目、財務無借金のEDA首位",
+    "summary": "図研はプリント基板（PCB）設計用CAD/EDAソフトで世界的な地位を持つ企業です。直近ではTSMCのEDAアライアンスへの参加や、仏ヴァレオとの提携など、AI半導体や車載分野での成長期待が高まっています。財務面はD/E比率0%と極めて健全で、24年連続で減配なしという抜群の実績を誇ります。2026年度の配当予想は200円と前年比倍増を計画しており、配当利回りは3.98%に達していますが、配当性向が約79%まで急上昇する計画であるため、この還元方針の持続性については精査が必要です。",
+    "strengths": [
+     "24年連続で減配なしという極めて優れた株主還元実績",
+     "D/E比率0%の無借金経営であり、自己資本が非常に厚く財務健全性が抜群",
+     "TSMCのEDAアライアンスへの参加やヴァレオとの提携など、先端半導体・車載分野での強固なポジション",
+     "第1四半期（4-6月期）の純利益が前年同期比89.4%増と、足元の業績も極めて好調"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "配当性向急上昇に伴う減配リスク",
+      "detail": "2026年度の予想配当は200円と急増していますが、予想EPS（253.01円）に対する配当性向は約79%に達します。この高い還元方針が中期的なものか、あるいは一時的な記念・特別配当的な要素を含むのかにより、将来の減配リスクや維持可能性が変わります。",
+      "severity": "medium"
+     },
+     {
+      "title": "顧客業界の設備投資抑制リスク",
+      "detail": "同社のCADソフトは半導体、自動車、電機メーカーなどの開発投資に依存します。世界的な景気後退やエレクトロニクス市場の冷え込みが生じた場合、ライセンス更新や新規導入が抑制される可能性があります。",
+      "severity": "medium"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-08-05",
+      "title": "図研の26年4〜6月期、純利益89.4%増 通期予想据え置き",
+      "takeaway": "第1四半期は極めて好調なスタートを切ったものの、通期予想は据え置かれており、今後の進捗と上方修正の有無が注目されます。",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE0zM2FUY3BXVzBYdEdfcUFGYlp3bkhUS1pIVkphR0ZQN0QyMTBWYUpBRmdEVjhuTkMxYy0xVXpKYXBxOXFGeVlUQS1CTlh2MnZMcjBrU0JoX0Q0UnY5dVNZT3hZV2Y2NkQ3WFljcQ?oc=5"
+     },
+     {
+      "date": "2026-07-10",
+      "title": "図研、TSMC Open Innovation PlatformのEDAアライアンスに参加",
+      "takeaway": "世界最大の半導体受託製造企業であるTSMCのエコシステムに深く組み込まれたことで、AI半導体や先端パッケージング分野での中長期的な成長期待が裏付けられました。",
+      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9vODZjcjdyb0dIY2hfN1hsZWwtSEV1bnd3LVZOSUZFRHE1bE5ValdVNGlNTnRqMVlfWnBYeDFBWTAzYkNReHJlZXFCZ214a21DSkhzSUpyS2ZNcUxSa2hyWWttdURtdW1mZVpYX004WXhUdkh2?oc=5"
+     },
+     {
+      "date": "2026-05-29",
+      "title": "図研が４日ぶり反発、自動車部品の世界的大手ヴァレオと戦略的提携",
+      "takeaway": "車載電子機器（CASE）の設計複雑化に伴い、グローバル大手との提携を通じて自動車分野でのデファクトスタンダード化が進む好材料です。",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBJazVjOGhndkxUWjhKUENCa3pKdFVfRjFNZHpLV19FNzVpZ2dMMjBxT3dOVC1DU19YTU5SLXZnZ2FiX3l2aXhXc21VVm9CcElvSERjcWZxNWN1TGNyZGNJSA?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "2026年度に配当を200円（前年比2倍）へ急増させた具体的な株主還元方針（配当性向目標や累進配当の有無）",
+     "1Qの大幅増益が通期業績に与える影響と、今後の上方修正の可能性",
+     "海外売上高比率と為替（円高・円安）が業績に与える感応度"
+    ],
+    "stance": "候補として有力",
+    "stanceReason": "24年連続減配なしという実績に加え、D/E比率0%の強固な財務、TSMCアライアンス参画による成長ストーリーが魅力的です。2026年度の配当性向が約79%と高水準になる点には注意が必要ですが、足元の業績も非常に好調であり、高配当株としての信頼性は極めて高いと判断します。",
+    "confidence": "high",
+    "sources": [
+     {
+      "title": "図研の26年4〜6月期、純利益89.4%増 通期予想据え置き",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE0zM2FUY3BXVzBYdEdfcUFGYlp3bkhUS1pIVkphR0ZQN0QyMTBWYUpBRmdEVjhuTkMxYy0xVXpKYXBxOXFGeVlUQS1CTlh2MnZMcjBrU0JoX0Q0UnY5dVNZT3hZV2Y2NkQ3WFljcQ?oc=5"
+     },
+     {
+      "title": "図研、TSMC Open Innovation Platform of EDAアライアンスに参加",
+      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9vODZjcjdyb0dIY2hfN1hsZWwtSEV1bnd3LVZOSUZFRHE1bE5ValdVNGlNTnRqMVlfWnBYeDFBWTAzYkNReHJlZXFCZ214a21DSkhzSUpyS2ZNcUxSa2hyWWttdURtdW1mZVpYX004WXhUdkh2?oc=5"
+     },
+     {
+      "title": "図研が４日ぶり反発、自動車部品の世界的大手ヴァレオと戦略的提携",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBJazVjOGhndkxUWjhKUENCa3pKdFVfRjFNZHpLV19FNzVpZ2dMMjBxT3dOVC1DU19YTU5SLXZnZ2FiX3l2aXhXc21VVm9CcElvSERjcWZxNWN1TGNyZGNJSA?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "7937",
+   "stockName": "ツツミ",
+   "generatedAt": "2026-09-20T04:08:51.349Z",
+   "model": "gemini-3.5-flash",
+   "review": {
+    "headline": "超健全財務と高利回りが魅力も、今期減益トレンドへの転換に要警戒",
+    "summary": "ツツミはD/E比率0%という極めて強固な財務基盤を持ち、24年連続で減配がない抜群の実績を誇る企業です。近年は金価格の高騰を追い風にEPSが急成長し、配当も大幅に増加してきましたが、直近の2027年3月期は通期で減益予想となっており、第1四半期決算でも純利益が前年同期比41.1%減と大きく落ち込んでいます。株価はBPSに対して大幅な割安水準（PBR1倍割れ）で推移しており、豊富な手元資金を背景としたMBOなどの思惑がある一方、業績のピークアウトに伴う配当維持への懸念が浮上しています。今後の業績推移と配当方針を慎重に見極める局面です。",
+    "strengths": [
+     "D/E比率0%の無借金経営であり、BPSが4,400円を超える極めて強固な財務健全性",
+     "24年間にわたり減配がない抜群の配当実績と、直近数年の積極的な増配姿勢",
+     "金価格高騰を背景とした宝飾品・ジュエリーの資産価値向上に伴うビジネスの強さ"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "業績のピークアウトと減益トレンド",
+      "detail": "金高騰による特需が一巡し、2027年3月期は通期で22%の経常減益予想となっています。直近1Qも純利益41.1%減と厳しい滑り出しとなっており、業績悪化が長引けば増配基調がストップするリスクがあります。",
+      "severity": "high"
+     },
+     {
+      "title": "仕入価格（金・地金）高騰によるマージン圧迫",
+      "detail": "金価格の上昇は売上や在庫価値を押し上げる一方、新規仕入コストの上昇につながり、消費者の買い控えを招くと利益率を圧迫する要因になります。",
+      "severity": "medium"
+     },
+     {
+      "title": "株主還元方針の持続性",
+      "detail": "2026年3月期に1株115円まで急増配したものの、減益局面においてこの配当水準を維持できるか、配当性向の観点から懸念が残ります。",
+      "severity": "medium"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-08-07",
+      "title": "ツツミ、4-6月期(1Q)経常は37％減益で着地",
+      "takeaway": "2027年3月期のスタートである第1四半期が大幅な減益となり、通期減益予想に対する進捗に懸念が生じています。",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFBWc0tLZk5LaDVDT0RfeHM3NE1oNnNXWEYtckhGUURUaEEya1FWMG1QWWhLUmhvalNDcy1DUzhVOXB0Z0wtNm5fQ01SR2RUMUtxZnc?oc=5"
+     },
+     {
+      "date": "2026-05-14",
+      "title": "ツツミ、今期経常は22％減益へ",
+      "takeaway": "前期までの急成長から一転して今期は減益計画となっており、成長ストーリーの踊り場、あるいはピークアウトを示唆しています。",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5TN0lwbWF3R3pBeXZsZDdydEhtZ3BVSTJaTU56RTNqQ3dsR2ZmQW1qd0lwN041M2c4a2JKOGhTSlBrVV90cHdYU2kydkpvN0N3THc?oc=5"
+     },
+     {
+      "date": "2026-04-23",
+      "title": "億り人たちが注目する「MBOで大化け期待」の銘柄",
+      "takeaway": "極めて低いPBR（解散価値割れ）と豊富なキャッシュを背景に、市場ではMBO（経営陣による買収）や非公開化の思惑が一部で囁かれています。",
+      "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE9YZ3pOemxSdTlxOVhtMjhVWFhnY2NoV3J5T3VDQXl3di1pRjBuOHlYcXA1QlF2N1hWYUlHY2ZqWmdEZ1Jsa2lZ?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "2027年3月期の年間配当予想が維持されているか（減配リスクの有無）",
+     "金価格の変動が同社の売上総利益率に与えている具体的な影響",
+     "PBR1倍割れ改善に向けた、会社側の中期経営計画や株主還元策のアップデート"
+    ],
+    "stance": "条件付きで検討",
+    "stanceReason": "D/E比率0%かつPBR0.6倍割れという圧倒的な割安さと財務の安全性は魅力的ですが、今期の業績が減益トレンドに転じている点がネックです。今期配当（115円水準など）が維持される見通しが立ち、業績の底打ちが確認できれば、非常に優れたインカムゲイン銘柄になり得ます。",
+    "confidence": "high",
+    "sources": [
+     {
+      "title": "ツツミ、4-6月期(1Q)経常は37％減益で着地",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFBWc0tLZk5LaDVDT0RfeHM3NE1oNnNXWEYtckhGUURUaEEya1FWMG1QWWhLUmhvalNDcy1DUzhVOXB0Z0wtNm5fQ01SR2RUMUtxZnc?oc=5"
+     },
+     {
+      "title": "ツツミ、今期経常は22％減益へ",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5TN0lwbWF3R3pBeXZsZDdydEhtZ3BVSTJaTU56RTNqQ3dsR2ZmQW1qd0lwN041M2c4a2JKOGhTSlBrVV90cHdYU2kydkpvN0N3THc?oc=5"
+     },
+     {
+      "title": "億り人たちが注目する「MBOで大化け期待」の銘柄",
+      "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE9YZ3pOemxSdTlxOVhtMjhVWFhnY2NoV3J5T3VDQXl3di1pRjBuOHlYcXA1QlF2N1hWYUlHY2ZqWmdEZ1Jsa2lZ?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "7820",
+   "stockName": "ニホンフラッシュ",
+   "generatedAt": "2026-09-20T04:08:18.956Z",
+   "model": "gemini-3.5-flash",
+   "review": {
+    "headline": "利回り5%超と15年非減配は魅力も、足元の赤字転落と高齢トップに懸念",
+    "summary": "ニホンフラッシュは15年連続で減配がなく、配当利回り5.06%と非常に高い水準を維持しています。D/E比率が7.06%と財務健全性は極めて高いものの、直近の業績は厳しく、2027年3月期1Q決算では最終赤字に転落しました。また、EPSの推移において2025年度に巨額の赤字を計上した後に急回復するなど極端な乱高下が見られ、一過性の要因や事業環境の激変が疑われます。さらに、90歳の社長が再任されるなど経営体制の持続性にも特有のリスクを抱えています。",
+    "strengths": [
+     "15年間にわたり減配がないという極めて強固な株主還元実績",
+     "D/E比率7.06%という、実質無借金に近い極めて健全な財務基盤",
+     "5%を超える高い配当利回りと、過去比で割安感のある株価水準"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "足元の業績悪化と赤字転落",
+      "detail": "2027年3月期1Q（4-6月期）において最終赤字に転落しており、通期の経常29%減益予想に対して厳しい滑り出しとなっています。業績低迷が長引けば、長年維持してきた配当水準の維持に黄色信号が灯る可能性があります。",
+      "severity": "high"
+     },
+     {
+      "title": "EPSの極端な乱高下と中国事業リスク",
+      "detail": "2025年度に極端な赤字を記録した背景には、同社が強みを持つ中国のマンション内装建具事業における不動産不況の影響や、それに伴う減損・貸倒引当金の計上など構造的なリスクが潜んでいる可能性が高いです。",
+      "severity": "high"
+     },
+     {
+      "title": "経営トップの超高齢化と後継者リスク",
+      "detail": "東証プライム最高齢となる90歳の髙橋社長が再任されており、カリスマ経営への依存度が高い反面、突然の経営体制変更やサクセッションプラン（後継者育成）の不透明さが長期的なリスク要因となっています。",
+      "severity": "medium"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-08-10",
+      "title": "ニホンフラの26年4～6月期、最終損益は1億7800万円の赤字 通期予想据え置き",
+      "takeaway": "1Q時点で最終赤字に転落しており、通期計画の達成に向けて不透明感が強まっています。株価の下押し圧力となる可能性があります。",
+      "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOQzUyd01JN085Z0VYLW9MV2JWZk90OGc4R3E0RnoxN3A3Zk1haWNicklQWDE3MmZVZEdrOWtLTWVzZ0M3cldUNVA2a3FYZXhKWW9paERndnppUWJyZzdCdzNxVnI3OXhya2NCc2poN2dZRTRwdFVZcHpGSTF1MkNib2I0bDQ4c2gzNnBBcVI1bDF1dw?oc=5"
+     },
+     {
+      "date": "2026-06-27",
+      "title": "ニホンフラッシュ、90歳の髙橋社長再任 東証プライム最高齢「株価倍増」に意欲",
+      "takeaway": "トップの意欲は高いものの、90歳という年齢は経営の継続性においてガバナンス上の懸念材料となり得ます。",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5PdnRoZ3preEwzUUYzYjNBQXRLQWRBQVRtRVZybFFsWWFtTW13VnhKUm1kbG1weC1fekJPVmpRc01aRzFTclMtakVBbHE0UzFmMkV5Q2pB?oc=5"
+     },
+     {
+      "date": "2026-05-15",
+      "title": "ニホンフラ、今期経常は29％減益へ",
+      "takeaway": "今期の業績見通しが大幅な減益計画となっており、成長性の鈍化と配当維持余力の低下が懸念されます。",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5jRjIwOEhtQ0p4YjNPaGdhMHVyNWJyUnM4VDg0dk5XY3FRbEpSMU94QWktVEZUVGNCWXdIcUdFMTl2QUJpazYxUzVBemJxLWtGSlE?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "2025年度にEPSが大幅な赤字となった具体的な要因（中国子会社に関連する減損損失や貸倒引当金の有無など）",
+     "中国の不動産市場の冷え込みが、同社の主力である内装ドア事業の売上や回収懸念に与えている影響の度合い",
+     "90歳の髙橋社長の後継者候補や、今後のガバナンス・体制移行計画の開示状況",
+     "今期予想の減益および1Q赤字を踏まえた、年間36円配当の維持に対する経営陣のコミットメント度合い"
+    ],
+    "stance": "条件付きで検討",
+    "stanceReason": "15年間の非減配実績と極めて強固な自己資本・財務基盤は、高配当投資家にとって大きな魅力です。しかし、中国市場の不透明感に伴う足元の業績悪化（1Q赤字）や、90歳のトップが率いる経営体制の持続性など特有のリスクがあるため、これらを許容し、かつ一時的な赤字要因が解消に向かうと判断できる場合のみ検討すべきです。",
+    "confidence": "medium",
+    "sources": [
+     {
+      "title": "ニホンフラの26年4～6月期、最終損益は1億7800万円の赤字 通期予想据え置き",
+      "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOQzUyd01JN085Z0VYLW9MV2JWZk90OGc4R3E0RnoxN3A3Zk1haWNicklQWDE3MmZVZEdrOWtLTWVzZ0M3cldUNVA2a3FYZXhKWW9paERndnppUWJyZzdCdzNxVnI3OXhya2NCc2poN2dZRTRwdFVZcHpGSTF1MkNib2I0bDQ4c2gzNnBBcVI1bDF1dw?oc=5"
+     },
+     {
+      "title": "ニホンフラッシュ、90歳の髙橋社長再任 東証プライム最高齢「株価倍増」に意欲",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5PdnRoZ3preEwzUUYzYjNBQXRLQWRBQVRtRVZybFFsWWFtTW13VnhKUm1kbG1weC1fekJPVmpRc01aRzFTclMtakVBbHE0UzFmMkV5Q2pB?oc=5"
+     },
+     {
+      "title": "ニホンフラ、今期経常は29％減益へ",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5jRjIwOEhtQ0p4YjNPaGdhMHVyNWJyUnM4VDg0dk5XY3FRbEpSMU94QWktVEZUVGNCWXdIcUdFMTl2QUJpazYxUzVBemJxLWtGSlE?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "2108",
+   "stockName": "日本甜菜製糖",
+   "generatedAt": "2026-09-20T03:59:58.176Z",
+   "model": "gemini-3.5-flash",
+   "review": {
+    "headline": "DOE4%導入と大幅増益で急増配も、株価急騰と原料動向に注視",
+    "summary": "日本甜菜製糖は、2026年6月に配当方針を「DOE（自己資本配当率）4%基準」へ変更したことで、株主還元姿勢が劇的に強化されました。直近では2027年3月期の業績予想の上方修正と、1株から3株への株式分割に伴う実質増配（分割前換算で年270円）を発表し、市場の注目を集めています。足元の業績は極めて好調で、D/E比率0.01%という超健全な財務体質も大きな強みです。一方で、ここ1年で株価は約87%急騰しており、過熱感がある点や、砂糖原料（てん菜）の作柄や価格変動といった農業・気候リスクには注意が必要です。",
+    "strengths": [
+     "劇的な株主還元方針の強化：配当方針を「DOE 4%基準」に変更し、大幅な増配（2027年3月期は実質270円予定）を実現",
+     "極めて強固な財務基盤：D/E比率0.01%と実質無借金経営であり、高い財務安全性を誇る",
+     "足元の業績急拡大：2027年3月期は大幅な営業増益見通しに加え、8月には上期・通期業績の上方修正を発表",
+     "株式分割による流動性向上：1株を3株に分割することを発表し、投資家層の拡大と流動性向上が期待される"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "原材料（てん菜）の作柄・気候変動リスク",
+      "detail": "北海道を中心とするてん菜の収穫量は天候に大きく左右され、不作時には原料調達コストの上昇や操業度低下が業績のボラティリティ要因となります。",
+      "severity": "medium"
+     },
+     {
+      "title": "急激な株価上昇による調整リスク",
+      "detail": "1年で株価が約87%急騰しており、好材料の多くはすでに織り込まれている可能性があります。期待に届かない場合の反落リスクに注意が必要です。",
+      "severity": "medium"
+     },
+     {
+      "title": "国内砂糖需要の長期的減少",
+      "detail": "人口減少や健康志向の高まりにより、国内の砂糖市場は長期的に縮小傾向にあり、構造的な成長には限界があります。",
+      "severity": "low"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-08-21",
+      "title": "日本甜菜製糖が1株を3株に分割 実質増配で株価急騰",
+      "takeaway": "株式分割と実質増配（2027年3月期は分割前換算270円）の発表により、株価は後場急騰。流動性向上と還元強化が好感されています。",
+      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE1aa05CQmtIQUhwaS1IVUExQWZZTzk3Uk45UnVuZHphTHZGM1B5OTRBc1ZIakhRc3lyNDItcExvdWpaRGlibnlFOWptdHJmTmpDdDFkNEk0WlNGanAwUnhyQ21FTnlWVlFJbVpSeWhyZy1obGRv?oc=5"
+     },
+     {
+      "date": "2026-08-10",
+      "title": "甜菜糖、上期最終を一転3.4倍増益に上方修正、通期も増額",
+      "takeaway": "足元の業績が期初想定を大きく上回って推移しており、増配の原資となる利益が順調に拡大していることを示しています。",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1vRFZPamJjLVFDbV9hSFpUSVZNaE9DQ181ZExzcC1LbDlvVVFLTWNGZkpHdHJkR2xGX2ZhYVhfR2xUczN1eTRPOVYtTnA2ME8tMEE?oc=5"
+     },
+     {
+      "date": "2026-06-09",
+      "title": "日本甜菜製糖（2108）、砂糖事業を軸に収益基盤を強化、てん菜産業への飛躍 資本効率改善へ DOE4％基準に配当方針を変更",
+      "takeaway": "配当方針をDOE（自己資本配当率）4%基準へ変更したことが、近年の大幅増配のトリガーとなっており、今後の配当の安定性と下限を担保する要因となります。",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1EWjVJUXFTN25DcnVhZE9QVlZZYWxZZ3dMZU1fUm4yQmlTbmdvMnNGNURJZmxDV2lrVkJxTlpKZDVtcEtxd1AyTEcxMVU1NndOcGc?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "株式分割（1→3株）の効力発生日と、分割後の実質的な配当金（1株当たり90円）の推移",
+     "DOE 4%基準が維持された場合の、中長期的な自己資本の推移と配当維持能力",
+     "今期の業績上方修正の具体的な要因（砂糖価格の上昇なのか、コスト削減なのか、あるいは一時的要因か）",
+     "北海道における今期のてん菜の作柄状況"
+    ],
+    "stance": "条件付きで検討",
+    "stanceReason": "DOE 4%基準への変更による還元強化と足元の業績上振れは非常に魅力的で、減配リスクは極めて低いと考えられます。しかし、直近1年で株価が2倍近くに急騰しており、好材料の多くが株価に織り込まれている可能性があるため、分割後の株価の落ち着きや業績の持続性を見極めつつエントリーしたい局面です。",
+    "confidence": "high",
+    "sources": [
+     {
+      "title": "日本甜菜製糖（2108）、砂糖事業を軸に収益基盤を強化、てん菜産業への飛躍 資本効率改善へ DOE4％基準に配当方針を変更",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1EWjVJUXFTN25DcnVhZE9QVlZZYWxZZ3dMZU1fUm4yQmlTbmdvMnNGNURJZmxDV2lrVkJxTlpKZDVtcEtxd1AyTEcxMVU1NndOcGc?oc=5"
+     },
+     {
+      "title": "日本甜菜製糖が1株を3株に分割 実質増配で株価急騰",
+      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE1aa05CQmtIQUhwaS1IVUExQWZZTzk3Uk45UnVuZHphTHZGM1B5OTRBc1ZIakhRc3lyNDItcExvdWpaRGlibnlFOWptdHJmTmpDdDFkNEk0WlNGanAwUnhyQ21FTnlWVlFJbVpSeWhyZy1obGRv?oc=5"
+     },
+     {
+      "title": "甜菜糖、上期最終を一転3.4倍増益に上方修正、通期も増額",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1vRFZPamJjLVFDbV9hSFpUSVZNaE9DQ181ZExzcC1LbDlvVVFLTWNGZkpHdHJkR2xGX2ZhYVhfR2xUczN1eTRPOVYtTnA2ME8tMEE?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "4345",
+   "stockName": "シーティーエス",
+   "generatedAt": "2026-09-20T03:59:29.328Z",
+   "model": "gemini-3.5-flash",
+   "review": {
+    "headline": "14期連続増配の建設DX企業、足元の成長鈍化と株価調整が買い好機か",
+    "summary": "シーティーエスは建設DX（デジタルトランスフォーメーション）を牽引し、17期連続増収・15期連続増益・14期連続増配を達成している極めて優秀な実績を持つ企業です。財務健全性はD/E比率6.84%と無借金に近い極めて強固な水準であり、配当利回りも3.4%台と過去比で割安な水準まで株価が調整しています。一方で、直近の2027年3月期第1四半期決算では経常利益が3%増益にとどまっており、これまでの高いEPS成長ペース（CAGR 15.17%）と比較すると足元の成長鈍化が意識されています。アナリストによる目標株価引き下げもあり株価は52週安値付近で推移していますが、自社株買いの実施や米国DSR社との提携など、中長期的な成長に向けた施策と株主還元姿勢はしっかりと維持されています。",
+    "strengths": [
+     "14期連続増配および15期連続増益を達成している抜群の実績と高い株主還元姿勢",
+     "D/E比率6.84%という極めて強固な財務基盤と、実質無借金経営による高い安全性",
+     "建設業界のDX化（SAP普及、AI・IoT活用）という国策・業界課題に合致したビジネスモデル"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "足元の成長ペース鈍化懸念",
+      "detail": "直近1Qの経常利益が3%増益にとどまり、過去のEPS成長率（CAGR 15.17%）と比較して成長が一時的に足踏みしている可能性があります。これが株価調整の一因となっています。",
+      "severity": "medium"
+     },
+     {
+      "title": "建設業界の投資動向への依存",
+      "detail": "主要顧客である建設業界の景気や、公共投資・民間設備投資の動向に業績が左右されやすい特徴があります。",
+      "severity": "medium"
+     },
+     {
+      "title": "アライアンス効果の発現時期",
+      "detail": "ワキタや米国DSR社との戦略的提携を進めていますが、これらが具体的な収益として結実するまでには時間を要する可能性があります。",
+      "severity": "low"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-09-10",
+      "title": "シーティーエス、米国DSR Corporationと戦略的パートナーシップ協定を締結 AI・IoT・映像技術を活用したソリューション創出で、建設・防災・社会インフラ分野のDXを加速",
+      "takeaway": "AIやIoT、映像技術を活用した建設・防災分野のDXソリューション開発を強化。中長期的な競争力向上に寄与する可能性があります。",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE8tWUc0RDNPMkVFMXlLa3U2dEs1TS0zV0NDc2U0LWZTcWJFQ0FRMnhRRG51OERpUUxGVTl5c1UXU0RZZGZxdkhoQXpkOE9rcG50OHV2U1h6a2k0M210QkJQRWIwRXphUXdueWc?oc=5"
+     },
+     {
+      "date": "2026-09-09",
+      "title": "シーティーエス[4345]：自己株式の取得状況に関するお知らせ 2026年9月9日(適時開示)",
+      "takeaway": "継続的な自社株買いを実施しており、株主還元への積極的な姿勢と下値支持要因として機能することが期待されます。",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5BeUgyUFdna3RDeWVURlZRUG1tRUpxVUQ1Q3pXMGZNUmpJOTNCS2dWRjB4Tml4S3kzNGc1UklpR0xBYzVFcUh4R2ZnQkJZUWJaNlkzMHZDem81STJLQzV3RjN2SnZxeWhZVmc?oc=5"
+     },
+     {
+      "date": "2026-08-04",
+      "title": "【アナリスト評価】ＣＴＳ、レーティング強気を継続、目標株価1,100円に引下げ（日系中堅証券）",
+      "takeaway": "中堅証券がレーティング「強気」を維持しつつも目標株価を引き下げており、足元の株価軟調の一因となっていますが、依然として現株価に対しては高い上値余地があると見られています。",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOT3I5S2lNVzAwaElVOHhVWk9UVHJlY05mbnAtRGl1RmdsV1J1aGdLdUZHRWlTR013ZzZJdEp1WXI2VUctNHhlNGpxTnd6VTh2RXRJdC1uREFOTF9hQXFySGZoRGhPcnNtZHU5UmNaRkJrZS1QSVpLWWQ4TjlGel9DSUVGVHhzNmM?oc=5"
+     },
+     {
+      "date": "2026-07-30",
+      "title": "ＣＴＳ、4-6月期(1Q)経常は3％増益で着地",
+      "takeaway": "増益は維持したものの、3%増益とやや物足りない進捗となっており、通期計画の達成に向けた進捗度を今後見極める必要があります。",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFA4d2ctdkNyT01fOThOU0VwR21PX3pGY0pkeTljQlB6cUNHRUxUZUN4X1Z5cmpTUEhSM05qcGVzbEloZTBOQXAyTjY0aVd0Y095UlE?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "2027年3月期の通期業績予想に対する進捗率（特に2Q決算での挽回状況）",
+     "自社株買いの進捗状況と、今後の追加的な株主還元方針",
+     "ワキタやDSR社との提携による具体的な受注・売上貢献の有無"
+    ],
+    "stance": "条件付きで検討",
+    "stanceReason": "14期連続増配の実績と極めて健全な財務は非常に魅力的であり、配当利回り3.4%超は過去比で割安な水準です。ただし、直近1Qの経常3%増益に見られるように成長ペースが一時的に鈍化しているため、通期計画の達成度合いを確認しながら、株価の下げ止まりを待ってエントリーするのが賢明と判断します。",
+    "confidence": "high",
+    "sources": [
+     {
+      "title": "シーティーエス、米国DSR Corporationと戦略的パートナーシップ協定を締結 AI・IoT・映像技術を活用したソリューション創出で、建設・防災・社会インフラ分野のDXを加速 (PR TIMES)",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE8tWUc0RDNPMkVFMXlLa3U2dEs1TS0zV0NDc2U0LWZTcWJFQ0FRMnhRRG51OERpUUxGVTl5c1UXU0RZZGZxdkhoQXpkOE9rcG50OHV2U1h6a2k0M210QkJQRWIwRXphUXdueWc?oc=5"
+     },
+     {
+      "title": "シーティーエス[4345]：自己株式の取得状況に関するお知らせ 2026年9月9日(適時開示) ：日経会社情報DIGITAL (日本経済新聞)",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5BeUgyUFdna3RDeWVURlZRUG1tRUpxVUQ1Q3pXMGZNUmpJOTNCS2dWRjB4Tml4S3kzNGc1UklpR0xBYzVFcUh4R2ZnQkJZUWJaNlkzMHZDem81STJLQzV3RjN2SnZxeWhZVmc?oc=5"
+     },
+     {
+      "title": "【アナリスト評価】ＣＴＳ、レーティング強気を継続、目標株価1,100円に引下げ（日系中堅証券）(アイフィス株予報) (Yahoo!ファイナンス)",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOT3I5S2lNVzAwaElVOHhVWk9UVHJlY05mbnAtRGl1RmdsV1J1aGdLdUZHRWlTR013ZzZJdEp1WXI2VUctNHhlNGpxTnd6VTh2RXRJdC1uREFOTF9hQXFySGZoRGhPcnNtZHU5UmNaRkJrZS1QSVpLWWQ4TjlGel9DSUVGVHhzNmM?oc=5"
+     },
+     {
+      "title": "ＣＴＳ、4-6月期(1Q)経常は3％増益で着地 (株探)",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFA4d2ctdkNyT01fOThOU0VwR21PX3pGY0pkeTljQlB6cUNHRUxUZUN4X1Z5cmpTUEhSM05qcGVzbEloZTBOQXAyTjY0aVd0Y095UlE?oc=5"
+     },
+     {
+      "title": "シーティーエス（4345）、「17期連続増収・15期連続増益・14期連続増配」達成、SAP普及とAI実装で来期業績拡大へ (ログミーFinance)",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1NcHBITFA1RjZZZGliRU9wU2RvNG15RFRlVDJVQXpWcVk3VU9IalpSWEZUM0p6eTdXTHlTRDFHc1oxZDNaRGxOdW8wTnViYmVwZlE?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "3854",
+   "stockName": "アイル",
+   "generatedAt": "2026-09-20T03:58:56.439Z",
+   "model": "gemini-3-flash-preview",
+   "review": {
+    "headline": "先行投資による一時的減益で株価急落も、還元意欲と財務は盤石",
+    "summary": "中小企業向け基幹システムで高成長を維持してきましたが、2027年7月期の減益予想を嫌気し、株価は直近で大幅に下落しています。減益の主因はAI・人材への投資や本社移転準備といった先行投資であり、事業の競争力低下によるものではありません。16年連続非減配かつ実質無借金の財務基盤は極めて強固で、配当利回りは過去のレンジ上限まで上昇し割安感が強まっています。中期経営計画の策定や増配発表など、株主還元と成長の両立を図る姿勢に変化は見られません。",
+    "strengths": [
+     "16年連続非減配という優れた実績と株主還元姿勢",
+     "D/E比率0%（実質無借金）の極めて健全な財務体質",
+     "中小企業のDX需要を背景とした高いEPS成長ポテンシャル",
+     "「CROSS MALL」などのSaaS事業における他社プラットフォームとの連携拡大"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "先行投資による利益圧迫の長期化",
+      "detail": "AI投資や人材確保のコストが想定を上回り、利益回復が次々期以降にずれ込むリスクがあります。",
+      "severity": "medium"
+     },
+     {
+      "title": "本社移転に伴う一時的費用",
+      "detail": "2028年3月の日本橋への本社移転に向け、二重家賃や引越費用などの販管費増が数年にわたり発生します。",
+      "severity": "low"
+     },
+     {
+      "title": "IT人材の採用難と人件費高騰",
+      "detail": "エンジニア等の確保が成長の鍵ですが、採用競争の激化により利益率が低下する懸念があります。",
+      "severity": "medium"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-09-09",
+      "title": "アイル---2029年7月期を最終年度とする中期経営計画を策定",
+      "takeaway": "長期的な成長ビジョンを提示しており、足元の投資が将来の収益化に繋がるかどうかが焦点となる。",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9hWnVVamhiSklNNGc2SjAzeVp2TnRsVW1SMk9OYkVjRkh0bEJEQUQ2akhwcHIyZlBSc2lhcEc3Q0hFVXNuaFY1aGJvMkVUeFAwRnplcDBvLUFlRVEyV3hLMw?oc=5"
+     },
+     {
+      "date": "2026-09-08",
+      "title": "アイル 計画超えも来期営業10.2%減、理由はAIと人材への投資",
+      "takeaway": "2027年7月期の減益予想が株価急落の直接的な引き金となった。投資の内容自体は前向き。",
+      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE0tbnMzODI1ZzJVUTRPRUhfR1dOQkdRNmVlOW9xSHMtYl94cG5hUlo5NG9NbWxTMFZwcnB2ZlFXcE9wSG9ibnB1N1BDeTM5UFBna29jMk5WYXVDTDBzYkE?oc=5"
+     },
+     {
+      "date": "2026-09-08",
+      "title": "アイル---大幅続落、今期の減益ガイダンスをマイナス視",
+      "takeaway": "市場は短期的な利益成長の鈍化を嫌気。配当利回りが上昇する一方で、株価の底打ち確認が必要。",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1DellmLXFGT1lEMlZHNVlBaDBkNndYWVBZT2REM2x0eWUyRG02OEpMZjFFd0pWQy1oem9GbmVZMVpxV09GQTJNSFR1eXdyaE9YRTRGRmJhV2tiVTZITUNnaA?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "2027年7月期の四半期決算において、減益幅が会社予想の範囲内に収まっているか",
+     "中期経営計画で掲げられた2029年7月期の数値目標（売上・利益）の妥当性",
+     "AI関連の新機能やサービスが顧客に受け入れられ、単価アップに寄与しているか"
+    ],
+    "stance": "候補として有力",
+    "stanceReason": "減益ガイダンスによる株価急落で利回りが3%を超え、過去比で非常に割安な水準です。無借金経営で配当余力は十分あり、一時的なコスト増を成長のための必要経費と割り切れる長期投資家にとっては、絶好の仕込み時となる可能性があります。",
+    "confidence": "high",
+    "sources": [
+     {
+      "title": "アイル---26年7月期増収・2ケタ増益、期末配当金の増配を発表",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOYkRhdHNhRHFkNk5scEJmLU1TZVBJWF9ZS2FLWnNvOUg4cG5DVW42c1hqdmFnUDktQXVpNzNZT1VRYWMwZnFJRk9jODF3VGFlOUNLV3ltQ0hiR3c5V0ZlZnNCanduSlRDYW5VVkFHYVVSdmwzaFRQVWI5aXBuSS1jT200YVotQ2_SAYwBQVVfeXFMTWt0LTJ3NlFGMDdKcjFmWGFWcFlRY0hOYXBjLWVOVTQ4WEdmb0pveUZZZG41THloZ2FGRXB5aXo2ejF2VjZ5bnhrQ2VfQnR3YTJvb1F4SGtMR1UzYXZGOTU4X1A0Tk04S0lQOHJiS0prSERaNDNqWm5ZOE0wUm9RRnVVRW9UTGNpakpPblA?oc=5"
+     },
+     {
+      "title": "アイル 計画超えも来期営業10.2%減、理由はAIと人材への投資｜決算ウォッチ",
+      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE0tbnMzODI1ZzJVUTRPRUhfR1dOQkdRNmVlOW9xSHMtYl94cG5hUlo5NG9NbWxTMFZwcnB2ZlFXcE9wSG9ibnB1N1BDeTM5UFBna29jMk5WYXVDTDBzYkE?oc=5"
+     },
+     {
+      "title": "アイル---2029年7月期を最終年度とする中期経営計画を策定",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9hWnVVamhiSklNNGc2SjAzeVp2TnRsVW1SMk9OYkVjRkh0bEJEQUQ2akhwcHIyZlBSc2lhcEc3Q0hFVXNuaFY1aGJvMkVUeFAwRnplcDBvLUFlRVEyV3hLMw?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "1952",
+   "stockName": "新日本空調",
+   "generatedAt": "2026-09-20T03:58:27.735Z",
+   "model": "gemini-3-flash-preview",
+   "review": {
+    "headline": "資産売却益で純益を確保も、本業の収益性と配当急増の持続性に注視が必要",
+    "summary": "16年連続非減配という実績に加え、近年は配当額を急激に引き上げる積極的な還元姿勢が目立ちます。直近の2027年3月期1Q決算では、営業利益が減益となる一方で、投資有価証券売却益により純利益が大幅増となるなど、利益の質に一過性の側面が見られます。データセンターやAI関連の空調需要という強力な追い風はありますが、人件費や資材高による採算悪化が懸念材料です。財務体質は極めて健全であり、下値不安は限定的ですが、本業での利益成長が伴うかが今後の焦点となります。",
+    "strengths": [
+     "16年連続非減配という、建設業界でも屈指の長期的な株主還元実績",
+     "データセンター、AI、宇宙テックといった先端分野への技術的関与とテーマ性",
+     "D/E比率3.02%という、実質無借金に近い極めて強固な財務基盤"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "一過性利益による純利益の底上げ",
+      "detail": "直近1Qの純増益は投資有価証券売却益が主因であり、本業の営業利益は38%減と苦戦。資産売却が進んだ後の増配原資の持続性に懸念が残る。",
+      "severity": "medium"
+     },
+     {
+      "title": "コストプッシュによる利益率の圧迫",
+      "detail": "建設業界全体の人件費高騰や資材価格の上昇が、受注済み案件の採算を悪化させている可能性が高い。",
+      "severity": "high"
+     },
+     {
+      "title": "配当急増への期待値の高さ",
+      "detail": "2024年から2026年にかけて配当が倍増（50円→110円）する計画であり、市場の期待が高い分、業績の下振れが減配リスクとして意識されやすい。",
+      "severity": "medium"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-08-18",
+      "title": "新日本空調---1Qは増収・営業減益、投資有価証券売却益により四半期純利益は大幅増",
+      "takeaway": "本業の稼ぐ力（営業利益）が低下している点は懸念。純利益の増加は資産整理によるもので、配当の原資として持続可能か見極めが必要。",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQbkxPOVdUc3A4QVJqc0ZOQzRNM1Z6T2IyUEx5RE1fVXlaQTFiUFpSYzVYa2o5RjI2Z3JCa2NKWU9QWTl6aHZSSU82aWRzRVNFNmtlaWw4bjMxaFliVVdhT0xPc1NnU2tqWkFYQldXSGFjNE1YOTk4cXIxNzZIbnI5X3RxSUZRMW8?oc=5"
+     },
+     {
+      "date": "2026-07-24",
+      "title": "AIデータセンターの本命は「冷やす側」だった。空調・計装・電力で今すぐ監視すべき20銘柄",
+      "takeaway": "AI・データセンター市場の拡大が、同社の高付加価値な空調設備の需要を長期的に支える期待がある。",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1NTTdhdldiVmM3aF80M0ZUbkhZTTVoOE5CeGpjc1UwWFdEY1d2M1ZIY2hCN1AxTkJTallFd1drRVZGYjdOMUlCVFlseTBEWlJrYTZ4cmlaSFpEZXM?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "営業利益率が前年同期比で改善傾向に転じるか",
+     "受注残高のうち、データセンター等の高採算案件が占める割合の推移",
+     "有価証券売却益を除いた「実力ベース」での配当性向の妥当性"
+    ],
+    "stance": "条件付きで検討",
+    "stanceReason": "財務の健全性と還元意欲は申し分ないが、足元の本業減益と一過性利益による純増益のギャップが大きいためです。本業の利益成長が配当の伸びに追いつくかを確認してからでも遅くありません。",
+    "confidence": "high",
+    "sources": [
+     {
+      "title": "新日本空調---1Qは増収・営業減益、投資有価証券売却益により四半期純利益は大幅増",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQbkxPOVdUc3A4QVJqc0ZOQzRNM1Z6T2IyUEx5RE1fVXlaQTFiUFpSYzVYa2o5RjI2Z3JCa2NKWU9QWTl6aHZSSU82aWRzRVNFNmtlaWw4bjMxaFliVVdhT0xPc1NnU2tqWkFYQldXSGFjNE1YOTk4cXIxNzZIbnI5X3RxSUZRMW8?oc=5"
+     },
+     {
+      "title": "AIデータセンターの本命は「冷やす側」だった。空調・計装・電力で今すぐ監視すべき20銘柄",
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE1NTTdhdldiVmM3aF80M0ZUbkhZTTVoOE5CeGpjc1UwWFdEY1d2M1ZIY2hCN1AxTkJTallFd1drRVZGYjdOMUlCVFlseTBEWlJrYTZ4cmlaSFpEZXM?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "3771",
+   "stockName": "システムリサーチ",
+   "generatedAt": "2026-09-20T03:58:00.250Z",
+   "model": "gemini-3.5-flash",
+   "review": {
+    "headline": "累進配当導入で還元魅力向上も、直近1Qの減益要因に注視が必要",
+    "summary": "システムリサーチは15年連続で減配がなく、D/E比率7.23%と極めて健全な財務基盤を持つIT企業です。2026年7月には「累進配当の導入」と目標配当性向の引き上げを発表し、2027年3月期の配当予想を80円に増額修正するなど、株主還元姿勢を大幅に強化しました。一方で、同時に発表された2027年3月期第1四半期決算は増収ながらも経常利益が12%減益となっており、足元の業績動向には注意が必要です。高付加価値SIerへの転換やAI活用組織の新設など成長投資を継続していますが、コスト増加による利益圧迫がないか見極める局面です。",
+    "strengths": [
+     "15年連続で減配がなく、新たに「累進配当」を導入したことで今後の減配リスクが極めて低い点",
+     "D/E比率が7.23%と非常に低く、実質無借金経営に近い極めて強固な財務健全性",
+     "過去数年で高いEPS成長（CAGR 17.69%）を達成しており、売上高・営業利益ともに過去最高を更新する成長力"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "足元の業績減速とコスト増加懸念",
+      "detail": "直近の2027年3月期1Q（4-6月期）決算において、経常利益が12%減益となっており、人件費や採用費、先行投資などのコスト増加が利益率を圧迫している可能性があります。",
+      "severity": "medium"
+     },
+     {
+      "title": "IT人材不足に伴う採用・人件費の高騰",
+      "detail": "IT業界全体でエンジニア不足が深刻化しており、優秀な人材の確保に向けた人件費の上昇が、今後の利益成長の足かせになるリスクがあります。",
+      "severity": "medium"
+     },
+     {
+      "title": "大株主（機関投資家）の動向による需給影響",
+      "detail": "フィデリティなどの大手機関投資家が変更報告書を提出しており、保有比率の増減によっては株価の需給に影響を与える可能性があります。",
+      "severity": "low"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-07-28",
+      "title": "システムリサーチ[3771]：配当方針の変更（目標配当性向の変更ならびに累進配当の導入）および2027年３月期 配当予想の修正に関するお知らせ",
+      "takeaway": "累進配当の導入と配当性向の引き上げにより、2027年3月期の配当が80円に増額。インカムゲインの安定性と魅力が飛躍的に向上しました。",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBMRWlzWGZSNktZRV9BcTk3RllpeDFqei14TWxqTjZXM2dmbW1sQl9qeFdrNDd4bzJSajVNS1ZxN0J0bkVEVi1ucjN2NmwyV2dvbTZHaHlSTEVVOEFBTXVDem1aTE1BbW0yR0E?oc=5"
+     },
+     {
+      "date": "2026-07-28",
+      "title": "【決算速報】システムリサ、4-6月期(1Q)経常は12％減益で着地、今期配当を10円増額修正(株探ニュース)",
+      "takeaway": "増配は好材料ですが、1Qが12%減益で着地したことはネガティブ要因。通期計画に対する進捗や減益の背景を確認する必要があります。",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxNRmtXREFmbjYtNTI2VGtPdU5tN01FODNkN1o3MXpCZjRyTWd0RzZDU0xtUHJ6VFh5MUEwOE9XcVdFOU9TNjdGRkd1SFpvbVJ3WkltNUppRWlPTEp6T2VXUTdFMDd1WU9fUHlsWjdRVkJDMnZDZWJ3NE1ncC03WFk3a0xVSVhjQ0k?oc=5"
+     },
+     {
+      "date": "2026-09-07",
+      "title": "フィデリティ マネジメント アンド リサーチ カンパニー エルエルシー (Fidelity Management & Research Company LLC)が株式会社システムリサーチ＜3771＞株式の変更報告書を提出",
+      "takeaway": "世界的機関投資家であるフィデリティが保有比率を変動させており、市場での需給や評価に影響を与える可能性があります。",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1RX0NQanBRSUxOMWU5NkJfT3RSdWdDR2U4UGZMQ04tdmpjSUlPdWhhb3h0ejBuLXJwZW1Bb08tMXFrVXVMcXcxcmhUb01tQ3FzbmZvbVFCZUZwY3B1NVlCODN3Zy1tNS1Ma2c?oc=5"
+     },
+     {
+      "date": "2026-06-11",
+      "title": "「最高AI責任者」で開発加速 システムリサーチ、業務改革へ新組織",
+      "takeaway": "AI技術の導入による自社業務の効率化や、顧客向けサービスの付加価値向上を目指す前向きな投資が行われています。",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE8tRGpOcDcwQkI3WGJVblh3cTdnbUZfc1c1dVZFN3ZtNk96emRiU1xlV29HT3BkZUpGYjVBazNRbjh0cWg3UTAtNkNjM0hpRFFMaVVaNS1QLW1KVVExRV9DcFgtYk42eDI1WDZXZQ?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "2027年3月期第1四半期（4-6月期）における12%減益の具体的な要因（一時的な費用発生なのか、構造的なコスト増なのか）",
+     "新しく変更された配当方針における「目標配当性向」の具体的なパーセンテージ",
+     "フィデリティが提出した変更報告書において、保有比率が「買い増し」なのか「売り崩し」なのかの動向"
+    ],
+    "stance": "条件付きで検討",
+    "stanceReason": "累進配当の導入と年間80円への増配発表により、配当利回りは4%を超えインカムゲインの魅力は非常に高まりました。しかし、直近1Q決算が12%減益で着地しているため、この減益が一時的な要因によるものか、あるいは通期業績予想の未達につながるリスクがあるのかを精査した上で投資を検討すべきです。",
+    "confidence": "high",
+    "sources": [
+     {
+      "title": "システムリサーチ[3771]：配当方針の変更（目標配当性向の変更ならびに累進配当の導入）および2027年３月期 配当予想の修正に関するお知らせ 2026年7月28日(適時開示) ：日経会社情報DIGITAL",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBMRWlzWGZSNktZRV9BcTk3RllpeDFqei14TWxqTjZXM2dmbW1sQl9qeFdrNDd4bzJSajVNS1ZxN0J0bkVEVi1ucjN2NmwyV2dvbTZHaHlSTEVVOEFBTXVDem1aTE1BbW0yR0E?oc=5"
+     },
+     {
+      "title": "【決算速報】システムリサ、4-6月期(1Q)経常は12％減益で着地、今期配当を10円増額修正(株探ニュース) (Yahoo!ファイナンス)",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxNRmtXREFmbjYtNTI2VGtPdU5tN01FODNkN1o3MXpCZjRyTWd0RzZDU0xtUHJ6VFh5MUEwOE9XcVdFOU9TNjdGRkd1SFpvbVJ3WkltNUppRWlPTEp6T2VXUTdFMDd1WU9fUHlsWjdRVkJDMnZDZWJ3NE1ncC03WFk3a0xVSVhjQ0k?oc=5"
+     },
+     {
+      "title": "フィデリティ マネジメント アンド リサーチ カンパニー エルエルシー (Fidelity Management & Research Company LLC)が株式会社システムリサーチ＜3771＞株式の変更報告書を提出 (Excite エキサイト)",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE1RX0NQanBRSUxOMWU5NkJfT3RSdWdDR2U4UGZMQ04tdmpjSUlPdWhhb3h0ejBuLXJwZW1Bb08tMXFrVXVMcXcxcmhUb01tQ3FzbmZvbVFCZUZwY3B1NVlCODN3Zy1tNS1Ma2c?oc=5"
+     },
+     {
+      "title": "「最高AI責任者」で開発加速 システムリサーチ、業務改革へ新組織 (日本経済新聞)",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE8tRGpOcDcwQkI3WGJVblh3cTdnbUZfc1c1dVZFN3ZtNk96emRiU1xlV29HT3BkZUpGYjVBazNRbjh0cWg3UTAtNkNjM0hpRFFMaVVaNS1QLW1KVVExRV9DcFgtYk42eDI1WDZXZQ?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "1885",
+   "stockName": "東亜建設工業",
+   "generatedAt": "2026-09-20T03:57:32.756Z",
+   "model": "gemini-3.5-flash",
+   "review": {
+    "headline": "高利回り4.5%超のマリコン大手、価格転嫁力と国策テーマが強みも株価急落の背景確認が必要",
+    "summary": "東亜建設工業は海洋土木（マリコン）大手として高い技術力を持ち、土木上位で唯一「価格転嫁率」の最高評価を得るなどインフレ耐性の強さが光ります。EPSは右肩上がりで成長しており、配当も2026年度に100円（利回り4.57%）に達する計画です。直近の2027年3月期第1四半期決算も純利益6.7%増と堅調で、JPX日経400への採用など市場評価も高まっています。しかし、株価は52週高値から半減近くまで急落しており、この下落要因や今期の業績・配当予想の持続性を精査する必要があります。",
+    "strengths": [
+     "海洋土木（マリコン）分野における高い技術力と、南鳥島沖レアアース開発などの国策テーマ性",
+     "土木上位で最高評価を受ける優れた価格転嫁力（資材高・人件費高を吸収可能）",
+     "D/E比率25.51%という極めて健全な財務体質と、15年連続の非減配実績",
+     "JPX日経400やJPX日経中小型株指数、ESG指数への相次ぐ選定による機関投資家の買い需要期待"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "株価急落の背景にある要因（需給や業績懸念）",
+      "detail": "株価は52週高値4,620円から2,189円へと半年で34%以上下落しています。Q1決算は増益ですが、通期予想や配当方針に変化がないか、あるいは過去の急騰に対する反動なのか、下落の主因を特定する必要があります。",
+      "severity": "medium"
+     },
+     {
+      "title": "公共投資・政府予算への依存度",
+      "detail": "マリコンとしての強みは港湾整備などの公共事業に依存するため、政府のインフラ投資予算の増減が中長期的な業績を大きく左右します。",
+      "severity": "medium"
+     },
+     {
+      "title": "レアアース開発の業績寄与への時間軸",
+      "detail": "南鳥島沖のレアアース開発は2030年頃の商業化を目指す長期プロジェクトであり、足元の業績や配当原資への直接的な貢献は当面先となります。",
+      "severity": "low"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-08-20",
+      "title": "取適法施行も価格転嫁率は横ばい、土木上位で最高評価は東亜建設工業のみ",
+      "takeaway": "他社が苦戦する中で価格転嫁が進んでおり、資材高騰下でも高い利益率を維持できるビジネスモデルの強さが証明されています。",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBFUkp3UXhXVXM2VXVMRi1zZ1BLY1ZDMlJnR0ZiYmpMcUlveUcwOXNWSVkwb0VORmpVXzR1SUowbVlrcmlCZUFiZGhscmlnZ0ZFemtmU3RBUnREMFVnNVE0Rks0RHV1YTA?oc=5"
+     },
+     {
+      "date": "2026-08-18",
+      "title": "東亜建設工業[1885]：「JPX 日経インデックス 400」および「JPX日経中小型株指数」の構成銘柄に選定",
+      "takeaway": "資本効率や財務の健全性が評価され、代表的な指数に採用されたことで、中長期的な機関投資家の資金流入が期待されます。",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFAyaE41MTh5MVF1cjhDQzFUV3hNNS1tUXE3RkdJNmZVMkxQVndLZFk1S3hheFBONm91eGZSUXpfOUh4SGdPcy1Kb1E1VE5rc2p1TXRKZm9vOHAtXzJIQlNlTTJYWG5YMl9YTEE?oc=5"
+     },
+     {
+      "date": "2026-08-06",
+      "title": "決算速報＞東亜建、２７年３月期第１四半期決算は純利益６．７％増",
+      "takeaway": "新年度（2027年3月期）のスタートは増益を確保しており、業績の急激な悪化懸念は薄いと考えられます。",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxNaTRuZDFWMVBTQ21hb1JMQVlNN0M4X1hXSFlUTHZOaVF3dm55TWp0anFsNmVjMmdxc3lWYllDY3RnR1gwV2M4SGF1WGI3RFBRVGZmSHgtdEhSNFdoZGNMa1l2bnB2ZTNwUDRHNVgwR21lcnR4aEYyZHlJRlBXalZIc2k0SWh2VDA?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "2027年3月期の通期業績予想および配当予想（100円が維持されるか、あるいは減配リスクがないか）",
+     "直近半年で株価が大幅に下落した具体的な要因（大株主の売却、信用需給の悪化、あるいはセクター全体の要因か）",
+     "手持ち工事高（受注残高）の推移と、今後の採算性見通し"
+    ],
+    "stance": "条件付きで検討",
+    "stanceReason": "配当利回り4.5%超、高い価格転嫁力、国策テーマ性などファンダメンタルズは極めて強力です。しかし、株価が52週高値から半減している理由が不明瞭であるため、今期（2027年3月期）の業績・配当予想の妥当性と需給要因を一次情報で確認した上で投資判断を下すべきです。",
+    "confidence": "medium",
+    "sources": [
+     {
+      "title": "取適法施行も価格転嫁率は横ばい、土木上位で最高評価は東亜建設工業のみ",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBFUkp3UXhXVXM2VXVMRi1zZ1BLY1ZDMlJnR0ZiYmpMcUlveUcwOXNWSVkwb0VORmpVXzR1SUowbVlrcmlCZUFiZGhscmlnZ0ZFemtmU3RBUnREMFVnNVE0Rks0RHV1YTA?oc=5"
+     },
+     {
+      "title": "東亜建設工業[1885]：「JPX 日経インデックス 400」および「JPX日経中小型株指数」の構成銘柄に選定 2026年8月18日(適時開示) ：日経会社情報DIGITAL",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFAyaE41MTh5MVF1cjhDQzFUV3hNNS1tUXE3RkdJNmZVMkxQVndLZFk1S3hheFBONm91eGZSUXpfOUh4SGdPcy1Kb1E1VE5rc2p1TXRKZm9vOHAtXzJIQlNlTTJYWG5YMl9YTEE?oc=5"
+     },
+     {
+      "title": "決算速報＞東亜建、２７年３月期第１四半期決算は純利益６．７％増(ウエルスアドバイザー)",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxNaTRuZDFWMVBTQ21hb1JMQVlNN0M4X1hXSFlUTHZOaVF3dm55TWp0anFsNmVjMmdxc3lWYllDY3RnR1gwV2M4SGF1WGI3RFBRVGZmSHgtdEhSNFdoZGNMa1l2bnB2ZTNwUDRHNVgwR21lcnR4aEYyZHlJRlBXalZIc2k0SWh2VDA?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "1867",
+   "stockName": "植木組",
+   "generatedAt": "2026-09-20T02:03:14.608Z",
+   "model": "gemini-3.5-flash",
+   "review": {
+    "headline": "価格転嫁と大型工事で最高益、配当も急増中の中堅地方ゼネコン",
+    "summary": "植木組は新潟県を地盤とする中堅ゼネコンで、直近の業績は極めて好調です。2026年3月期決算では工事費の見直しや大型工事の進捗により過去最高益を達成し、配当も120円へと大幅に増配されました。足元の2027年3月期第1四半期（2026年4-6月期）も経常利益2%増益と堅調なスタートを切っています。業界全体で人手不足を背景とした選別受注と価格転嫁が進んでおり、同社の利益率向上に寄与しています。財務面もD/E比率約20%と極めて健全で、18年連続で減配がない点も高評価です。",
+    "strengths": [
+     "「18年連続減配なし」という優れた配当実績と、足元の業績拡大に伴う大幅な増配（2026年度120円）",
+     "D/E比率19.93%という極めて健全な財務体質",
+     "業界的な選別受注・価格転嫁の浸透による、売上総利益率の改善傾向"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "地域依存度と公共投資への影響",
+      "detail": "新潟県柏崎市に本社を置く地域密着型ゼネコンであるため、新潟県内を中心とした地方の公共投資や地域経済の動向に業績が左右されやすい特徴があります。",
+      "severity": "medium"
+     },
+     {
+      "title": "人手不足による施工キャパシティの限界",
+      "detail": "業界全体で人手不足が深刻化しており、無理な受注を避けることで利益率は維持できているものの、中長期的な事業規模拡大の制約要因になる恐れがあります。",
+      "severity": "medium"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-08-11",
+      "title": "【Q1決算】植木組、第1四半期は増収 大型工事の進捗で建設事業が堅調",
+      "takeaway": "2027年3月期第1四半期も大型工事の進捗により増収を確保しており、通期業績および配当計画の達成に向けて順調な滑り出しを見せています。",
+      "url": "https://news.google.com/rss/articles/CBMiREFVX3lxTE9QbTFJTGthVjctaGpvZXFSZzlSUUd6M3hNLTVhTk00LTROVENXVXlNR0JlZEtiZ2gxZ0JoVGJPSkNYS243?oc=5"
+     },
+     {
+      "date": "2026-05-14",
+      "title": "植木組（柏崎市）各利益が過去最高・2026年3月期連結決算 工事費見直しなど奏功",
+      "takeaway": "前期（2026年3月期）に過去最高益を達成。適切な価格転嫁（工事費見直し）が利益率向上に直結していることが確認できます。",
+      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE5iUGQxVmJqZERiTnVkMVl1c2Z3M21zd2htUURqZ2FBTWRYQzg0UDQ3NVQzWHE5VmJxZjVQSlB1ZEZBdzNtMWtFeUdTdGlmbGwwQUJTeU5kcGlYZm5vR3c?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "新潟県内における官公庁向け・民間向けの受注比率および今後の開発計画",
+     "2027年3月期の通期業績予想に対する進捗率と、さらなる増配の可能性（配当性向の目安）",
+     "労務費や資材価格の今後の推移と、それに対する価格転嫁の継続性"
+    ],
+    "stance": "候補として有力",
+    "stanceReason": "18年連続で減配がなく、足元では価格転嫁の成功により過去最高益を更新し大幅な増配を実現しています。財務健全性も非常に高く、配当利回り4.4%は現在の業績成長と配当性向（約32%）を考慮すると十分に持続可能と判断されます。",
+    "confidence": "high",
+    "sources": [
+     {
+      "title": "【Q1決算】植木組、第1四半期は増収 大型工事の進捗で建設事業が堅調",
+      "url": "https://news.google.com/rss/articles/CBMiREFVX3lxTE9QbTFJTGthVjctaGpvZXFSZzlSUUd6M3hNLTVhTk00LTROVENXVXlNR0JlZEtiZ2gxZ0JoVGJPSkNYS243?oc=5"
+     },
+     {
+      "title": "植木組（柏崎市）各利益が過去最高・2026年3月期連結決算 工事費見直しなど奏功",
+      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE5iUGQxVmJqZERiTnVkMVl1c2Z3M21zd2htUURqZ2FBTWRYQzg0UDQ3NVQzWHE5VmJxZjVQSlB1ZEZBdzNtMWtFeUdTdGlmbGwwQUJTeU5kcGlYZm5vR3c?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "2307",
+   "stockName": "クロスキャット",
+   "generatedAt": "2026-09-20T02:02:46.373Z",
+   "model": "gemini-3-flash-preview",
+   "review": {
+    "headline": "18年非減配の鉄壁財務、クラウド・AI需要を追い風に最高益更新が続く",
+    "summary": "18年連続で減配がなく、無借金経営を維持する極めて堅実な企業です。金融・公共向け開発を基盤に、オラクルクラウド(OCI)やAI等の先端領域で高い技術力を評価されており、2026年3月期も過去最高益を更新する見通しです。2023年の特別配当を除けば実質的な増配が続いており、成長と還元のバランスが優れています。直近では株主優待の電子化など、還元体制の効率化も進めています。",
+    "strengths": [
+     "18年間にわたる非減配の実績と累進的な配当方針",
+     "自己資本比率が高く、D/E比率0%の無借金経営",
+     "オラクルクラウド(OCI)における国内トップクラスの技術力",
+     "DX需要を背景としたEPSの二桁成長"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "人材確保に伴うコスト増",
+      "detail": "エンジニアの技術力評価が高い反面、採用競争激化による人件費上昇が利益率を圧迫する懸念があります。",
+      "severity": "medium"
+     },
+     {
+      "title": "特定プラットフォームへの依存",
+      "detail": "OCI関連の評価が強みですが、オラクルの戦略変更やクラウド市場のシェア変動に業績が左右されるリスクがあります。",
+      "severity": "low"
+     },
+     {
+      "title": "小規模銘柄の流動性",
+      "detail": "時価総額が比較的小さいため、大口の売買による株価変動が大きくなりやすい傾向があります。",
+      "severity": "low"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-09-18",
+      "title": "株主優待を選択式電子ギフトに変更、基準日も3月末へ",
+      "takeaway": "事務コストを削減しつつ、株主還元を継続する姿勢。基準日変更による権利取りのタイミングに注意。",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOUVhxZUs4bG9HcDlvY2VMZ2kyaktHTk1ENTlieG9kUmFENjMzd3ZVT3d4SlN0YUJpc2lGOVVzRk5VVWJBRG16TUZPNGRVeU9IUkNRQ0JzUE1sRXhJb1hwNGVRUFJBSGJEQnlqNTVGYVZXRmN0QXRsaGw2MzVfWkFVa2hhTzlnR1XSAYwBQVVfeXFMTkxaZkxEeUR4M2FNbVR3c2pXZGJDaWs1Ty1NUktJSWdkQy1iU3dyeDNxNkdDYWJ6T21hM2tGaWp0VlV3dGZwcDhmVHRjTTA2RERlWFpackFfUlZYNjU1U080Ynk2THFYQXlNMjRWdmVrWXV2OUx5dEM4X3RLSzlqRE9WdFF6cDNsei0zWWw?oc=5"
+     },
+     {
+      "date": "2026-07-07",
+      "title": "2026年3月期は過去最高業績を更新。2027年3月期も増収増益見込む",
+      "takeaway": "中期的な成長シナリオが極めて堅調であることを示唆。EPS成長が配当原資となる。",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1VUF9BWVlNT05pa3BheW43R2NVUEFjNTJTMG00Q0VWR3k3Uzh1S19NLXBDNURMMVNOdWJteWc5ZW0zSVcxTE1vUlNIQUxsRU84aHRLeUlSS1kySlU3MVV5OA?oc=5"
+     },
+     {
+      "date": "2026-09-03",
+      "title": "エンジニアが「2026 OCI Top Partner Engineers」に選出",
+      "takeaway": "技術力の高さが客観的に証明されており、高単価な案件獲得や顧客維持に寄与する好材料。",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9ocG0wdmhmYmw5MktFZmd3YXU5Z1VjTElUQ3JuaDF4OFFoaU5ZaENhQUlEbDE0WlA1eTlKZEdIendCa2Y3TWJ1NnVCc0g0MlduMWc?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "2026年3月期の進捗率と、会社予想に対する上振れ余地",
+     "エンジニアの採用数と離職率の推移",
+     "配当性向の目標値に変更がないか（現在は30%〜40%程度か確認）"
+    ],
+    "stance": "候補として有力",
+    "stanceReason": "18年間の非減配実績と無借金経営という圧倒的な安心感に加え、DX・クラウド需要を捉えたEPS成長が続いています。現在の利回りは過去のレンジで見ても割安水準にあり、長期的なインカムとキャピタルの両取りが期待できる銘柄です。",
+    "confidence": "high",
+    "sources": [
+     {
+      "title": "クロスキャット---株主優待を選択式電子ギフトに変更、基準日も3月末へ",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOUVhxZUs4bG9HcDlvY2VMZ2kyaktHTk1ENTlieG9kUmFENjMzd3ZVT3d4SlN0YUJpc2lGOVVzRk5VVWJBRG16TUZPNGRVeU9IUkNRQ0JzUE1sRXhJb1hwNGVRUFJBSGJEQnlqNTVGYVZXRmN0QXRsaGw2MzVfWkFVa2hhTzlnR1XSAYwBQVVfeXFMTkxaZkxEeUR4M2FNbVR3c2pXZGJDaWs1Ty1NUktJSWdkQy1iU3dyeDNxNkdDYWJ6T21hM2tGaWp0VlV3dGZwcDhmVHRjTTA2RERlWFpackFfUlZYNjU1U080Ynk2THFYQXlNMjRWdmVrWXV2OUx5dEM4X3RLSzlqRE9WdFF6cDNsei0zWWw?oc=5"
+     },
+     {
+      "title": "クロスキャット Research Memo（1）：2026年3月期は過去最高業績を更新。2027年3月期も増収増益見込む",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1VUF9BWVlNT05pa3BheW43R2NVUEFjNTJTMG00Q0VWR3k3Uzh1S19NLXBDNURMMVNOdWJteWc5ZW0zSVcxTE1vUlNIQUxsRU84aHRLeUlSS1kySlU3MVV5OA?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "2163",
+   "stockName": "アルトナー",
+   "generatedAt": "2026-09-20T02:02:11.553Z",
+   "model": "gemini-3.5-flash",
+   "review": {
+    "headline": "利回り4.5%超と15年非減配が魅力も、通期予想据え置きによる株価調整に留意",
+    "summary": "アルトナーは技術者派遣事業を展開しており、稼働人員の増加と技術者単価の上昇を背景に業績は堅調に推移しています。2026年9月10日に発表された上期決算では経常利益が11%増益と好調な着地を見せたものの、通期予想が据え置かれたことで株価は一時的に下落しました。一方で、15年連続で減配がなく、D/E比率17.79%と極めて健全な財務体質を維持しています。2026年8月に実施した1対2の株式分割と実質的な増配発表を経て、現在の配当利回りは4.51%と過去3年間のレンジで最も割安な水準にあります。",
+    "strengths": [
+     "15年連続で減配がない抜群の配当実績と、12期連続増配予定という強力な株主還元姿勢",
+     "稼働人員の増加と技術者単価の継続的な上昇による、高いEPS成長性（CAGR 16.03%）",
+     "D/E比率17.79%という無借金に近い極めて健全な財務基盤",
+     "1対2の株式分割実施による投資口価格の引き下げと、市場流動性の向上"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "採用コストの上昇と人材獲得競争の激化",
+      "detail": "技術者派遣ビジネスの性質上、優秀なエンジニアの採用・育成コストが高騰した場合、売上総利益率が圧迫されるリスクがあります。",
+      "severity": "medium"
+     },
+     {
+      "title": "主要顧客（製造業）の景気動向への依存",
+      "detail": "自動車や電機などの主要顧客が研究開発費や設備投資を抑制した場合、稼働率の低下や単価交渉の難航につながる可能性があります。",
+      "severity": "medium"
+     },
+     {
+      "title": "通期予想据え置きに伴う目先の失望売り",
+      "detail": "上期実績が好調であるにもかかわらず通期予想が据え置かれたため、下期の進捗に対する警戒感から短期的には株価の上値が重くなる可能性があります。",
+      "severity": "low"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-09-10",
+      "title": "アルトナー、上期経常は11％増益で着地",
+      "takeaway": "上期業績は堅調に推移しており、事業のファンダメンタルズが良好であることを裏付けています。",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9maERnZE94UHdxTG02aDVIMXNxQjNTMmtCQVUtMWxfbUQ4a3JySGlyaXdqVDJoM0luUVRZZFgyanZON1BxYk04NmwzR1VWNS1vZEE?oc=5"
+     },
+     {
+      "date": "2026-09-10",
+      "title": "アルトナー－後場マイナス転換 上期営業益12.2億円 通期予想は据え置き〔DZH 個別株情報〕(時事通信)",
+      "takeaway": "好決算ながらも通期予想の据え置きが嫌気され、目先は利益確定売りや失望売りに押される展開となっています。",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOd3pfYjZFTnczM09FUWQ4ZlFyX0xzV2Z5NVE3clQtRkgtZzNrTkhVanZzdG5mOW85dHFSUFc1SE5ZNmNwTlpMcTB3RHEyRnVsM3Q0cjVLWnVXTzlvOWJGUUMxb3hzc1o1Q0VNSkVrUFhqVEU2OW1iVjVEbHlhT0s4MmxjYXgza28?oc=5"
+     },
+     {
+      "date": "2026-06-16",
+      "title": "アルトナー[2163]：株式分割及び定款の一部変更並びに配当予想の修正に関するお知らせ 2026年6月16日(適時開示)",
+      "takeaway": "1対2の株式分割とそれに伴う配当予想の実質的な増額修正を行い、株主還元に積極的な姿勢を示しています。",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5HNlRsU25DVVlHV2JZTmRSd3VqR3BmODVwMzNRV0lsMmNxblJsdUREVXN6ZVFWSmJHMURPTWZweEhZTTlvQ3B1ZzMxb1NxdHdUeUEwT25qekx6UXpscU1NM0FWXzB4UHByRVE?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "株式分割（1対2）の前後における、調整後配当金と配当性向の推移",
+     "月次で開示される稼働率および月末技術者数の推移に陰りがないか",
+     "主要取引先である大手製造業の業績や研究開発投資の動向"
+    ],
+    "stance": "条件付きで検討",
+    "stanceReason": "15年非減配の実績や4.5%を超える高い配当利回り、極めて健全な財務は長期配当投資として非常に魅力的です。ただし、直近の上期決算で通期予想が据え置かれたことで株価が調整局面にあるため、月次の稼働率データ等で事業の堅調さを確認しつつ、株価が落ち着いたところでの押し目買いを検討すべきです。",
+    "confidence": "high",
+    "sources": [
+     {
+      "title": "アルトナー、上期経常は11％増益で着地",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9maERnZE94UHdxTG02aDVIMXNxQjNTMmtCQVUtMWxfbUQ4a3JySGlyaXdqVDJoM0luUVRZZFgyanZON1BxYk04NmwzR1VWNS1vZEE?oc=5"
+     },
+     {
+      "title": "アルトナー－後場マイナス転換 上期営業益12.2億円 通期予想は据え置き〔DZH 個別株情報〕(時事通信)",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOd3pfYjZFTnczM09FUWQ4ZlFyX0xzV2Z5NVE3clQtRkgtZzNrTkhVanZzdG5mOW85dHFSUFc1SE5ZNmNwTlpMcTB3RHEyRnVsM3Q0cjVLWnVXTzlvOWJGUUMxb3hzc1o1Q0VNSkVrUFhqVEU2OW1iVjVEbHlhT0s4MmxjYXgza28?oc=5"
+     },
+     {
+      "title": "アルトナー[2163]：株式分割及び定款の一部変更並びに配当予想の修正に関するお知らせ 2026年6月16日(適時開示)",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5HNlRsU25DVVlHV2JZTmRSd3VqR3BmODVwMzNRV0lsMmNxblJsdUREVXN6ZVFWSmJHMURPTWZweEhZTTlvQ3B1ZzMxb1NxdHdUeUEwT25qekx6UXpscU1NM0FWXzB4UHByRVE?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "1381",
+   "stockName": "アクシーズ",
+   "generatedAt": "2026-09-20T01:49:55.073Z",
+   "model": "gemini-3.5-flash",
+   "review": {
+    "headline": "財務超健全な鶏肉大手、今期38%減益予想も120円配当維持で高利回り",
+    "summary": "アクシーズは鶏肉（ブロイラー）の生産・加工・販売を行う企業であり、17年連続で減配なしという優れた配当実績を誇ります。D/E比率0.21%という実質無借金の極めて強固な財務体質が最大の強みです。直近の2026年6月期はEPSが520.76円と急拡大し、配当も120円に増額されました。しかし、2027年6月期（今期）は一転して経常利益が38%減益となる見通しであり、配当は120円維持にとどまる計画です。飼料価格や為替、鳥インフルエンザなどの外部要因に業績が左右されやすい点には注意が必要です。",
+    "strengths": [
+     "17年間にわたる長期の非減配実績と、株主還元への高い意識",
+     "D/E比率0.21%という、実質無借金経営の極めて強固な財務基盤",
+     "直近2026年6月期における大幅なEPS成長（520.76円）とそれに伴う増配実績"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "業績のボラティリティと今期大幅減益予想",
+      "detail": "2027年6月期は38%の経常減益予想となっており、鶏肉相場や需要の変動によって業績が大きくブレるリスクがあります。",
+      "severity": "medium"
+     },
+     {
+      "title": "感染症（鳥インフルエンザ）リスク",
+      "detail": "養鶏ビジネスにおける最大の不可避リスクであり、直営肥育施設等で発生した場合、出荷制限や殺処分などにより業績に甚大な打撃を与える可能性があります。",
+      "severity": "high"
+     },
+     {
+      "title": "為替および原材料価格の変動リスク",
+      "detail": "配合飼料の原料となる穀物は輸入に依存しているため、円安の進行や国際的な穀物価格の高騰が直接的なコスト増につながります。",
+      "severity": "medium"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-08-07",
+      "title": "【決算速報】アクシーズ、今期経常は38％減益、前期配当を7.5円増額・今期も120円継続へ(株探ニュース)",
+      "takeaway": "2026年6月期は好決算で配当を120円に増額したものの、2027年6月期は38%の減益予想。配当は120円維持を計画しており、利回りは維持されるものの業績は踊り場に差し掛かっています。",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxPUk41cWpHT253Vm5hMVZSMUhvM0F3RWg2TXdvVmJIaTlrZTk2YmwwM2h6NzRYTXdFOHpXakcyb1VEbWlHc0tUVGVwSFIyb3pMVGo3MksyQ0s5RENWSlFxOFBwUkFBc2lOaTdmZnM2V2R5YzVxWDZCX3lxRDNOSzFHQm95MkZST28?oc=5"
+     },
+     {
+      "date": "2026-04-30",
+      "title": "アクシーズ、今期経常を21％上方修正",
+      "takeaway": "2026年6月期中の業績上振れを示しており、直近の事業環境自体は非常に良好であったことが確認できます。",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1lNDJiekJIMnQyS2c5VjcyS1Fpak9wNndadzQ5MW9jNkxzZFdmckVEMHpKYndNRUNJMHZ4UHFjQjlzVVI0VUw3N3NLU0VCcWtKMWc?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "2027年6月期（今期）の38%減益予想の主因（飼料価格の見通しや鶏肉相場の動向）",
+     "鳥インフルエンザに対する同社の防疫対策の状況と過去の被害実績",
+     "主要販売先（日本KFC等）との取引関係の安定性と売上依存度"
+    ],
+    "stance": "条件付きで検討",
+    "stanceReason": "財務は超健全で17年非減配の実績は非常に魅力的ですが、今期の38%減益予想が示す通り、業績のボラティリティが高いビジネスモデルです。配当維持（120円）が計画されているため現在の利回りは維持される見込みですが、飼料価格や鳥インフルエンザなどの外部リスクを許容できるかが投資の判断基準となります。",
+    "confidence": "medium",
+    "sources": [
+     {
+      "title": "【決算速報】アクシーズ、今期経常は38％減益、前期配当を7.5円増額・今期も120円継続へ(株探ニュース)",
+      "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxPUk41cWpHT253Vm5hMVZSMUhvM0F3RWg2TXdvVmJIaTlrZTk2YmwwM2h6NzRYTXdFOHpXakcyb1VEbWlHc0tUVGVwSFIyb3pMVGo3MksyQ0s5RENWSlFxOFBwUkFBc2lOaTdmZnM2V2R5YzVxWDZCX3lxRDNOSzFHQm95MkZST28?oc=5"
+     },
+     {
+      "title": "アクシーズ、今期経常を21％上方修正",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1lNDJiekJIMnQyS2c5VjcyS1Fpak9wNndadzQ5MW9jNkxzZFdmckVEMHpKYndNRUNJMHZ4UHFjQjlzVVI0VUw3N3NLU0VCcWtKMWc?oc=5"
+     }
+    ]
+   }
+  },
+  {
+   "stockCode": "1414",
+   "stockName": "ショーボンドホールディングス",
+   "generatedAt": "2026-09-20T01:47:16.062Z",
+   "model": "gemini-3-flash-preview",
+   "review": {
+    "headline": "17期連続増配の補修最大手、財務鉄壁も直近の格下げに注意",
+    "summary": "橋梁等の補修・補強に特化した建設業の優良企業で、17年連続増配という圧倒的な実績を誇ります。無借金経営かつ高いEPS成長性を維持しており、老朽化インフラの更新需要という構造的な追い風を受けています。直近決算では14期連続の営業増益を達成した一方、中東情勢の影響による減収や証券会社による投資判断の格下げが報告されており、短期的には株価の調整局面にある点に留意が必要です。",
+    "strengths": [
+     "17年連続増配の確かな実績と高い株主還元意欲",
+     "D/E比率0%の無借金経営による極めて強固な財務基盤",
+     "公共インフラの老朽化対策（国土強靭化）という景気に左右されにくい安定需要",
+     "補修・補強分野における高い専門性と市場シェア"
+    ],
+    "hiddenRisks": [
+     {
+      "title": "海外事業における地政学リスク",
+      "detail": "直近の決算説明会で「中東リスクによる減収」が言及されており、国内専業のイメージに反して海外情勢が業績の重石となる可能性がある。",
+      "severity": "medium"
+     },
+     {
+      "title": "証券会社による評価の悪化",
+      "detail": "2026年9月にモルガンMUFG証券が「アンダーウエート」へ格下げしており、機関投資家の売り圧力や株価の重しになる懸念がある。",
+      "severity": "medium"
+     },
+     {
+      "title": "建設コストの上昇と人手不足",
+      "detail": "業界共通の課題として、資材高騰や労務費の上昇が利益率を圧迫するリスクは常に存在する。",
+      "severity": "low"
+     }
+    ],
+    "recentNews": [
+     {
+      "date": "2026-09-18",
+      "title": "ショーボンド、モルガンＭＵＦＧ証が「アンダーウエート」に格下げ",
+      "takeaway": "大手証券による弱気判断への変更は、短中期の株価パフォーマンスにネガティブな影響を与える可能性がある。",
+      "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTFAxS0lGOTFfZ0JSbmlKbzg3LWNGLXY5U2g5ZHNyeVRNNUJYa1NXRW9UN3RseXdyVWQ4cXNJZWtzblNCSVNpZWhV?oc=5"
+     },
+     {
+      "date": "2026-09-03",
+      "title": "ショーボンドホールディングス[1414]：自己株式の取得状況に関するお知らせ",
+      "takeaway": "継続的な自社株買いを実施しており、配当以外でも株主還元を積極的に行う姿勢が確認できる。",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9lRHVFRmsxWkRLeE1ZOTdoNGtnRVVjVmZPVXJlX3FKd1g5ZnpHaWh5X3ZKVGF3UTdnUS1nZU9NUkx5ZWlfaDNGNkJUSlRZdVhfQ1BVU1lBQmQtV3hzcFBfWWxpM1dhQm1zQUE?oc=5"
+     },
+     {
+      "date": "2026-08-23",
+      "title": "【ショーボンドHD FY2026 FY 決算説明会】営業利益208億円で14期連続増益、中東リスクで減収も17期連続増配へ",
+      "takeaway": "本業は極めて堅調で増益を維持しているが、中東リスクという新たな懸念材料が浮上している。",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5UM0RlbmJld0lkV1VZclFRajBWYWV3UlMtSHVBc1ZZTFBOcWhCcXEzMndTUXZuQlVUUjllQjMyS256QWpkbWpwS29mYVQ4N2NEYUw4UFlpVUlhOTczUThJ?oc=5"
+     }
+    ],
+    "checkpoints": [
+     "2026年度のEPSが前期比で大幅に跳ね上がる（46.14円→76.03円）要因が、一過性のものか本業の成長か",
+     "「中東リスク」の具体的な内容と、売上・利益に占める海外比率の推移",
+     "モルガンMUFG証券が格下げに至った具体的な理由（目標株価との乖離や利益成長の鈍化懸念など）"
+    ],
+    "stance": "候補として有力",
+    "stanceReason": "17期連続増配と無借金経営という圧倒的な信頼感があり、配当利回りも過去のレンジ内で割安な水準にあります。直近の格下げによる株価の揺らぎはあるものの、インフラ補修という長期的な国策テーマに合致しており、押し目買いの好機と捉えられます。",
+    "confidence": "high",
+    "sources": [
+     {
+      "title": "【ショーボンドHD FY2026 FY 決算説明会】営業利益208億円で14期連続増益、中東リスクで減収も17期連続増配へ",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5UM0RlbmJld0lkV1VZclFRajBWYWV3UlMtSHVBc1ZZTFBOcWhCcXEzMndTUXZuQlVUUjllQjMyS256QWpkbWpwS29mYVQ4N2NEYUw4UFlpVUlhOTczUThJ?oc=5"
+     },
+     {
+      "title": "ショーボンド、モルガンＭＵＦＧ証が「アンダーウエート」に格下げ 速報",
+      "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTFAxS0lGOTFfZ0JSbmlKbzg3LWNGLXY5U2g5ZHNyeVRNNUJYa1NXRW9UN3RseXdyVWQ4cXNJZWtzblNCSVNpZWhV?oc=5"
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -45,6 +45,20 @@ GitHub Pages以外(Cloudflare Pages / Netlify / Vercel)を使う場合は、
 `out/` ディレクトリを各サービスにアップロードする。ルート直下で公開するなら
 `NEXT_PUBLIC_BASE_PATH` は不要。
 
+### AI総評・会社概要を公開サイトに載せる
+
+個人モードで生成したAI総評・会社概要は、次のコマンドで公開用のJSON (`content/ai/*.json`) に書き出せる。
+
+```bash
+npm run publish:ai
+```
+
+書き出されるのは生成結果のテキストだけで、APIキー・プロンプト・元データは含まれない。
+書き出し時に `.env.local` のキー値や代表的なAPIキーの形式が混入していないかを検査し、
+見つかれば中断する (`src/lib/ai/secret-guard.ts`)。書き出したJSONをコミットしてpushすると、
+公開サイトのビルドがそれを読み込み、`/ai-reviews` と各銘柄ページに表示する。
+公開サイト側にAIの生成機能は無く、JSONを表示するだけ。
+
 ### 閲覧者のデータの扱い
 
 ウォッチリストと運用実績の入力内容は、閲覧者のブラウザのlocalStorageにのみ保存される。
@@ -124,6 +138,7 @@ APIキーなしで使える組み合わせが既定。優先順位は次のと�
 | `npm run dev` | 開発サーバー |
 | `npm run refresh` | データ取得 + スクリーニング実行 (作業用SQLiteに保存) |
 | `npm run export:data` | DBの内容を `public/data/*.json` に書き出し |
+| `npm run publish:ai` | AI総評・会社概要を公開用の `content/ai/*.json` に書き出し (秘密情報チェック付き) |
 | `npm run build` | 静的サイトを `out/` に書き出し |
 | `npm run build:site` | 上記3つをまとめて実行 |
 | `npm run edinet:index` | EDINET提出書類インデックスの構築(任意) |

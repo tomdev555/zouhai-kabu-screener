@@ -27,37 +27,8 @@ const PAUSE_BETWEEN_STOCKS_MS = 7000;
 const NEWS_DAYS = 180;
 const NEWS_LIMIT = 20;
 
-export const ReviewSchema = z.object({
-  headline: z.string().describe("1行の結論"),
-  summary: z.string().describe("総評 (3〜6文)"),
-  strengths: z.array(z.string()).describe("強み・安心材料"),
-  hiddenRisks: z
-    .array(
-      z.object({
-        title: z.string(),
-        detail: z.string(),
-        severity: z.enum(["high", "medium", "low"]),
-      })
-    )
-    .describe("スクリーニングの数字だけでは見えないリスク"),
-  recentNews: z
-    .array(
-      z.object({
-        date: z.string().describe("YYYY-MM-DD または YYYY-MM。不明なら空文字"),
-        title: z.string(),
-        takeaway: z.string().describe("投資判断への含意"),
-        url: z.string().optional(),
-      })
-    )
-    .describe("直近のニュース・開示"),
-  checkpoints: z.array(z.string()).describe("買う前に自分で確認すべきこと"),
-  stance: z.enum(["候補として有力", "条件付きで検討", "様子見", "見送り"]),
-  stanceReason: z.string(),
-  confidence: z.enum(["high", "medium", "low"]).describe("情報の十分さに基づく自信度"),
-  sources: z.array(z.object({ title: z.string(), url: z.string() })),
-});
-
-export type Review = z.infer<typeof ReviewSchema>;
+export { ReviewSchema, type Review } from "../ai/schemas";
+import { ReviewSchema, type Review } from "../ai/schemas";
 
 export interface StoredReview {
   stockCode: string;

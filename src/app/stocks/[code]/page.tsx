@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
-import { loadScreeningSnapshot, loadStockDetail } from "@/lib/static-data";
+import { loadPublishedProfiles, loadPublishedReviews, loadScreeningSnapshot, loadStockDetail } from "@/lib/static-data";
+import { ReviewCard } from "@/components/ai/review-card";
+import { CompanyProfileCard } from "@/components/ai/company-profile-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { PriceChart } from "@/components/charts/price-chart";
@@ -26,10 +28,17 @@ export default async function StockDetailPage({
   const screening = detail.screening;
   const health = screening.breakdown.financialHealth;
 
-  // 個人モードのときだけ会社概要とAI総評への導線を表示する。公開ビルドではスタブ(null)に差し替わる
+  // 個人モードでは DB の会社概要・AI総評 (生成ボタン付き) を、公開サイトでは
+  // content/ai/*.json に書き出した公開用の総評・概要 (表示のみ) を出す
   const personal = process.env.PERSONAL_MODE === "1" ? await import("@/components/personal/personal-sections") : null;
   const CompanyProfile = personal?.CompanyProfileSection ?? null;
   const AiReviewTeaser = personal?.AiReviewTeaser ?? null;
+  const [publishedReview, publishedProfile] = personal
+    ? [null, null]
+    : await Promise.all([
+        loadPublishedReviews().then((rs) => rs.find((r) => r.stockCode === code) ?? null),
+        loadPublishedProfiles().then((ps) => ps.find((p) => p.stockCode === code) ?? null),
+      ]);
 
   return (
     <div className="p-6 space-y-6">
@@ -54,6 +63,13 @@ export default async function StockDetailPage({
       </div>
 
       {CompanyProfile && <CompanyProfile code={code} />}
+      {publishedProfile && (
+        <CompanyProfileCard
+          profile={publishedProfile.profile}
+          generatedAt={publishedProfile.generatedAt}
+          model={publishedProfile.model}
+        />
+      )}
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         <StatCard label="現在値" value={formatYen(detail.currentPrice)} />
@@ -132,6 +148,20 @@ export default async function StockDetailPage({
       </Card>
 
       {AiReviewTeaser && <AiReviewTeaser code={code} />}
+      {publishedReview && (
+        <div className="space-y-2">
+          <h2 className="text-sm font-medium text-slate-500 dark:text-slate-400">AI総評 (直近ニュースを踏まえた評価)</h2>
+          <ReviewCard
+            code={code}
+            name={detail.name}
+            rank={screening.rank}
+            review={publishedReview.review}
+            generatedAt={publishedReview.generatedAt}
+            model={publishedReview.model}
+            anchorId="ai-review"
+          />
+        </div>
+      )}
     </div>
   );
 }

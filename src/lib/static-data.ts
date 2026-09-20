@@ -4,6 +4,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import type { ScreeningCriteria, StockScreeningResult } from "./screening/types";
+import type { ProfileRecord, ReviewRecord } from "./ai/schemas";
 
 const DATA_DIR = path.join(process.cwd(), "public", "data");
 
@@ -57,5 +58,30 @@ export async function loadStockDetail(code: string): Promise<StockDetail | null>
     return JSON.parse(text) as StockDetail;
   } catch {
     return null;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// ローカルで生成して公開用に書き出したAI総評・会社概要 (content/ai/*.json、npm run publish:ai で生成)
+// 生成結果のテキストだけを含み、APIキー等は含まない。無ければ空を返す。
+// ---------------------------------------------------------------------------
+
+const AI_DIR = path.join(process.cwd(), "content", "ai");
+
+export async function loadPublishedReviews(): Promise<ReviewRecord[]> {
+  try {
+    const text = await fs.readFile(path.join(AI_DIR, "reviews.json"), "utf-8");
+    return (JSON.parse(text) as { reviews: ReviewRecord[] }).reviews ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export async function loadPublishedProfiles(): Promise<ProfileRecord[]> {
+  try {
+    const text = await fs.readFile(path.join(AI_DIR, "profiles.json"), "utf-8");
+    return (JSON.parse(text) as { profiles: ProfileRecord[] }).profiles ?? [];
+  } catch {
+    return [];
   }
 }

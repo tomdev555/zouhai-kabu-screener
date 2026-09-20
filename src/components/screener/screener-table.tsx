@@ -31,9 +31,12 @@ function formatFinancialHealth(health: StockScreeningResult["breakdown"]["financ
 export function ScreenerTable({
   results,
   reviewedCodes = [],
+  reviewHrefBase = "/ai-reviews/#",
 }: {
   results: StockScreeningResult[];
   reviewedCodes?: string[];
+  /** AIバッジのリンク先の前半 (末尾に銘柄コードが付く) */
+  reviewHrefBase?: string;
 }) {
   const reviewed = useMemo(() => new Set(reviewedCodes), [reviewedCodes]);
   const [query, setQuery] = useState("");
@@ -125,7 +128,7 @@ export function ScreenerTable({
                   </Link>
                   {reviewed.has(r.code) && (
                     <Link
-                      href={`/my/reviews/${r.code}`}
+                      href={`${reviewHrefBase}${r.code}`}
                       className="ml-2 inline-flex items-center gap-1 rounded-full bg-violet-100 px-2 py-0.5 text-[11px] font-medium text-violet-800 hover:bg-violet-200 dark:bg-violet-900/40 dark:text-violet-300 dark:hover:bg-violet-900/60"
                       title="AI総評を見る"
                     >

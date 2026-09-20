@@ -1,4 +1,4 @@
-import { loadScreeningSnapshot } from "@/lib/static-data";
+import { loadPublishedReviews, loadScreeningSnapshot } from "@/lib/static-data";
 import { ScreenerTable } from "@/components/screener/screener-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -6,11 +6,11 @@ export default async function ScreenerPage() {
   const snapshot = await loadScreeningSnapshot();
   const criteria = snapshot.criteria;
 
-  // 個人モードのときだけ、AI総評が生成済みの銘柄にバッジを付ける
-  const reviewedCodes =
-    process.env.PERSONAL_MODE === "1"
-      ? await (await import("@/components/personal/personal-sections")).reviewedStockCodes()
-      : [];
+  // AI総評がある銘柄にバッジを付ける。個人モードはDB、公開サイトは content/ai/reviews.json を見る
+  const personal = process.env.PERSONAL_MODE === "1";
+  const reviewedCodes = personal
+    ? await (await import("@/components/personal/personal-sections")).reviewedStockCodes()
+    : (await loadPublishedReviews()).map((r) => r.stockCode);
 
   if (snapshot.results.length === 0) {
     return (
@@ -62,7 +62,7 @@ export default async function ScreenerPage() {
         </Card>
       </div>
 
-      <ScreenerTable results={snapshot.results} reviewedCodes={reviewedCodes} />
+      <ScreenerTable results={snapshot.results} reviewedCodes={reviewedCodes} reviewHrefBase={personal ? "/my/reviews/" : "/ai-reviews/#"} />
     </div>
   );
 }

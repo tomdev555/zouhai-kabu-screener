@@ -4,11 +4,11 @@
 
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { isAiReviewConfigured, loadReviews } from "@/lib/personal/ai-review";
 import { loadCompanyProfile } from "@/lib/personal/company-profile";
 import { CompanyProfilePanel } from "./company-profile-panel";
+import { StanceBadge } from "@/components/ai/review-card";
 
 /** 銘柄ページの先頭に出す四季報風の会社概要 */
 export async function CompanyProfileSection({ code }: { code: string }) {
@@ -45,12 +45,6 @@ export async function AiReviewTeaser({ code }: { code: string }) {
       </CardContent>
     </Card>
   );
-}
-
-function StanceBadge({ stance }: { stance: string }) {
-  const variant =
-    stance === "候補として有力" ? "success" : stance === "条件付きで検討" ? "warning" : stance === "見送り" ? "danger" : "default";
-  return <Badge variant={variant}>{stance}</Badge>;
 }
 
 /** 一覧でAIバッジを出すための、総評が生成済みの銘柄コード一覧 */

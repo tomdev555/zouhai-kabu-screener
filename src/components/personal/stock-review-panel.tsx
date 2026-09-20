@@ -2,10 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ReviewCard, type ReviewItem } from "./reviews-client";
+import { ReviewCard } from "@/components/ai/review-card";
+import type { ReviewItem } from "./reviews-client";
 
-/** 個別銘柄ページに埋め込むAI総評。未生成ならその場で生成できる。 */
+/** 個人モードのAI総評パネル。表示は共通の ReviewCard に任せ、生成・再生成ボタンを付ける。 */
 export function StockReviewPanel({ item, configured }: { item: ReviewItem; configured: boolean }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -31,19 +34,36 @@ export function StockReviewPanel({ item, configured }: { item: ReviewItem; confi
     }
   }
 
+  if (!configured) {
+    return (
+      <Card>
+        <CardContent className="py-4 text-sm text-amber-700 dark:text-amber-400">
+          <code className="rounded bg-slate-100 px-1 dark:bg-slate-800">.env.local</code> に
+          <code className="rounded bg-slate-100 px-1 dark:bg-slate-800">GEMINI_API_KEY</code> を設定すると使えます。
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
-    <div id="ai-review" className="space-y-2 scroll-mt-6">
+    <div className="space-y-2">
       <h2 className="text-sm font-medium text-slate-500 dark:text-slate-400">AI総評 (直近ニュースを踏まえた評価・自分用)</h2>
-      {!configured ? (
-        <Card>
-          <CardContent className="py-4 text-sm text-amber-700 dark:text-amber-400">
-            <code className="rounded bg-slate-100 px-1 dark:bg-slate-800">.env.local</code> に
-            <code className="rounded bg-slate-100 px-1 dark:bg-slate-800">GEMINI_API_KEY</code> を設定すると使えます。
-          </CardContent>
-        </Card>
-      ) : (
-        <ReviewCard item={item} busy={busy} disabled={busy} onRegenerate={generate} />
-      )}
+      <ReviewCard
+        code={item.code}
+        name={item.name}
+        rank={item.rank}
+        review={item.review?.review ?? null}
+        generatedAt={item.review?.generatedAt}
+        model={item.review?.model}
+        rawText={item.review?.rawText}
+        anchorId="ai-review"
+        action={
+          <Button size="sm" variant="outline" onClick={generate} disabled={busy}>
+            <RefreshCw className={busy ? "animate-spin" : ""} />
+            {item.review?.review ? "再生成" : "生成"}
+          </Button>
+        }
+      />
       {error && <p className="text-sm text-red-600">{error}</p>}
       {busy && <p className="text-sm text-slate-500 dark:text-slate-400">生成中… 20〜60秒ほどかかります。</p>}
     </div>
