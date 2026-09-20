@@ -17,7 +17,7 @@ export default async function ReviewsPage() {
       <div>
         <h1 className="text-xl font-semibold">AI総評 (スクリーニング上位10社)</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          Geminiが各銘柄の最新ニュース・決算・開示をGoogle検索し、スクリーニングの数字だけでは見えない
+          各銘柄の直近6ヶ月のニュース・決算・開示をGoogleニュースから集め、Geminiがスクリーニングの数字だけでは見えない
           リスクや状況を整理します。投資助言ではなく判断材料の整理です。
         </p>
       </div>

@@ -1,21 +1,30 @@
-// 個人モード専用: スクリーニング上位銘柄について、Gemini が最新ニュースをGoogle検索した上で
-// 「数字だけでは見えないリスク」を含む総評を生成する。
+// 個人モード専用: スクリーニング上位銘柄について、直近のニュースを踏まえた
+// 「数字だけでは見えないリスク」を含む総評を Gemini で生成する。
 //
-// - Gemini API の無料枠で動く前提 (モデルは既定で gemini-3.8-flash、AI_REVIEW_MODEL で変更可)
-// - 認証は GEMINI_API_KEY (.env.local)。Google AI Studio で発行する
-// - ニュース検索は Gemini 内蔵の Google Search グラウンディングを使うため、追加のAPI契約は不要
+// - Gemini API の無料枠で動く前提。認証は GEMINI_API_KEY (.env.local)。Google AI Studio で発行する
+// - 無料枠では Google検索グラウンディングが使えないため、ニュースは Googleニュースの RSS (無料) で
+//   集めてプロンプトに渡す (news.ts)
+// - 出力は responseJsonSchema による構造化出力で受け取る (ツールを使わないので併用できる)
 // - 無料枠は 1分あたりのリクエスト数に上限があるため、銘柄ごとに間隔を空けて実行する
+// - モデルは AI_REVIEW_MODEL で指定。未指定なら無料枠で使える候補を順に試す
 
 import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
 import { prisma } from "../db";
 import { computeScreeningFromDb, computeScreeningForStock } from "../screening/engine";
 import { DEFAULT_CRITERIA, type StockScreeningResult } from "../screening/types";
+import { fetchStockNews, type NewsItem } from "./news";
 
-const MODEL = process.env.AI_REVIEW_MODEL || "gemini-3.8-flash";
+// 無料枠で動作確認できたモデルを優先順に並べる。429/503 が返ったら次を試す
+const MODEL_CANDIDATES = process.env.AI_REVIEW_MODEL
+  ? [process.env.AI_REVIEW_MODEL]
+  : ["gemini-3.5-flash", "gemini-3-flash-preview", "gemini-3.5-flash-lite"];
+
 const REVIEW_FRESH_HOURS = 24;
 // 無料枠のRPM制限(概ね10/分)に収めるための銘柄間の待ち時間
 const PAUSE_BETWEEN_STOCKS_MS = 7000;
+const NEWS_DAYS = 180;
+const NEWS_LIMIT = 20;
 
 export const ReviewSchema = z.object({
   headline: z.string().describe("1行の結論"),
@@ -69,9 +78,11 @@ const SYSTEM_PROMPT = `あなたは日本株の配当投資に精通したアナ
 ユーザーは「10年以上減配なし・EPS成長・財務健全・配当利回り2〜7%」という機械的なスクリーニングで
 上位に入った銘柄について、数字だけでは分からない実態とリスクを知りたがっています。
 
-必ずGoogle検索を使って、その企業の直近3〜6ヶ月のニュース・決算・適時開示・業績修正・不祥事・
-業界動向・株主還元方針の変更などを調べ、事実に基づいて評価してください。
-検索は日本語で行い、企業名と証券コードの両方を使うと精度が上がります。
+ユーザーからは、スクリーニングの数値データに加えて、直近数ヶ月のニュース見出しの一覧が渡されます。
+ニュースは見出しと短い抜粋のみで本文はありません。見出しから読み取れる範囲で、決算・業績修正・
+適時開示・不祥事・業界動向・株主還元方針の変更などを拾い、あなた自身の企業知識と合わせて評価してください。
+見出しにない事実を断定しないでください。判断に必要な情報が不足している場合は confidence を下げ、
+checkpoints にユーザーが自分で確認すべき点として書いてください。
 
 重視する視点:
 - 増配が今後も続く根拠はあるか (利益成長・配当性向・キャッシュフロー・経営方針)
@@ -81,24 +92,34 @@ const SYSTEM_PROMPT = `あなたは日本株の配当投資に精通したアナ
 - 直近で株価が急騰・急落していれば、その理由
 - 最新決算の内容と会社予想の方向性
 
-出力は必ず次のJSONのみを返してください。前後に説明文やコードブロック記号(\`\`\`)を付けないでください。
-不明な項目は空配列または空文字にし、推測で埋めないでください。
-{
-  "headline": "1行の結論 (30字程度)",
-  "summary": "総評。3〜6文。数字と事実に基づく",
-  "strengths": ["強み・安心材料"],
-  "hiddenRisks": [{"title": "リスクの見出し", "detail": "具体的な内容と根拠", "severity": "high|medium|low"}],
-  "recentNews": [{"date": "YYYY-MM-DD", "title": "ニュースの要旨", "takeaway": "投資判断への含意", "url": "出典URL"}],
-  "checkpoints": ["買う前にユーザー自身が確認すべきこと"],
-  "stance": "候補として有力|条件付きで検討|様子見|見送り",
-  "stanceReason": "そのスタンスの理由 (2〜3文)",
-  "confidence": "high|medium|low",
-  "sources": [{"title": "出典名", "url": "URL"}]
-}
+出力項目の意味:
+- headline: 1行の結論 (30字程度)
+- summary: 総評。3〜6文。数字と事実に基づく
+- strengths: 強み・安心材料
+- hiddenRisks: スクリーニングの数字だけでは見えないリスク。severity は high/medium/low
+- recentNews: 渡されたニュース一覧の中で投資判断に関係するもの。date と url は渡された値をそのまま使う。takeaway は投資判断への含意
+- checkpoints: 買う前にユーザー自身が確認すべきこと
+- stance: 候補として有力 / 条件付きで検討 / 様子見 / 見送り のいずれか
+- stanceReason: そのスタンスの理由 (2〜3文)
+- confidence: 情報の十分さに基づく自信度 high/medium/low
+- sources: 根拠として使ったニュースの出典 (title, url)。渡された一覧から選ぶ
 
+不明な項目は空配列または空文字にし、推測で埋めないでください。
 これは投資助言ではなく情報整理です。断定的な売買推奨は避け、判断材料を提示してください。`;
 
-async function buildStockContext(code: string): Promise<{ text: string; screening: StockScreeningResult | null }> {
+function formatNews(news: NewsItem[]): string {
+  if (news.length === 0) return "(該当するニュースは見つかりませんでした)";
+  return news
+    .map((n, i) => {
+      const snippet = n.snippet && n.snippet !== n.title ? `\n   抜粋: ${n.snippet.slice(0, 200)}` : "";
+      return `${i + 1}. [${n.publishedAt || "日付不明"}] ${n.title} (${n.source || "出典不明"})\n   URL: ${n.url}${snippet}`;
+    })
+    .join("\n");
+}
+
+async function buildStockContext(
+  code: string
+): Promise<{ text: string; screening: StockScreeningResult | null; news: NewsItem[] }> {
   const [stock, screening, prices] = await Promise.all([
     prisma.stock.findUnique({
       where: { code },
@@ -116,6 +137,8 @@ async function buildStockContext(code: string): Promise<{ text: string; screenin
     }),
   ]);
   if (!stock) throw new Error(`銘柄 ${code} がデータベースにありません`);
+
+  const news = await fetchStockNews(stock.name, stock.code, NEWS_DAYS, NEWS_LIMIT);
 
   const closes = prices.map((p) => Number(p.close));
   const current = closes[0] ?? null;
@@ -159,10 +182,13 @@ async function buildStockContext(code: string): Promise<{ text: string; screenin
     epsLine || "データなし",
     latestFin?.bps ? `BPS: ${Number(latestFin.bps)}円` : "",
     ``,
-    `上記のデータを踏まえ、最新のニュースを検索して総評を作成してください。今日は ${new Date().toISOString().slice(0, 10)} です。`,
+    `【直近${NEWS_DAYS}日のニュース見出し (Googleニュース、新しい順)】`,
+    formatNews(news),
+    ``,
+    `上記のデータとニュースを踏まえて総評を作成してください。今日は ${new Date().toISOString().slice(0, 10)} です。`,
   ].join("\n");
 
-  return { text, screening };
+  return { text, screening, news };
 }
 
 /** 応答テキストからJSONを取り出す。コードブロック記号や前後の文があっても最初の { から最後の } までを解釈する */
@@ -177,25 +203,59 @@ function extractJson(text: string): unknown | null {
   }
 }
 
+/** 無料枠で一時的に使えないモデル(429/503)は次の候補に切り替える */
+function isRetryableModelError(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return /"code":(429|503)|RESOURCE_EXHAUSTED|UNAVAILABLE|overloaded/i.test(msg);
+}
+
 export async function generateReviewForStock(code: string): Promise<StoredReview> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("GEMINI_API_KEY が設定されていません");
 
   const ai = new GoogleGenAI({ apiKey });
-  const { text: context, screening } = await buildStockContext(code);
+  const t0 = Date.now();
+  const { text: context, screening, news } = await buildStockContext(code);
+  const tNews = Date.now();
+  const responseJsonSchema = z.toJSONSchema(ReviewSchema);
 
-  const response = await ai.models.generateContent({
-    model: MODEL,
-    contents: context,
-    config: {
-      systemInstruction: SYSTEM_PROMPT,
-      tools: [{ googleSearch: {} }],
-      temperature: 0.3,
-    },
-  });
+  let response: Awaited<ReturnType<typeof ai.models.generateContent>> | null = null;
+  let usedModel = MODEL_CANDIDATES[0];
+  let lastError: unknown = null;
 
-  const candidate = response.candidates?.[0];
-  const finishReason = candidate?.finishReason;
+  for (const model of MODEL_CANDIDATES) {
+    const tModel = Date.now();
+    try {
+      response = await ai.models.generateContent({
+        model,
+        contents: context,
+        config: {
+          systemInstruction: SYSTEM_PROMPT,
+          responseMimeType: "application/json",
+          responseJsonSchema,
+          temperature: 0.3,
+        },
+      });
+      usedModel = model;
+      console.log(
+        `[ai-review] ${code}: ニュース${news.length}件 ${((tNews - t0) / 1000).toFixed(1)}s / ${model} 生成 ${((Date.now() - tModel) / 1000).toFixed(1)}s`
+      );
+      break;
+    } catch (err) {
+      lastError = err;
+      console.warn(
+        `[ai-review] ${code}: ${model} 失敗 ${((Date.now() - tModel) / 1000).toFixed(1)}s → ${isRetryableModelError(err) ? "次の候補へ" : "中断"}`
+      );
+      if (!isRetryableModelError(err)) throw err;
+    }
+  }
+  if (!response) {
+    throw new Error(
+      `無料枠で利用できるモデルがありません (${MODEL_CANDIDATES.join(", ")}): ${lastError instanceof Error ? lastError.message.slice(0, 200) : lastError}`
+    );
+  }
+
+  const finishReason = response.candidates?.[0]?.finishReason;
   if (finishReason && finishReason !== "STOP") {
     throw new Error(`生成が完了しませんでした (finishReason: ${finishReason})`);
   }
@@ -203,21 +263,18 @@ export async function generateReviewForStock(code: string): Promise<StoredReview
   const rawText = response.text ?? "";
   if (!rawText.trim()) throw new Error("モデルから空の応答が返りました");
 
-  // グラウンディングで実際に参照したページ (モデルが出典を省略した場合の補完に使う)
-  const groundedSources: { title: string; url: string }[] = [];
-  for (const chunk of candidate?.groundingMetadata?.groundingChunks ?? []) {
-    if (chunk.web?.uri) groundedSources.push({ title: chunk.web.title ?? chunk.web.uri, url: chunk.web.uri });
-  }
-
   const parsed = ReviewSchema.safeParse(extractJson(rawText));
   let review: Review | null = null;
   if (parsed.success) {
     review = parsed.data;
-    if (review.sources.length === 0) review.sources = groundedSources.slice(0, 10);
+    // モデルが出典を省略した場合は、渡したニュースの上位を出典として補う
+    if (review.sources.length === 0) {
+      review.sources = news.slice(0, 8).map((n) => ({ title: `${n.title} (${n.source})`, url: n.url }));
+    }
   }
 
   const data = {
-    model: MODEL,
+    model: usedModel,
     rankAtTime: screening?.rank ?? null,
     content: JSON.stringify(review),
     rawText: review ? null : rawText,
