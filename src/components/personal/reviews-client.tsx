@@ -9,14 +9,14 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { StoredReview } from "@/lib/personal/ai-review";
 
-interface Item {
+export interface ReviewItem {
   code: string;
   name: string;
-  rank: number;
+  rank: number | null;
   review: StoredReview | null;
 }
 
-export function ReviewsClient({ items, configured }: { items: Item[]; configured: boolean }) {
+export function ReviewsClient({ items, configured }: { items: ReviewItem[]; configured: boolean }) {
   const router = useRouter();
   const [busy, setBusy] = useState<string | null>(null); // "all" | code
   const [message, setMessage] = useState<string | null>(null);
@@ -84,13 +84,13 @@ export function ReviewsClient({ items, configured }: { items: Item[]; configured
   );
 }
 
-function ReviewCard({
+export function ReviewCard({
   item,
   busy,
   disabled,
   onRegenerate,
 }: {
-  item: Item;
+  item: ReviewItem;
   busy: boolean;
   disabled: boolean;
   onRegenerate: () => void;
@@ -103,7 +103,7 @@ function ReviewCard({
       <CardHeader className="flex flex-row items-start justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs text-slate-400">#{item.rank}</span>
+            {item.rank !== null && <span className="text-xs text-slate-400">#{item.rank}</span>}
             <Link href={`/stocks/${item.code}`} className="text-base font-semibold text-slate-900 hover:underline dark:text-slate-100">
               {item.name}
             </Link>

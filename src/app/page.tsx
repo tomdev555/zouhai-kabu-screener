@@ -6,6 +6,12 @@ export default async function ScreenerPage() {
   const snapshot = await loadScreeningSnapshot();
   const criteria = snapshot.criteria;
 
+  // 個人モードのときだけ、AI総評が生成済みの銘柄にバッジを付ける
+  const reviewedCodes =
+    process.env.PERSONAL_MODE === "1"
+      ? await (await import("@/components/personal/ai-review-section")).reviewedStockCodes()
+      : [];
+
   if (snapshot.results.length === 0) {
     return (
       <div className="p-6">
@@ -56,7 +62,7 @@ export default async function ScreenerPage() {
         </Card>
       </div>
 
-      <ScreenerTable results={snapshot.results} />
+      <ScreenerTable results={snapshot.results} reviewedCodes={reviewedCodes} />
     </div>
   );
 }

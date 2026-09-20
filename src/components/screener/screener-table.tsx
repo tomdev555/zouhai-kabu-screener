@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Star } from "lucide-react";
+import { Sparkles, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,7 +28,14 @@ function formatFinancialHealth(health: StockScreeningResult["breakdown"]["financ
   return `D/E ${formatPercent(health.value)}`;
 }
 
-export function ScreenerTable({ results }: { results: StockScreeningResult[] }) {
+export function ScreenerTable({
+  results,
+  reviewedCodes = [],
+}: {
+  results: StockScreeningResult[];
+  reviewedCodes?: string[];
+}) {
+  const reviewed = useMemo(() => new Set(reviewedCodes), [reviewedCodes]);
   const [query, setQuery] = useState("");
   const [onlyPassed, setOnlyPassed] = useState(true);
   const [sortKey, setSortKey] = useState<SortKey>("rank");
@@ -112,6 +119,15 @@ export function ScreenerTable({ results }: { results: StockScreeningResult[] }) 
                   <Link href={`/stocks/${r.code}`} className="font-medium text-emerald-800 hover:underline dark:text-emerald-400">
                     {r.name}
                   </Link>
+                  {reviewed.has(r.code) && (
+                    <Link
+                      href={`/stocks/${r.code}#ai-review`}
+                      className="ml-2 inline-flex items-center gap-1 rounded-full bg-violet-100 px-2 py-0.5 text-[11px] font-medium text-violet-800 hover:bg-violet-200 dark:bg-violet-900/40 dark:text-violet-300 dark:hover:bg-violet-900/60"
+                      title="AI総評を見る"
+                    >
+                      <Sparkles className="size-3" /> AI
+                    </Link>
+                  )}
                   <div className="text-xs text-slate-400">{r.code}</div>
                 </TableCell>
                 <TableCell className="text-slate-500">{r.sector ?? "-"}</TableCell>

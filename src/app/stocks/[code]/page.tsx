@@ -26,6 +26,12 @@ export default async function StockDetailPage({
   const screening = detail.screening;
   const health = screening.breakdown.financialHealth;
 
+  // 個人モードのときだけAI総評を表示する。静的書き出し時は PERSONAL_MODE が無いので読み込まれない
+  const AiReview =
+    process.env.PERSONAL_MODE === "1"
+      ? (await import("@/components/personal/ai-review-section")).AiReviewSection
+      : null;
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-start justify-between">
@@ -47,6 +53,8 @@ export default async function StockDetailPage({
           <WatchButton code={code} />
         </div>
       </div>
+
+      {AiReview && <AiReview code={code} name={detail.name} rank={screening.rank} />}
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         <StatCard label="現在値" value={formatYen(detail.currentPrice)} />
