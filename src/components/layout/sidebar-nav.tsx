@@ -9,7 +9,6 @@ const NAV_ITEMS = [
   { href: "/", label: "スクリーニング", icon: LayoutGrid },
   { href: "/ai-reviews", label: "AI総評", icon: Sparkles },
   { href: "/watchlist", label: "ウォッチリスト", icon: Star },
-  { href: "/portfolio", label: "運用実績", icon: Wallet },
   { href: "/settings", label: "このサイトについて", icon: Settings },
 ];
 
@@ -17,6 +16,7 @@ const NAV_ITEMS = [
 const PERSONAL_ITEMS = [
   { href: "/my/reviews", label: "AI総評の生成 (上位10社)", icon: Sparkles },
   { href: "/my", label: "マイポートフォリオ", icon: Briefcase },
+  { href: "/portfolio", label: "簡易運用実績 (ブラウザ保存)", icon: Wallet },
 ];
 
 export function SidebarNav({ personal = false }: { personal?: boolean }) {

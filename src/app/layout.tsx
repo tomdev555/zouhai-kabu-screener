@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "増配株ナビ",
-  description: "優良な増配株をスクリーニングし、ウォッチリスト・運用実績を管理するアプリ",
+  description: "日本株の優良な増配株を毎朝スクリーニングし、AI総評とあわせて表示するサイト",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

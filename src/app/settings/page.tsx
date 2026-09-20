@@ -129,11 +129,11 @@ export default async function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>ウォッチリスト・運用実績について</CardTitle>
+          <CardTitle>ウォッチリストについて</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            ウォッチリストと運用実績に入力した内容は、お使いのブラウザ内にのみ保存されます。
+            ウォッチリストに登録した内容は、お使いのブラウザ内にのみ保存されます。
             サーバーには送信されないため、他の閲覧者に見えることはありません。
             一方で、ブラウザのデータを消したり別の端末で開いたりすると内容は引き継がれません。
           </p>
