@@ -42,7 +42,7 @@ export function EpsDividendChart({ data }: { data: EpsDividendPoint[] }) {
           ]}
           labelFormatter={(l) => `${l}年度`}
         />
-        <Bar yAxisId="div" dataKey="dividendPerShare" name="1株配当" barSize={20}>
+        <Bar yAxisId="div" dataKey="dividendPerShare" name="1株配当" barSize={20} isAnimationActive={false}>
           {data.map((d, i) => (
             <Cell key={i} fill={d.isSpecial ? "#f59e0b" : "#10b981"} />
           ))}
@@ -55,6 +55,7 @@ export function EpsDividendChart({ data }: { data: EpsDividendPoint[] }) {
           stroke="#2563eb"
           strokeWidth={2}
           dot={{ r: 3 }}
+          isAnimationActive={false}
         />
       </ComposedChart>
     </ResponsiveContainer>

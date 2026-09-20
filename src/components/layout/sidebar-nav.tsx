@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutGrid, Star, Settings, TrendingUp, Briefcase, Sparkles } from "lucide-react";
+import { LayoutGrid, Star, Settings, TrendingUp, Briefcase, Sparkles, type LucideIcon } from "lucide-react";
 
 const NAV_ITEMS = [
   { href: "/", label: "スクリーニング", icon: LayoutGrid },
@@ -12,17 +12,23 @@ const NAV_ITEMS = [
   { href: "/settings", label: "このサイトについて", icon: Settings },
 ];
 
-// 個人モードでだけ表示するメニュー (公開ビルドには含まれない)
-const PERSONAL_ITEMS = [
-  { href: "/my/reviews", label: "AI総評の生成 (上位10社)", icon: Sparkles },
-  { href: "/my", label: "マイポートフォリオ", icon: Briefcase },
-];
+// 個人モードのメニューは personal-sections.tsx から渡される (公開ビルドには文字列も含めない)。
+// クライアントコンポーネントにはアイコン関数を渡せないため、名前で受け取る
+const ICONS: Record<string, LucideIcon> = { sparkles: Sparkles, briefcase: Briefcase };
 
-export function SidebarNav({ personal = false }: { personal?: boolean }) {
+export interface NavItem {
+  href: string;
+  label: string;
+  icon: keyof typeof ICONS;
+}
+
+export function SidebarNav({ personalItems = [] }: { personalItems?: NavItem[] }) {
   const pathname = usePathname() ?? "";
+  const personal = personalItems.length > 0;
+  const extraItems = personalItems.map((i) => ({ ...i, icon: ICONS[i.icon] ?? Sparkles }));
 
   // /my と /my/reviews のように前方一致が重なる場合は、最も長く一致したものだけを選択中にする
-  const allItems = personal ? [...NAV_ITEMS, ...PERSONAL_ITEMS] : NAV_ITEMS;
+  const allItems = personal ? [...NAV_ITEMS, ...extraItems] : NAV_ITEMS;
   const activeHref = allItems
     .filter((i) => (i.href === "/" ? pathname === "/" : pathname === i.href || pathname.startsWith(i.href + "/")))
     .sort((a, b) => b.href.length - a.href.length)[0]?.href;
@@ -57,7 +63,7 @@ export function SidebarNav({ personal = false }: { personal?: boolean }) {
       {personal && (
         <>
           <div className="px-6 pt-3 pb-1 text-xs font-medium text-slate-400">自分用 (このPCのみ)</div>
-          <nav className="flex flex-col gap-1 px-3">{PERSONAL_ITEMS.map(renderItem)}</nav>
+          <nav className="flex flex-col gap-1 px-3">{extraItems.map(renderItem)}</nav>
         </>
       )}
     </aside>

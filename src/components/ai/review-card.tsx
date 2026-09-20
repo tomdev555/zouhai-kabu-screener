@@ -24,6 +24,8 @@ export interface ReviewCardProps {
   nameHref?: string;
   /** ページ内リンク用のid。一覧で複数並べるときは付けない */
   anchorId?: string;
+  /** 生成後に順位が変わり、現在は上位50社に入っていない */
+  outOfRanking?: boolean;
 }
 
 export function ReviewCard({
@@ -38,6 +40,7 @@ export function ReviewCard({
   rawText,
   nameHref,
   anchorId,
+  outOfRanking = false,
 }: ReviewCardProps) {
   const generatedLabel = generatedAt ? new Date(generatedAt).toLocaleString("ja-JP") : null;
 
@@ -47,6 +50,7 @@ export function ReviewCard({
         <div>
           <div className="flex flex-wrap items-center gap-2">
             {rank !== null && <span className="text-xs text-slate-400">#{rank}</span>}
+            {outOfRanking && <Badge variant="outline">現在は50位圏外</Badge>}
             <Link href={nameHref ?? `/stocks/${code}`} className="text-base font-semibold text-slate-900 hover:underline dark:text-slate-100">
               {name}
             </Link>

@@ -24,7 +24,8 @@ export default async function AiReviewsPage() {
       <div>
         <h1 className="text-xl font-semibold">AI総評</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          スクリーニング上位銘柄について、直近6ヶ月のニュース・決算・開示を踏まえ、数字だけでは見えないリスクや状況をAIが整理したものです。
+          スクリーニング上位銘柄について、直近6ヶ月のニュース・開示の見出しと財務データをもとに、数字だけでは見えないリスクや状況をAIが整理したものです。
+          生成後に順位が変わることがあるため、現在50位圏外の銘柄もそのまま掲載しています。
           {latest && ` 最終生成: ${new Date(latest).toLocaleDateString("ja-JP")}`}
         </p>
       </div>
@@ -46,6 +47,7 @@ export default async function AiReviewsPage() {
                 code={r.stockCode}
                 name={r.stockName}
                 rank={rankByCode.get(r.stockCode) ?? null}
+                outOfRanking={!rankByCode.has(r.stockCode)}
                 review={r.review}
                 generatedAt={r.generatedAt}
                 model={r.model}

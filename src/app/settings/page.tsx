@@ -35,7 +35,7 @@ export default async function SettingsPage() {
               <li><b>借金が少ない</b> (有利子負債が自己資本の{((criteria?.maxDebtToEquity ?? 150) / 100).toFixed(1)}倍以下)</li>
               <li>
                 <b>配当利回りが{criteria?.minDividendYield ?? 2.5}〜{criteria?.maxDividendYield ?? 6}%</b>
-                (会社の今期予想ベース)
+                (会社の今期予想ベース。予想がない会社は直近1年の実績)
               </li>
             </ol>
           </div>
@@ -56,9 +56,10 @@ export default async function SettingsPage() {
           <div>
             <h3 className="mb-1.5 font-medium">AI総評について</h3>
             <p>
-              上位の会社ごとに、直近半年のニュースや決算をAIが読んで「数字だけでは見えないリスク」をまとめています
+              上位の会社ごとに、直近半年のニュース・開示の見出しと財務データをAIが読んで「数字だけでは見えないリスク」をまとめています
               (証券会社の格下げ、主力商品の問題、業績の下方修正など)。
               スタンス (候補として有力／条件付き／様子見／見送り) は目安です。
+              AIは記事の本文までは読んでおらず、生成後に順位や状況が変わることもあります。
             </p>
           </div>
 

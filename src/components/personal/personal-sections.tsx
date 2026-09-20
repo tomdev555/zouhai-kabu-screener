@@ -9,6 +9,13 @@ import { isAiReviewConfigured, loadReviews } from "@/lib/personal/ai-review";
 import { loadCompanyProfile } from "@/lib/personal/company-profile";
 import { CompanyProfilePanel } from "./company-profile-panel";
 import { StanceBadge } from "@/components/ai/review-card";
+import type { NavItem } from "@/components/layout/sidebar-nav";
+
+/** サイドバーに追加する個人モードのメニュー */
+export const personalNavItems: NavItem[] = [
+  { href: "/my/reviews", label: "AI総評の生成 (上位10社)", icon: "sparkles" },
+  { href: "/my", label: "マイポートフォリオ", icon: "briefcase" },
+];
 
 /** 銘柄ページの先頭に出す四季報風の会社概要 */
 export async function CompanyProfileSection({ code }: { code: string }) {

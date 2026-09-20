@@ -1,67 +1,76 @@
 {
- "publishedAt": "2026-09-20T08:09:17.507Z",
+ "publishedAt": "2026-09-20T10:29:23.676Z",
  "reviews": [
   {
    "stockCode": "9799",
    "stockName": "旭情報サービス",
-   "generatedAt": "2026-09-20T08:08:51.184Z",
+   "generatedAt": "2026-09-20T10:29:13.500Z",
    "model": "gemini-3.5-flash",
    "review": {
-    "headline": "16年減配なしのIT中堅、PER11倍台で割安もM&A効果を要確認",
-    "summary": "旭情報サービスは、16年間にわたり実質的な減配がなく、EPSもCAGR 11.85%と綺麗な右肩上がりを続けるITサービス企業です。直近の配当利回りは3.61%とユーザーの理想（4%前後）に近く、PERも11.44倍と基準の15倍を下回り割安感があります。D/E比率2.03%と財務は極めて健全ですが、スクリーニングデータで現預金比率が不明なため、実際のキャッシュ保有額の確認が必要です。直近では2026年9月にスィンク社の子会社化を完了しており、手元資金が成長投資へ活用されている点が注目されます。",
+    "headline": "豊富な手元資金と着実なEPS成長、割安感強まるITサービス企業",
+    "summary": "本サイトの基準であるPER15倍を大きく下回る11.44倍と割安感があり、現預金比率が時価総額の46.59%に達する極めてキャッシュリッチな企業です。16年間にわたり減配がなく、EPSも右肩上がりで成長しており、配当利回りは3.61%と合格帯に位置しています。直近では2026年9月にスィンク社の子会社化を完了するなど、豊富な手元資金を成長投資へ活用する動きも見られます。株価は直近6ヶ月で調整しているものの、財務健全性と安定した還元姿勢から、中長期での下値余地は限定的と考えられます。",
     "strengths": [
-     "16年間実質減配なしの優れた配当実績と、2026年度に向けた増配基調（34円予想）",
-     "EPSが2023年度の58.84円から2026年度予想の82.33円まで、下降年なしで着実に成長",
-     "D/E比率2.03%という極めて強固な財務健全性",
-     "PER11.44倍と、目標基準である15倍を大きく下回る割安な水準"
+     "16年連続で減配がなく、EPSもCAGR 11.85%と安定して成長している点",
+     "現預金が時価総額の46.59%を占め、D/E比率も2.03%と極めて強固な財務基盤を有している点",
+     "PER11.44倍、直近3年の配当利回りレンジで100%の位置にあり、過去比較で割安感が強い点"
     ],
     "hiddenRisks": [
      {
-      "title": "M&A（子会社化）に伴う統合リスクと資金流出",
-      "detail": "2026年9月に株式会社スィンクの株式取得（子会社化）を完了。買収シナジーが早期に発現するか、また買収に伴うのれん等の減損リスクがないか注視が必要です。",
+      "title": "M&Aに伴う統合リスク",
+      "detail": "2026年9月に子会社化した株式会社スィンクとのシナジー創出や、のれん減損リスクの有無を注視する必要があります。",
       "severity": "medium"
      },
      {
-      "title": "現預金データの欠損と資金使途の不透明さ",
-      "detail": "スクリーニングデータ上で現預金÷時価総額が算出されておらず、手元流動性の正確な規模が不明です。M&AやDX投資への資金配分により、還元余力が変化する可能性があります。",
+      "title": "IT人材の確保と人件費高騰",
+      "detail": "システム開発・運用を主軸とするため、業界共通の課題であるエンジニア不足や採用・人件費の上昇が利益率を圧迫する懸念があります。",
+      "severity": "medium"
+     },
+     {
+      "title": "1Q決算の詳細情報の不足",
+      "detail": "2026年8月7日に決算発表が行われていますが、ニュース見出しからは進捗率や業績の方向性が読み取れません。",
       "severity": "low"
-     },
-     {
-      "title": "IT人材不足による採用・人件費高騰リスク",
-      "detail": "DX・AI需要は旺盛であるものの、業界全体でエンジニア不足が深刻化しており、人件費の上昇が利益率を圧迫する懸念があります。",
-      "severity": "medium"
      }
     ],
     "recentNews": [
      {
       "date": "2026-09-01",
       "title": "旭情報サービス[9799]：（開示事項の経過）株式会社スィンクの株式取得（子会社化）完了のお知らせ",
-      "takeaway": "M&Aによる事業拡大が完了。今後の業績上乗せが期待される一方、買収資金の規模や財務への影響を第一四半期以降の決算書で確認する必要があります。",
+      "takeaway": "豊富な手元資金を活かしたM&Aによる事業拡大が進んでおり、今後の業績上乗せが期待される一方、統合プロセスの成否に注目が必要です。",
       "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5vbEljSlh1Ykw1ODliUFRVLUtUcmo3RzZ4b0xZeExBODhIV1o4cUFSczRNcU4xLS1NekZldE55eWttSi1jRFJNblB0YkE1SWk2aXZEbUg3MU5tTFoydy1pREwzWnlPbWlGTnc?oc=5"
      },
      {
       "date": "2026-05-01",
       "title": "旭情報サービス[9799]：剰余金の配当（増配）に関するお知らせ",
-      "takeaway": "2026年5月に増配を発表しており、株主還元への積極的な姿勢が示されています。業績拡大に伴う増配の信頼性が高い裏付けとなります。",
+      "takeaway": "2026年度の配当予想を34円とするなど、業績成長に伴う積極的な株主還元姿勢が継続していることを裏付ける好材料です。",
       "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE0xU3RKbGxLREJ0VmZlZHlKVHV2OGpIaXdISmpHUFVRdGN6YjJxOGplekFLeVRvcFlVOW1ocGF1TksyRDMwdmdXUEY0WDRPb3dkZVZrZXRtWlVwWUlkX2hrNC1LLUxIQnhQbkE?oc=5"
+     },
+     {
+      "date": "2026-04-01",
+      "title": "DXHR株式会社、旭情報サービス株式会社とパートナーシップを開始",
+      "takeaway": "外部パートナーとの連携強化により、DX分野などの高付加価値案件の獲得や人材育成の強化を目指している動きが伺えます。",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5OSlFvLVhteGJIcXNOUHdVQldYLUdKbkRfQjVOR1ByTEhac3pxSm1jRDhwUWVfWTU1bzVzWU1jOUZ5MXhCVlM0b0twT0d6bDljcWZFWGwxOWZ1b2RUMFlUdGFKcWpwYzktb0E?oc=5"
      }
     ],
     "checkpoints": [
-     "最新の決算短信における現預金残高および自己資本比率の具体的な数値",
-     "子会社化した株式会社スィンクの業績規模と、今期業績予想への連結影響",
-     "主要取引先（顧客業界）の偏りや、特定の大型案件への依存度"
+     "2026年8月7日に発表された2027年3月期第1四半期決算の進捗率と、通期会社予想に対する達成度",
+     "子会社化した株式会社スィンクの業績規模と、連結業績への寄与度およびのれんの額",
+     "受注環境の動向（主要顧客からの案件状況やDX関連需要の強さ）"
     ],
-    "stance": "条件付きで検討",
-    "stanceReason": "16年減配なしの実績と綺麗なEPS成長、PER11倍台の割安さは非常に魅力的です。ただし、スクリーニングで現預金スコアが算出されていない点と、直近のM&A（スィンク社買収）によるキャッシュアウトの影響を確認した上で投資判断を下すべきと考えます。",
+    "stance": "候補として有力",
+    "stanceReason": "本サイトの基準であるPER15倍を大きく下回る割安水準にあり、現預金比率が46%を超える極めて安全性の高い財務構造が魅力です。16年連続で減配がなく、今期も増配予想（34円）となっており、利回り3.61%は十分に魅力的な水準と言えます。",
     "confidence": "medium",
     "sources": [
      {
-      "title": "旭情報サービス[9799]：（開示事項の経過）株式会社スィンクの株式取得（子会社化）完了のお知らせ 2026年9月1日(適時開示) ：日経会社情報DIGITAL",
+      "title": "旭情報サービス[9799]：（開示事項の経過）株式会社スィンクの株式取得（子会社化）完了のお知らせ 2026年9月1日(適時開示) ：日経会社情報DIGITAL (日本経済新聞)",
       "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5vbEljSlh1Ykw1ODliUFRVLUtUcmo3RzZ4b0xZeExBODhIV1o4cUFSczRNcU4xLS1NekZldE55eWttSi1jRFJNblB0YkE1SWk2aXZEbUg3MU5tTFoydy1pREwzWnlPbWlGTnc?oc=5"
      },
      {
-      "title": "旭情報サービス[9799]：剰余金の配当（増配）に関するお知らせ 2026年5月1日(適時開示) ：日経会社情報DIGITAL",
+      "title": "旭情報サービス[9799]：剰余金の配当（増配）に関するお知らせ 2026年5月1日(適時開示) ：日経会社情報DIGITAL (日本経済新聞)",
       "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE0xU3RKbGxLREJ0VmZlZHlKVHV2OGpIaXdISmpHUFVRdGN6YjJxOGplekFLeVRvcFlVOW1ocGF1TksyRDMwdmdXUEY0WDRPb3dkZVZrZXRtWlVwWUlkX2hrNC1LLUxIQnhQbkE?oc=5"
+     },
+     {
+      "title": "DXHR株式会社、旭情報サービス株式会社とパートナーシップを開始 (PR TIMES)",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5OSlFvLVhteGJIcXNOUHdVQldYLUdKbkRfQjVOR1ByTEhac3pxSm1jRDhwUWVfWTU1bzVzWU1jOUZ5MXhCVlM0b0twT0d6bDljcWZFWGwxOWZ1b2RUMFlUdGFKcWpwYzktb0E?oc=5"
      }
     ]
    }
