@@ -16,6 +16,65 @@ export default async function SettingsPage() {
 
       <Card>
         <CardHeader>
+          <CardTitle>何をするサイトか</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 text-sm text-slate-700 dark:text-slate-200">
+          <p>
+            日本の上場企業約3,700社の中から「長く増配を続けている割安な会社」を毎朝自動で探して、
+            上位{criteria?.targetCount ?? 50}社を表示します。
+          </p>
+
+          <div>
+            <h3 className="mb-1.5 font-medium">選ぶ条件 (4つ全部を満たした会社だけ)</h3>
+            <ol className="list-decimal space-y-1 pl-5">
+              <li>
+                <b>{criteria?.minDividendCutFreeYears ?? 10}年以上、配当を減らしていない</b>
+                (一時的な特別配当は除いて判定)
+              </li>
+              <li><b>利益 (EPS) が伸びている</b></li>
+              <li><b>借金が少ない</b> (有利子負債が自己資本の{((criteria?.maxDebtToEquity ?? 150) / 100).toFixed(1)}倍以下)</li>
+              <li>
+                <b>配当利回りが{criteria?.minDividendYield ?? 2.5}〜{criteria?.maxDividendYield ?? 6}%</b>
+                (会社の今期予想ベース)
+              </li>
+            </ol>
+          </div>
+
+          <div>
+            <h3 className="mb-1.5 font-medium">順位のつけ方</h3>
+            <p className="mb-1 text-slate-500 dark:text-slate-400">条件を満たした会社を、次の考え方で点数化して並べています。</p>
+            <ul className="list-disc space-y-1 pl-5">
+              <li>
+                配当利回りは<b>{criteria?.targetDividendYield ?? 4}%前後が理想</b>。高すぎる (減配の前兆かも) も低すぎる (買われすぎ) も減点
+              </li>
+              <li><b>PERは{criteria?.basePer ?? 15}倍を基準</b>に、安いほど加点</li>
+              <li><b>現金を多く持っている</b>会社を加点</li>
+              <li>減配なしの年数が長いほど、利益の伸びが大きいほど加点</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="mb-1.5 font-medium">AI総評について</h3>
+            <p>
+              上位の会社ごとに、直近半年のニュースや決算をAIが読んで「数字だけでは見えないリスク」をまとめています
+              (証券会社の格下げ、主力商品の問題、業績の下方修正など)。
+              スタンス (候補として有力／条件付き／様子見／見送り) は目安です。
+            </p>
+          </div>
+
+          <div className="rounded-md bg-amber-50 p-3 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300">
+            <h3 className="mb-1 font-medium">注意</h3>
+            <ul className="list-disc space-y-1 pl-5">
+              <li>投資助言ではなく、機械的な絞り込みとAIの要約です。数字の誤りやAIの勘違いもありえます</li>
+              <li>買う前に、その会社の決算資料や出典のニュースを自分で確認してください</li>
+              <li>株価データは前日終値で毎朝自動更新。AI総評は不定期更新 (各カードに生成日を表示)</li>
+            </ul>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
           <CardTitle>データ</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
