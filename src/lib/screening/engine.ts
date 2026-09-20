@@ -154,6 +154,41 @@ export async function computeScreeningFromDb(
   return results;
 }
 
+/**
+ * 直近の refresh で保存したスクリーニング結果を読む。
+ * computeScreeningFromDb は全銘柄を再計算するため数千銘柄では数十秒かかる。
+ * 画面表示など「最新の保存結果で十分」な用途はこちらを使う。
+ */
+export async function loadLatestScreeningResults(): Promise<StockScreeningResult[]> {
+  const run = await prisma.screeningRun.findFirst({ orderBy: { runAt: "desc" }, select: { id: true } });
+  if (!run) return [];
+
+  const rows = await prisma.screeningResult.findMany({
+    where: { screeningRunId: run.id },
+    include: { stock: { select: { name: true, sector33: true, currentPrice: true } } },
+  });
+
+  return rows
+    .filter((r) => r.ruleBreakdown)
+    .map((r) => ({
+      code: r.stockCode,
+      name: r.stock.name,
+      sector: r.stock.sector33 ?? undefined,
+      currentPrice: r.stock.currentPrice ? Number(r.stock.currentPrice) : null,
+      breakdown: JSON.parse(r.ruleBreakdown!) as RuleBreakdown,
+      passedAllRules: r.passedAllRules,
+      compositeScore: r.compositeScore ? Number(r.compositeScore) : 0,
+      rank: r.rank,
+    }))
+    // SQLiteはNULLを先頭に並べるため、順位付きを先頭にする並べ替えはJS側で行う
+    .sort((a, b) => {
+      if (a.rank !== null && b.rank !== null) return a.rank - b.rank;
+      if (a.rank !== null) return -1;
+      if (b.rank !== null) return 1;
+      return b.compositeScore - a.compositeScore;
+    });
+}
+
 export async function runScreeningAndPersist(
   criteria: ScreeningCriteria = DEFAULT_CRITERIA
 ): Promise<StockScreeningResult[]> {

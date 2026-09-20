@@ -11,7 +11,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
 import { prisma } from "../db";
-import { computeScreeningFromDb, computeScreeningForStock } from "../screening/engine";
+import { computeScreeningForStock, loadLatestScreeningResults } from "../screening/engine";
 import { DEFAULT_CRITERIA, type StockScreeningResult } from "../screening/types";
 import { fetchStockNews, type NewsItem } from "./news";
 
@@ -329,7 +329,7 @@ export async function loadReviews(codes?: string[]): Promise<StoredReview[]> {
 }
 
 export async function topStockCodes(n: number): Promise<{ code: string; name: string; rank: number }[]> {
-  const results = await computeScreeningFromDb(DEFAULT_CRITERIA);
+  const results = await loadLatestScreeningResults();
   return results
     .filter((r) => r.rank !== null && r.rank <= n)
     .sort((a, b) => a.rank! - b.rank!)
