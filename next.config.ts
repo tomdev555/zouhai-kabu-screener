@@ -16,7 +16,7 @@ const personal = process.env.PERSONAL_MODE === "1";
 const publicStubs: Record<string, string> = personal
   ? {}
   : {
-      "@/components/personal/ai-review-section": "./src/components/personal/ai-review-section.public.ts",
+      "@/components/personal/personal-sections": "./src/components/personal/personal-sections.public.ts",
     };
 
 const nextConfig: NextConfig = {

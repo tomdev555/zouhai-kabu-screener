@@ -121,7 +121,7 @@ export function ScreenerTable({
                   </Link>
                   {reviewed.has(r.code) && (
                     <Link
-                      href={`/stocks/${r.code}#ai-review`}
+                      href={`/my/reviews/${r.code}`}
                       className="ml-2 inline-flex items-center gap-1 rounded-full bg-violet-100 px-2 py-0.5 text-[11px] font-medium text-violet-800 hover:bg-violet-200 dark:bg-violet-900/40 dark:text-violet-300 dark:hover:bg-violet-900/60"
                       title="AI総評を見る"
                     >

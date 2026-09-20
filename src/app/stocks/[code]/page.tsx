@@ -26,11 +26,10 @@ export default async function StockDetailPage({
   const screening = detail.screening;
   const health = screening.breakdown.financialHealth;
 
-  // 個人モードのときだけAI総評を表示する。静的書き出し時は PERSONAL_MODE が無いので読み込まれない
-  const AiReview =
-    process.env.PERSONAL_MODE === "1"
-      ? (await import("@/components/personal/ai-review-section")).AiReviewSection
-      : null;
+  // 個人モードのときだけ会社概要とAI総評への導線を表示する。公開ビルドではスタブ(null)に差し替わる
+  const personal = process.env.PERSONAL_MODE === "1" ? await import("@/components/personal/personal-sections") : null;
+  const CompanyProfile = personal?.CompanyProfileSection ?? null;
+  const AiReviewTeaser = personal?.AiReviewTeaser ?? null;
 
   return (
     <div className="p-6 space-y-6">
@@ -54,7 +53,7 @@ export default async function StockDetailPage({
         </div>
       </div>
 
-      {AiReview && <AiReview code={code} name={detail.name} rank={screening.rank} />}
+      {CompanyProfile && <CompanyProfile code={code} />}
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         <StatCard label="現在値" value={formatYen(detail.currentPrice)} />
@@ -119,6 +118,8 @@ export default async function StockDetailPage({
           </div>
         </CardContent>
       </Card>
+
+      {AiReviewTeaser && <AiReviewTeaser code={code} />}
     </div>
   );
 }

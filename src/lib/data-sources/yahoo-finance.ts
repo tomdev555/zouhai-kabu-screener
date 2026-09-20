@@ -190,6 +190,64 @@ function parseFundamentals(json: unknown): YahooFundamentals | null {
   };
 }
 
+export interface YahooCompanyProfile {
+  industry: string | null;
+  sector: string | null;
+  employees: number | null;
+  website: string | null;
+  address: string | null;
+  businessSummary: string | null; // 英文の事業概要
+  officers: { name: string; title: string }[];
+  marketCap: number | null;
+  trailingPE: number | null;
+  priceToBook: number | null;
+}
+
+/** 会社概要 (業種・従業員数・本社・役員・事業概要など)。会社概要ページの元データに使う */
+export async function fetchCompanyProfile(code: string): Promise<YahooCompanyProfile | null> {
+  const { cookie, crumb } = await getAuth();
+
+  const url = new URL(`${QUOTE_SUMMARY_BASE}/${toYahooSymbol(code)}`);
+  url.searchParams.set("modules", "assetProfile,summaryDetail,defaultKeyStatistics");
+  url.searchParams.set("crumb", crumb);
+
+  let res = await fetch(url.toString(), { headers: { "User-Agent": USER_AGENT, Cookie: cookie } });
+  if (res.status === 401) {
+    cachedAuth = null;
+    const retry = await getAuth();
+    url.searchParams.set("crumb", retry.crumb);
+    res = await fetch(url.toString(), { headers: { "User-Agent": USER_AGENT, Cookie: retry.cookie } });
+  }
+  if (!res.ok) return null;
+
+  const json = (await res.json()) as { quoteSummary?: { result?: Record<string, unknown>[] } };
+  const result = json.quoteSummary?.result?.[0];
+  if (!result) return null;
+
+  const a = (result.assetProfile ?? {}) as Record<string, unknown>;
+  const s = (result.summaryDetail ?? {}) as Record<string, RawValue | undefined>;
+  const k = (result.defaultKeyStatistics ?? {}) as Record<string, RawValue | undefined>;
+  const officers = Array.isArray(a.companyOfficers) ? (a.companyOfficers as Record<string, unknown>[]) : [];
+
+  const addressParts = [a.address1, a.address2, a.city, a.state].filter((v) => typeof v === "string" && v) as string[];
+
+  return {
+    industry: (a.industry as string) ?? null,
+    sector: (a.sector as string) ?? null,
+    employees: typeof a.fullTimeEmployees === "number" ? a.fullTimeEmployees : null,
+    website: (a.website as string) ?? null,
+    address: addressParts.length ? addressParts.join(", ") : null,
+    businessSummary: (a.longBusinessSummary as string) ?? null,
+    officers: officers
+      .filter((o) => typeof o.name === "string")
+      .slice(0, 5)
+      .map((o) => ({ name: String(o.name).replace(/\s+/g, " ").trim(), title: String(o.title ?? "") })),
+    marketCap: s.marketCap?.raw ?? null,
+    trailingPE: s.trailingPE?.raw ?? null,
+    priceToBook: k.priceToBook?.raw ?? null,
+  };
+}
+
 function toDateString(unixSeconds: number): string {
   return new Date(unixSeconds * 1000).toISOString().slice(0, 10);
 }

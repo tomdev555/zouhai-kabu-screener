@@ -9,7 +9,7 @@ export default async function ScreenerPage() {
   // 個人モードのときだけ、AI総評が生成済みの銘柄にバッジを付ける
   const reviewedCodes =
     process.env.PERSONAL_MODE === "1"
-      ? await (await import("@/components/personal/ai-review-section")).reviewedStockCodes()
+      ? await (await import("@/components/personal/personal-sections")).reviewedStockCodes()
       : [];
 
   if (snapshot.results.length === 0) {

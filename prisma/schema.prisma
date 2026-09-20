@@ -30,6 +30,7 @@ model Stock {
   dividendReceipts DividendReceipt[]
   note           StockNote?
   aiReview       AiReview?
+  companyProfile CompanyProfile?
 
   @@index([sector33])
 }
@@ -191,6 +192,17 @@ model AiReview {
   rawText     String? // JSONとして解釈できなかった場合の生テキスト
   inputTokens Int?
   outputTokens Int?
+
+  stock       Stock    @relation(fields: [stockCode], references: [code], onDelete: Cascade)
+}
+
+// AIが整理した四季報風の会社概要 (Yahoo Financeの企業プロフィール + 財務データから生成)
+model CompanyProfile {
+  stockCode   String   @id
+  generatedAt DateTime @default(now())
+  model       String
+  content     String // 構造化した会社概要(JSON文字列)
+  sourceJson  String? // 生成に使った元データ (Yahooプロフィール等)
 
   stock       Stock    @relation(fields: [stockCode], references: [code], onDelete: Cascade)
 }

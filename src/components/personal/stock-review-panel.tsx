@@ -33,7 +33,7 @@ export function StockReviewPanel({ item, configured }: { item: ReviewItem; confi
 
   return (
     <div id="ai-review" className="space-y-2 scroll-mt-6">
-      <h2 className="text-sm font-medium text-slate-500 dark:text-slate-400">AI総評 (自分用)</h2>
+      <h2 className="text-sm font-medium text-slate-500 dark:text-slate-400">AI総評 (直近ニュースを踏まえた評価・自分用)</h2>
       {!configured ? (
         <Card>
           <CardContent className="py-4 text-sm text-amber-700 dark:text-amber-400">

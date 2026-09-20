@@ -14,6 +14,7 @@ import { prisma } from "../db";
 import { computeScreeningForStock, loadLatestScreeningResults } from "../screening/engine";
 import { DEFAULT_CRITERIA, type StockScreeningResult } from "../screening/types";
 import { fetchStockNews, type NewsItem } from "./news";
+import { generateCompanyProfile, isProfileFresh, loadCompanyProfile } from "./company-profile";
 
 // 無料枠で動作確認できたモデルを優先順に並べる。429/503 が返ったら次を試す
 const MODEL_CANDIDATES = process.env.AI_REVIEW_MODEL
@@ -383,6 +384,13 @@ export async function generateTopReviews(
       await generateReviewForStock(t.code);
       generated.push(t.code);
       onProgress?.(done + 1, top.length, t.code, true);
+      // 会社概要も無ければ (または古ければ) ついでに作っておく。失敗しても総評の結果には影響させない
+      if (!isProfileFresh(await loadCompanyProfile(t.code))) {
+        await sleep(PAUSE_BETWEEN_STOCKS_MS);
+        await generateCompanyProfile(t.code).catch((err) =>
+          console.warn(`[ai-review] ${t.code}: 会社概要の生成に失敗:`, err instanceof Error ? err.message : err)
+        );
+      }
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       failed.push({ code: t.code, error: message });
