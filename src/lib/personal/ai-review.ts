@@ -1,19 +1,21 @@
-// 個人モード専用: スクリーニング上位銘柄について、Claude が最新ニュースをWeb検索した上で
+// 個人モード専用: スクリーニング上位銘柄について、Gemini が最新ニュースをGoogle検索した上で
 // 「数字だけでは見えないリスク」を含む総評を生成する。
 //
-// - モデルは既定で claude-opus-5 (AI_REVIEW_MODEL で変更可)
-// - 認証は ANTHROPIC_API_KEY (.env.local) を SDK が自動で読む
-// - Web検索はAnthropicのサーバー側ツール (web_search) を使うため、ニュースAPI等の追加契約は不要
+// - Gemini API の無料枠で動く前提 (モデルは既定で gemini-3.8-flash、AI_REVIEW_MODEL で変更可)
+// - 認証は GEMINI_API_KEY (.env.local)。Google AI Studio で発行する
+// - ニュース検索は Gemini 内蔵の Google Search グラウンディングを使うため、追加のAPI契約は不要
+// - 無料枠は 1分あたりのリクエスト数に上限があるため、銘柄ごとに間隔を空けて実行する
 
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
 import { prisma } from "../db";
 import { computeScreeningFromDb, computeScreeningForStock } from "../screening/engine";
 import { DEFAULT_CRITERIA, type StockScreeningResult } from "../screening/types";
 
-const MODEL = process.env.AI_REVIEW_MODEL || "claude-opus-5";
-const MAX_SEARCHES_PER_STOCK = 8;
+const MODEL = process.env.AI_REVIEW_MODEL || "gemini-3.8-flash";
 const REVIEW_FRESH_HOURS = 24;
+// 無料枠のRPM制限(概ね10/分)に収めるための銘柄間の待ち時間
+const PAUSE_BETWEEN_STOCKS_MS = 7000;
 
 export const ReviewSchema = z.object({
   headline: z.string().describe("1行の結論"),
@@ -60,15 +62,15 @@ export interface StoredReview {
 }
 
 export function isAiReviewConfigured(): boolean {
-  return Boolean(process.env.ANTHROPIC_API_KEY);
+  return Boolean(process.env.GEMINI_API_KEY);
 }
 
 const SYSTEM_PROMPT = `あなたは日本株の配当投資に精通したアナリストです。
 ユーザーは「10年以上減配なし・EPS成長・財務健全・配当利回り2〜7%」という機械的なスクリーニングで
 上位に入った銘柄について、数字だけでは分からない実態とリスクを知りたがっています。
 
-必ず web_search ツールで、その企業の直近3〜6ヶ月のニュース・決算・適時開示・業績修正・不祥事・
-業界動向・株主還元方針の変更などを検索し、事実に基づいて評価してください。
+必ずGoogle検索を使って、その企業の直近3〜6ヶ月のニュース・決算・適時開示・業績修正・不祥事・
+業界動向・株主還元方針の変更などを調べ、事実に基づいて評価してください。
 検索は日本語で行い、企業名と証券コードの両方を使うと精度が上がります。
 
 重視する視点:
@@ -79,7 +81,7 @@ const SYSTEM_PROMPT = `あなたは日本株の配当投資に精通したアナ
 - 直近で株価が急騰・急落していれば、その理由
 - 最新決算の内容と会社予想の方向性
 
-出力は必ず次のJSONのみを返してください。前後に説明文やコードブロック記号を付けないでください。
+出力は必ず次のJSONのみを返してください。前後に説明文やコードブロック記号(\`\`\`)を付けないでください。
 不明な項目は空配列または空文字にし、推測で埋めないでください。
 {
   "headline": "1行の結論 (30字程度)",
@@ -158,14 +160,12 @@ async function buildStockContext(code: string): Promise<{ text: string; screenin
     latestFin?.bps ? `BPS: ${Number(latestFin.bps)}円` : "",
     ``,
     `上記のデータを踏まえ、最新のニュースを検索して総評を作成してください。今日は ${new Date().toISOString().slice(0, 10)} です。`,
-  ]
-    .filter((l) => l !== undefined)
-    .join("\n");
+  ].join("\n");
 
   return { text, screening };
 }
 
-/** 応答テキストからJSONを取り出す。前後に余計な文があっても最初の { から最後の } までを解釈する */
+/** 応答テキストからJSONを取り出す。コードブロック記号や前後の文があっても最初の { から最後の } までを解釈する */
 function extractJson(text: string): unknown | null {
   const start = text.indexOf("{");
   const end = text.lastIndexOf("}");
@@ -178,98 +178,57 @@ function extractJson(text: string): unknown | null {
 }
 
 export async function generateReviewForStock(code: string): Promise<StoredReview> {
-  if (!isAiReviewConfigured()) throw new Error("ANTHROPIC_API_KEY が設定されていません");
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error("GEMINI_API_KEY が設定されていません");
 
-  const client = new Anthropic();
+  const ai = new GoogleGenAI({ apiKey });
   const { text: context, screening } = await buildStockContext(code);
 
-  const messages: Anthropic.Beta.BetaMessageParam[] = [{ role: "user", content: context }];
-  let final: Anthropic.Beta.BetaMessage | null = null;
-  const searchedUrls = new Map<string, string>();
+  const response = await ai.models.generateContent({
+    model: MODEL,
+    contents: context,
+    config: {
+      systemInstruction: SYSTEM_PROMPT,
+      tools: [{ googleSearch: {} }],
+      temperature: 0.3,
+    },
+  });
 
-  // Web検索が長引くと pause_turn で一旦返ってくるため、その場合は続きを再開する
-  for (let i = 0; i < 6; i++) {
-    const stream = client.beta.messages.stream({
-      model: MODEL,
-      max_tokens: 16000,
-      system: SYSTEM_PROMPT,
-      messages,
-      tools: [
-        {
-          type: "web_search_20260209",
-          name: "web_search",
-          max_uses: MAX_SEARCHES_PER_STOCK,
-          user_location: { type: "approximate", country: "JP", timezone: "Asia/Tokyo" },
-        },
-      ],
-      thinking: { type: "adaptive" },
-      output_config: { effort: "high" },
-      // 安全分類で拒否された場合に別モデルで自動継続する (Opus 5 の推奨設定)
-      betas: ["server-side-fallback-2026-07-01"],
-      fallbacks: "default",
-    });
-    final = await stream.finalMessage();
-
-    for (const block of final.content) {
-      if (block.type === "web_search_tool_result" && Array.isArray(block.content)) {
-        for (const r of block.content) {
-          if (r.type === "web_search_result") searchedUrls.set(r.url, r.title);
-        }
-      }
-    }
-
-    if (final.stop_reason === "pause_turn") {
-      messages.push({ role: "assistant", content: final.content });
-      continue;
-    }
-    break;
-  }
-  if (!final) throw new Error("応答がありません");
-
-  if (final.stop_reason === "refusal") {
-    throw new Error(`モデルが応答を拒否しました: ${final.stop_details?.explanation ?? "理由不明"}`);
-  }
-  if (final.stop_reason === "max_tokens") {
-    throw new Error("出力が長すぎて途中で切れました (max_tokens)");
+  const candidate = response.candidates?.[0];
+  const finishReason = candidate?.finishReason;
+  if (finishReason && finishReason !== "STOP") {
+    throw new Error(`生成が完了しませんでした (finishReason: ${finishReason})`);
   }
 
-  const rawText = final.content
-    .filter((b): b is Anthropic.Beta.BetaTextBlock => b.type === "text")
-    .map((b) => b.text)
-    .join("\n");
+  const rawText = response.text ?? "";
+  if (!rawText.trim()) throw new Error("モデルから空の応答が返りました");
+
+  // グラウンディングで実際に参照したページ (モデルが出典を省略した場合の補完に使う)
+  const groundedSources: { title: string; url: string }[] = [];
+  for (const chunk of candidate?.groundingMetadata?.groundingChunks ?? []) {
+    if (chunk.web?.uri) groundedSources.push({ title: chunk.web.title ?? chunk.web.uri, url: chunk.web.uri });
+  }
 
   const parsed = ReviewSchema.safeParse(extractJson(rawText));
   let review: Review | null = null;
   if (parsed.success) {
     review = parsed.data;
-    // モデルが出典を省略した場合に備え、実際に検索でヒットしたURLを補う
-    if (review.sources.length === 0) {
-      review.sources = Array.from(searchedUrls.entries())
-        .slice(0, 10)
-        .map(([url, title]) => ({ title, url }));
-    }
+    if (review.sources.length === 0) review.sources = groundedSources.slice(0, 10);
   }
+
+  const data = {
+    model: MODEL,
+    rankAtTime: screening?.rank ?? null,
+    content: JSON.stringify(review),
+    rawText: review ? null : rawText,
+    inputTokens: response.usageMetadata?.promptTokenCount ?? null,
+    outputTokens: response.usageMetadata?.candidatesTokenCount ?? null,
+  };
 
   const saved = await prisma.aiReview.upsert({
     where: { stockCode: code },
-    create: {
-      stockCode: code,
-      model: final.model,
-      rankAtTime: screening?.rank ?? null,
-      content: JSON.stringify(review),
-      rawText: review ? null : rawText,
-      inputTokens: final.usage.input_tokens,
-      outputTokens: final.usage.output_tokens,
-    },
-    update: {
-      generatedAt: new Date(),
-      model: final.model,
-      rankAtTime: screening?.rank ?? null,
-      content: JSON.stringify(review),
-      rawText: review ? null : rawText,
-      inputTokens: final.usage.input_tokens,
-      outputTokens: final.usage.output_tokens,
-    },
+    create: { stockCode: code, ...data },
+    update: { generatedAt: new Date(), ...data },
     include: { stock: { select: { name: true } } },
   });
 
@@ -320,9 +279,11 @@ export async function topStockCodes(n: number): Promise<{ code: string; name: st
     .map((r) => ({ code: r.code, name: r.name, rank: r.rank! }));
 }
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 /**
  * 上位N銘柄の総評をまとめて生成する。直近 REVIEW_FRESH_HOURS 以内に生成済みのものは force 指定がない限りスキップ。
- * 1件ずつ順番に実行する (Web検索を含むため1件あたり1〜3分程度かかる)。
+ * 無料枠のレート制限に収めるため1件ずつ間隔を空けて実行する。
  */
 export async function generateTopReviews(
   n = 10,
@@ -348,6 +309,7 @@ export async function generateTopReviews(
       onProgress?.(done, top.length, t.code, true, "skip");
       continue;
     }
+    if (generated.length + failed.length > 0) await sleep(PAUSE_BETWEEN_STOCKS_MS);
     try {
       await generateReviewForStock(t.code);
       generated.push(t.code);

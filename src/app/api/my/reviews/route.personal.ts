@@ -17,7 +17,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   if (!isAiReviewConfigured()) {
     return NextResponse.json(
-      { error: ".env.local に ANTHROPIC_API_KEY を設定してサーバーを再起動してください" },
+      { error: ".env.local に GEMINI_API_KEY を設定してサーバーを再起動してください" },
       { status: 400 }
     );
   }

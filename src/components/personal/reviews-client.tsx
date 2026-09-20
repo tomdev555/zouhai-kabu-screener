@@ -23,7 +23,7 @@ export function ReviewsClient({ items, configured }: { items: Item[]; configured
 
   async function generate(body: Record<string, unknown>, label: string) {
     setBusy(label);
-    setMessage(label === "all" ? "生成中… 1銘柄あたり1〜3分かかります。このページを開いたままお待ちください。" : "生成中…");
+    setMessage(label === "all" ? "生成中… 1銘柄あたり30秒〜1分程度、無料枠の制限に合わせて間隔を空けて実行します。このページを開いたままお待ちください。" : "生成中…");
     try {
       const res = await fetch("/api/my/reviews", {
         method: "POST",
@@ -53,7 +53,7 @@ export function ReviewsClient({ items, configured }: { items: Item[]; configured
         <Card>
           <CardContent className="py-4 text-sm text-amber-700 dark:text-amber-400">
             <code className="rounded bg-slate-100 px-1 dark:bg-slate-800">.env.local</code> に
-            <code className="rounded bg-slate-100 px-1 dark:bg-slate-800">ANTHROPIC_API_KEY</code> を設定してサーバーを再起動すると使えるようになります。
+            <code className="rounded bg-slate-100 px-1 dark:bg-slate-800">GEMINI_API_KEY</code> を設定してサーバーを再起動すると使えるようになります。
           </CardContent>
         </Card>
       )}
