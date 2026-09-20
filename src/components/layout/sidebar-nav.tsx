@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutGrid, Star, Wallet, Settings, TrendingUp, Briefcase, Sparkles } from "lucide-react";
+import { LayoutGrid, Star, Settings, TrendingUp, Briefcase, Sparkles } from "lucide-react";
 
 const NAV_ITEMS = [
   { href: "/", label: "スクリーニング", icon: LayoutGrid },
@@ -16,7 +16,6 @@ const NAV_ITEMS = [
 const PERSONAL_ITEMS = [
   { href: "/my/reviews", label: "AI総評の生成 (上位10社)", icon: Sparkles },
   { href: "/my", label: "マイポートフォリオ", icon: Briefcase },
-  { href: "/portfolio", label: "簡易運用実績 (ブラウザ保存)", icon: Wallet },
 ];
 
 export function SidebarNav({ personal = false }: { personal?: boolean }) {
