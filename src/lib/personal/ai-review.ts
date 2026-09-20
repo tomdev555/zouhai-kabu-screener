@@ -138,6 +138,18 @@ async function buildStockContext(
   ]);
   if (!stock) throw new Error(`銘柄 ${code} がデータベースにありません`);
 
+  // 単一銘柄の評価には順位が付かないため、直近の refresh で保存した順位を引く
+  if (screening) {
+    const latestRun = await prisma.screeningRun.findFirst({ orderBy: { runAt: "desc" }, select: { id: true } });
+    const saved = latestRun
+      ? await prisma.screeningResult.findFirst({
+          where: { screeningRunId: latestRun.id, stockCode: code },
+          select: { rank: true },
+        })
+      : null;
+    screening.rank = saved?.rank ?? null;
+  }
+
   const news = await fetchStockNews(stock.name, stock.code, NEWS_DAYS, NEWS_LIMIT);
 
   const closes = prices.map((p) => Number(p.close));
