@@ -64,8 +64,11 @@ export class YahooFinanceProvider implements DataProvider {
         bps: fiscalYear === latestYear ? fundamentals?.bookValuePerShare ?? undefined : undefined,
         // Yahoo Financeからは自己資本比率が取れないため、D/E比率を負債の指標として使う
         debtToEquity: fiscalYear === latestYear ? fundamentals?.debtToEquity ?? undefined : undefined,
+        cashAndEquivalents: fiscalYear === latestYear ? fundamentals?.totalCash ?? undefined : undefined,
         dividendPerShare: dividendByYear.get(fiscalYear),
         isForecast: false,
+        forwardDividendPerShare: fiscalYear === latestYear ? fundamentals?.forwardDividendRate ?? undefined : undefined,
+        marketCap: fiscalYear === latestYear ? fundamentals?.marketCap ?? undefined : undefined,
       }));
   }
 }

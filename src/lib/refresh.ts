@@ -134,6 +134,15 @@ async function persistStock(
     if (financials.length > 0) {
       const specialYears = detectSpecialDividendYears(financials, DEFAULT_CRITERIA.specialDividendSpikeRatio);
 
+      // 最新年度レコードに付いてくる「現在のスナップショット」(会社予想配当・時価総額)を Stock に転記する
+      const latest = financials[financials.length - 1];
+      if (latest.forwardDividendPerShare !== undefined || latest.marketCap !== undefined) {
+        await prisma.stock.update({
+          where: { code: m.code },
+          data: { forwardDividendPerShare: latest.forwardDividendPerShare, marketCap: latest.marketCap },
+        });
+      }
+
       const financialUpserts = financials.map((f) =>
         prisma.financialStatement.upsert({
           where: { stockCode_fiscalYear: { stockCode: m.code, fiscalYear: f.fiscalYear } },
@@ -152,6 +161,7 @@ async function persistStock(
             equityRatio: f.equityRatio,
             debtToEquity: f.debtToEquity,
             interestBearingDebt: f.interestBearingDebt,
+            cashAndEquivalents: f.cashAndEquivalents,
             isForecast: f.isForecast ?? false,
           },
           update: {
@@ -167,6 +177,7 @@ async function persistStock(
             equityRatio: f.equityRatio,
             debtToEquity: f.debtToEquity,
             interestBearingDebt: f.interestBearingDebt,
+            cashAndEquivalents: f.cashAndEquivalents,
             isForecast: f.isForecast ?? false,
           },
         })

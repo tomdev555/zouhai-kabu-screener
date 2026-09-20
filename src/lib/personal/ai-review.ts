@@ -76,8 +76,10 @@ export function isAiReviewConfigured(): boolean {
 }
 
 const SYSTEM_PROMPT = `あなたは日本株の配当投資に精通したアナリストです。
-ユーザーは「10年以上減配なし・EPS成長・財務健全・配当利回り2〜7%」という機械的なスクリーニングで
-上位に入った銘柄について、数字だけでは分からない実態とリスクを知りたがっています。
+ユーザーは「10年以上減配なし・EPS成長・財務健全・配当利回り4%前後が理想(2.5〜6%が合格帯)」という
+機械的なスクリーニングで上位に入った銘柄について、数字だけでは分からない実態とリスクを知りたがっています。
+ユーザーの投資方針: 半年程度先までを主な評価期間とし、PERは15倍を基準に割安・割高を判断し、
+現金を厚く持つ会社を好みます。利回りは高すぎても(減配リスク)低すぎても(買われすぎ)よくないと考えています。
 
 ユーザーからは、スクリーニングの数値データに加えて、直近数ヶ月のニュース見出しの一覧が渡されます。
 ニュースは見出しと短い抜粋のみで本文はありません。見出しから読み取れる範囲で、決算・業績修正・
@@ -92,6 +94,8 @@ checkpoints にユーザーが自分で確認すべき点として書いてく�
   原材料高、中国依存、大株主の動向、TOB/MBOの可能性、会計上の懸念)
 - 直近で株価が急騰・急落していれば、その理由
 - 最新決算の内容と会社予想の方向性
+- 今後半年で配当・株価に影響しそうなイベント (決算発表、権利確定、増配/減配の予想修正、自社株買い)
+- 現金の使い道 (還元に回るのか、投資・M&Aに回るのか、ただ積み上がっているのか)
 
 出力項目の意味:
 - headline: 1行の結論 (30字程度)
@@ -177,7 +181,10 @@ async function buildStockContext(
     ``,
     `【スクリーニング結果】`,
     `順位: ${screening?.rank ?? "圏外"} / 全条件クリア: ${screening?.passedAllRules ? "はい" : "いいえ"} / 総合スコア: ${screening?.compositeScore ?? "-"}`,
-    `配当利回り: ${b?.dividendYield.value ?? "-"}%`,
+    `配当利回り: ${b?.dividendYield.value ?? "-"}% (${b?.dividendYield.basis === "forward" ? "会社予想の今期配当ベース" : "実績ベース"}、目標4%との近さ ${b?.dividendYield.score ?? "-"}点)`,
+    `PER: ${b?.valuation.per ?? "-"}倍 (15倍基準のスコア ${b?.valuation.score ?? "-"}点)`,
+    `現金確保: 現預金÷時価総額 ${b?.cash.cashToMarketCap ?? "-"}% (スコア ${b?.cash.score ?? "-"}点)`,
+    `直近6ヶ月の株価騰落率: ${b?.priceChangeOverHorizon ?? "-"}%`,
     `減配なし年数: ${b?.dividendCutFree.years ?? "-"}年`,
     `財務健全性: ${b?.financialHealth.metric === "debtToEquity" ? `D/E比率 ${b.financialHealth.value}%` : `自己資本比率 ${b?.financialHealth.value ?? "-"}%`}`,
     `EPS成長性スコア: ${b?.epsTrend.score ?? "-"}点 (CAGR ${b?.epsTrend.cagrPercent ?? "-"}%, 下降年 ${b?.epsTrend.downYears ?? "-"}回)`,

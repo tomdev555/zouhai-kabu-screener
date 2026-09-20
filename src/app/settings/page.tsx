@@ -43,7 +43,10 @@ export default async function SettingsPage() {
         <CardContent>
           {criteria?.targetCount ? (
             <ul className="text-sm text-slate-600 dark:text-slate-300 space-y-1">
-              <li>配当利回り: {criteria.minDividendYield}% 〜 {criteria.maxDividendYield}%</li>
+              <li>
+                配当利回り: {criteria.targetDividendYield}%前後が理想 (高すぎても低すぎても減点)。合格帯は{criteria.minDividendYield}%〜{criteria.maxDividendYield}%。
+                会社予想の今期配当があればそれで計算
+              </li>
               <li>減配なし年数: {criteria.minDividendCutFreeYears}年以上</li>
               <li>
                 財務健全性: 自己資本比率{criteria.minEquityRatio}%以上
@@ -54,6 +57,9 @@ export default async function SettingsPage() {
                 特別配当判定: 前後の年の平均に対して{criteria.specialDividendSpikeRatio}倍を超えたら
                 一時的な特別配当とみなし、減配判定から除外
               </li>
+              <li>PER: {criteria.basePer}倍を基準に、安いほど加点・割高なほど減点 (足切りなし)</li>
+              <li>現金確保: 現預金÷時価総額が{criteria.cashRatioFullScore}%以上で満点 (足切りなし)</li>
+              <li>評価の目安期間: 約{criteria.evaluationHorizonMonths}ヶ月 (騰落率の参考表示に使用)</li>
               <li>選定銘柄数: 上位{criteria.targetCount}社</li>
             </ul>
           ) : (

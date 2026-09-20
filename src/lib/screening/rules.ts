@@ -4,10 +4,13 @@
 
 import type { FinancialYearRecord, PriceBar } from "../data-sources/types";
 import type {
+  CashCheck,
   DividendCutResult,
+  DividendYieldCheck,
   EpsTrendResult,
   FinancialHealthCheck,
   ScreeningCriteria,
+  ValuationCheck,
   YieldRangeResult,
 } from "./types";
 
@@ -178,18 +181,77 @@ export function evaluateFinancialHealth(
   return { metric: "none", value: null, pass: false };
 }
 
+/**
+ * 配当利回りの判定。「4%前後がベスト、高すぎても低すぎてもよくない」を
+ * 目標値で満点・離れるほど減点する山型スコアにする。
+ * 半年程度の投資視野では「これから受け取る配当」が重要なので、会社予想(今期)の配当があればそちらを使う。
+ */
+export function evaluateDividendYieldCheck(
+  currentPrice: number | null,
+  trailingDividend: number | null | undefined,
+  forwardDividend: number | null | undefined,
+  criteria: ScreeningCriteria
+): DividendYieldCheck {
+  const useForward = criteria.preferForwardDividend && forwardDividend !== null && forwardDividend !== undefined && forwardDividend > 0;
+  const dps = useForward ? forwardDividend! : trailingDividend ?? null;
+  const value = evaluateDividendYield(currentPrice, dps);
+  if (value === null) {
+    return { value: null, basis: "none", dividendPerShare: null, score: 0, pass: false };
+  }
+  const distance = Math.abs(value - criteria.targetDividendYield);
+  const score = clamp(100 * (1 - distance / criteria.dividendYieldTolerance), 0, 100);
+  return {
+    value,
+    basis: useForward ? "forward" : "trailing",
+    dividendPerShare: round2(dps!),
+    score: round2(score),
+    pass: value >= criteria.minDividendYield && value <= criteria.maxDividendYield,
+  };
+}
+
+/**
+ * PERの評価。basePer を基準点(70点)とし、1倍安いごとに+5点(上限100)、1倍割高なごとに-5点(下限0)。
+ * 赤字(EPS<=0)は0点。足切りには使わず、スコアにのみ反映する。
+ */
+export function evaluateValuation(
+  currentPrice: number | null,
+  latestEps: number | null | undefined,
+  criteria: ScreeningCriteria
+): ValuationCheck {
+  if (!currentPrice || !latestEps || latestEps <= 0) return { per: null, score: 0 };
+  const per = round2(currentPrice / latestEps);
+  const score = clamp(70 + (criteria.basePer - per) * 5, 0, 100);
+  return { per, score: round2(score) };
+}
+
+/** 現金確保の評価。現預金÷時価総額が cashRatioFullScore(%) 以上で満点、0で0点の線形。 */
+export function evaluateCash(
+  cash: number | null | undefined,
+  marketCap: number | null | undefined,
+  criteria: ScreeningCriteria
+): CashCheck {
+  if (cash === null || cash === undefined || !marketCap) {
+    return { cash: cash ?? null, marketCap: marketCap ?? null, cashToMarketCap: null, score: 0 };
+  }
+  const ratio = (cash / marketCap) * 100;
+  return {
+    cash,
+    marketCap,
+    cashToMarketCap: round2(ratio),
+    score: round2(clamp((ratio / criteria.cashRatioFullScore) * 100, 0, 100)),
+  };
+}
+
 export function passesCriteria(
   values: {
-    dividendYield: number | null;
+    dividendYieldPass: boolean;
     cutFreeYears: number;
     financialHealthPass: boolean;
     epsScore: number;
   },
   criteria: ScreeningCriteria
 ): boolean {
-  if (values.dividendYield === null) return false;
-  if (values.dividendYield < criteria.minDividendYield) return false;
-  if (values.dividendYield > criteria.maxDividendYield) return false;
+  if (!values.dividendYieldPass) return false;
   if (values.cutFreeYears < criteria.minDividendCutFreeYears) return false;
   if (!values.financialHealthPass) return false;
   if (values.epsScore < criteria.minEpsTrendScore) return false;
@@ -197,24 +259,27 @@ export function passesCriteria(
 }
 
 export function compositeScore(values: {
-  dividendYield: number | null;
+  dividendYield: DividendYieldCheck;
   cutFreeYears: number;
   financialHealth: FinancialHealthCheck;
   epsScore: number;
+  valuation: ValuationCheck;
+  cash: CashCheck;
   yieldPercentile: number | null;
 }): number {
-  const yieldScore = clamp(((values.dividendYield ?? 0) / 5) * 100, 0, 100);
   const cutScore = clamp((values.cutFreeYears / 15) * 100, 0, 100);
   const healthScore = financialHealthScore(values.financialHealth);
   const rangeScore = values.yieldPercentile ?? 50;
 
-  // 重み付け: EPS成長性と減配なし年数を重視、利回りレンジは補助的な指標として扱う
+  // 重み付け: 減配なし年数・EPS成長性を軸に、利回り(4%目標)・PER(15倍基準)・現金確保を加える
   return round2(
-    values.epsScore * 0.3 +
-      cutScore * 0.3 +
-      healthScore * 0.2 +
-      yieldScore * 0.1 +
-      rangeScore * 0.1
+    values.epsScore * 0.2 +
+      cutScore * 0.25 +
+      healthScore * 0.15 +
+      values.dividendYield.score * 0.15 +
+      values.valuation.score * 0.1 +
+      values.cash.score * 0.1 +
+      rangeScore * 0.05
   );
 }
 

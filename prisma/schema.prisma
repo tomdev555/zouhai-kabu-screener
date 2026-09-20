@@ -19,6 +19,7 @@ model Stock {
   per            Decimal?
   pbr            Decimal?
   marketCap      Decimal?
+  forwardDividendPerShare Decimal? // 会社予想ベースの今期年間配当 (円)
   updatedAt      DateTime @updatedAt
 
   prices         PriceDaily[]
@@ -69,6 +70,7 @@ model FinancialStatement {
   equityRatio           Decimal? // 自己資本比率 (%)
   debtToEquity          Decimal? // 有利子負債÷自己資本 (%)。自己資本比率が取れないデータソース用
   interestBearingDebt   Decimal? // 有利子負債
+  cashAndEquivalents    Decimal? // 現金及び現金同等物
   isForecast            Boolean  @default(false)
 
   stock                 Stock    @relation(fields: [stockCode], references: [code], onDelete: Cascade)
@@ -110,6 +112,8 @@ model ScreeningResult {
   dividendCutFreeYears  Int? // 減配せず経過した年数
   equityRatio           Decimal?
   debtToEquity          Decimal?
+  per                   Decimal?
+  cashToMarketCap       Decimal? // 現預金÷時価総額 (%)
   yieldRangePercentile  Decimal? // 直近3年配当利回りレンジの中での現在位置 (0-100)
   passedAllRules        Boolean  @default(false)
   compositeScore        Decimal? // 総合スコア (ランキング用)

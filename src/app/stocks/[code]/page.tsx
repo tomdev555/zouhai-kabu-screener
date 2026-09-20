@@ -89,9 +89,9 @@ export default async function StockDetailPage({
         </CardHeader>
         <CardContent className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <RuleRow
-            label={`配当利回り (${criteria.minDividendYield}%〜${criteria.maxDividendYield}%)`}
+            label={`配当利回り (${criteria.targetDividendYield}%前後が理想、合格帯 ${criteria.minDividendYield}〜${criteria.maxDividendYield}%)`}
             pass={screening.breakdown.dividendYield.pass}
-            value={formatPercent(screening.breakdown.dividendYield.value)}
+            value={`${formatPercent(screening.breakdown.dividendYield.value)}${screening.breakdown.dividendYield.basis === "forward" ? " (会社予想)" : ""} ・ ${screening.breakdown.dividendYield.score.toFixed(0)}点`}
           />
           <RuleRow
             label={`減配なし年数 (${criteria.minDividendCutFreeYears}年以上)`}
@@ -112,8 +112,20 @@ export default async function StockDetailPage({
             pass={screening.breakdown.epsTrend.pass}
             value={`${screening.breakdown.epsTrend.score.toFixed(0)}点 (CAGR ${screening.breakdown.epsTrend.cagrPercent ?? "-"}%)`}
           />
+          <InfoRow
+            label={`PER (${criteria.basePer}倍を基準に加減点)`}
+            value={`${screening.breakdown.valuation.per !== null ? `${screening.breakdown.valuation.per.toFixed(1)}倍` : "-"} ・ ${screening.breakdown.valuation.score.toFixed(0)}点`}
+          />
+          <InfoRow
+            label="現金確保 (現預金 ÷ 時価総額)"
+            value={`${screening.breakdown.cash.cashToMarketCap !== null ? formatPercent(screening.breakdown.cash.cashToMarketCap, 1) : "-"} ・ ${screening.breakdown.cash.score.toFixed(0)}点`}
+          />
           <div className="sm:col-span-2 text-sm text-slate-500 dark:text-slate-400">
-            直近3年配当利回りレンジ内の位置: {formatPercent(screening.breakdown.yieldRange.percentileInRange)}
+            直近{criteria.evaluationHorizonMonths}ヶ月の株価騰落率:{" "}
+            {screening.breakdown.priceChangeOverHorizon !== null
+              ? `${screening.breakdown.priceChangeOverHorizon >= 0 ? "+" : ""}${screening.breakdown.priceChangeOverHorizon}%`
+              : "-"}
+            {" "}／ 直近3年配当利回りレンジ内の位置: {formatPercent(screening.breakdown.yieldRange.percentileInRange)}
             (100%に近いほど自社の過去レンジの中で割安な利回り)
           </div>
         </CardContent>
@@ -132,6 +144,16 @@ function StatCard({ label, value }: { label: string; value: string }) {
       </CardHeader>
       <CardContent className="text-xl font-semibold">{value}</CardContent>
     </Card>
+  );
+}
+
+/** 合否のない参考指標 (PER・現金など) */
+function InfoRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between rounded-md border border-slate-100 px-3 py-2 dark:border-slate-800">
+      <span className="text-sm text-slate-600 dark:text-slate-300">{label}</span>
+      <span className="text-sm font-medium">{value}</span>
+    </div>
   );
 }
 

@@ -37,8 +37,12 @@ export interface FinancialYearRecord {
   equityRatio?: number; // %
   debtToEquity?: number; // % (有利子負債 ÷ 自己資本。自己資本比率が取れないデータソース用の代替指標)
   interestBearingDebt?: number;
+  cashAndEquivalents?: number; // 現金及び現金同等物 (円)
   dividendPerShare?: number; // 年間合計 (中間+期末など)
   isForecast?: boolean;
+  // 以下は最新年度のレコードにだけ付く「現在のスナップショット」。refresh 時に Stock 側へ転記する
+  forwardDividendPerShare?: number; // 会社予想ベースの今期年間配当 (円)
+  marketCap?: number; // 時価総額 (円)
 }
 
 export interface DataProvider {

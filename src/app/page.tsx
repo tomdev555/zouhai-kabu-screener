@@ -29,7 +29,7 @@ export default async function ScreenerPage() {
       <div>
         <h1 className="text-xl font-semibold">増配株スクリーニング</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          EPS成長性・減配履歴・財務健全性・配当利回りの4条件で銘柄を評価し、上位{criteria.targetCount}社をランキングします。
+          EPS成長性・減配履歴・財務健全性・配当利回り(4%前後が理想)で足切りし、PER(15倍基準)と現金確保を加味したスコアで上位{criteria.targetCount}社をランキングします。
         </p>
       </div>
 
@@ -50,9 +50,9 @@ export default async function ScreenerPage() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>最低配当利回り</CardTitle>
+            <CardTitle>理想の配当利回り</CardTitle>
           </CardHeader>
-          <CardContent className="text-2xl font-semibold">{criteria.minDividendYield}%</CardContent>
+          <CardContent className="text-2xl font-semibold">{criteria.targetDividendYield}%前後</CardContent>
         </Card>
         <Card>
           <CardHeader>

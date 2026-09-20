@@ -19,7 +19,7 @@ import { useLocalStorage } from "@/lib/use-local-storage";
 import { WATCHLIST_KEY } from "@/lib/storage-keys";
 import type { StockScreeningResult } from "@/lib/screening/types";
 
-type SortKey = "rank" | "compositeScore" | "dividendYield" | "epsScore" | "cutFreeYears" | "financialHealth";
+type SortKey = "rank" | "compositeScore" | "dividendYield" | "epsScore" | "cutFreeYears" | "financialHealth" | "per" | "cash";
 
 /** 自己資本比率(高いほど良い) と D/E比率(低いほど良い) のどちらでも読めるように整形する */
 function formatFinancialHealth(health: StockScreeningResult["breakdown"]["financialHealth"]): string {
@@ -91,6 +91,8 @@ export function ScreenerTable({
           <option value="epsScore">EPS成長性で並び替え</option>
           <option value="cutFreeYears">減配なし年数で並び替え</option>
           <option value="financialHealth">財務健全性で並び替え</option>
+          <option value="per">PERが低い順</option>
+          <option value="cash">現金比率が高い順</option>
         </select>
       </div>
 
@@ -106,6 +108,8 @@ export function ScreenerTable({
               <TableHead className="text-right">EPSスコア</TableHead>
               <TableHead className="text-right">減配なし年数</TableHead>
               <TableHead className="text-right">財務健全性</TableHead>
+              <TableHead className="text-right">PER</TableHead>
+              <TableHead className="text-right">現金/時価</TableHead>
               <TableHead className="text-right">総合スコア</TableHead>
               <TableHead>判定</TableHead>
               <TableHead className="w-10" />
@@ -134,6 +138,9 @@ export function ScreenerTable({
                 <TableCell className="text-right">{formatYen(r.currentPrice)}</TableCell>
                 <TableCell className="text-right">
                   <RuleCell pass={r.breakdown.dividendYield.pass} value={formatPercent(r.breakdown.dividendYield.value)} />
+                  {r.breakdown.dividendYield.basis === "forward" && (
+                    <div className="text-[10px] text-slate-400">予想</div>
+                  )}
                 </TableCell>
                 <TableCell className="text-right">
                   <RuleCell pass={r.breakdown.epsTrend.pass} value={r.breakdown.epsTrend.score.toFixed(0)} />
@@ -146,6 +153,14 @@ export function ScreenerTable({
                     pass={r.breakdown.financialHealth.pass}
                     value={formatFinancialHealth(r.breakdown.financialHealth)}
                   />
+                </TableCell>
+                <TableCell className="text-right">
+                  <span className={perTone(r.breakdown.valuation.per)}>
+                    {r.breakdown.valuation.per !== null ? `${r.breakdown.valuation.per.toFixed(1)}倍` : "-"}
+                  </span>
+                </TableCell>
+                <TableCell className="text-right">
+                  {r.breakdown.cash.cashToMarketCap !== null ? formatPercent(r.breakdown.cash.cashToMarketCap, 0) : "-"}
                 </TableCell>
                 <TableCell className="text-right font-medium">{r.compositeScore.toFixed(1)}</TableCell>
                 <TableCell>
@@ -175,6 +190,14 @@ export function ScreenerTable({
   );
 }
 
+/** PERは15倍を基準に、安ければ緑・割高なら赤 */
+function perTone(per: number | null): string {
+  if (per === null) return "text-slate-400";
+  if (per <= 12) return "text-emerald-700 dark:text-emerald-400";
+  if (per >= 22) return "text-red-500";
+  return "text-slate-700 dark:text-slate-200";
+}
+
 function RuleCell({ pass, value }: { pass: boolean; value: string }) {
   return <span className={pass ? "text-slate-700 dark:text-slate-200" : "text-red-500"}>{value}</span>;
 }
@@ -197,5 +220,10 @@ function sortValue(r: StockScreeningResult, key: SortKey): number {
       // D/E比率は低いほど良いので、並び順を揃えるために符号を反転する
       return h.metric === "equityRatio" ? h.value : -h.value;
     }
+    case "per":
+      // 低いほど良い。未算出(赤字等)は最後に
+      return r.breakdown.valuation.per !== null ? -r.breakdown.valuation.per : -Infinity;
+    case "cash":
+      return r.breakdown.cash.cashToMarketCap ?? -1;
   }
 }

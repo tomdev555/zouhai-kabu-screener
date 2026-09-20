@@ -1,10 +1,12 @@
 import { prisma } from "../db";
 import {
   compositeScore,
+  evaluateCash,
   evaluateDividendCutFreeYears,
-  evaluateDividendYield,
+  evaluateDividendYieldCheck,
   evaluateEpsTrend,
   evaluateFinancialHealth,
+  evaluateValuation,
   evaluateYieldRangePercentile,
   passesCriteria,
 } from "./rules";
@@ -36,6 +38,7 @@ async function loadStockInputs(stockCode: string) {
     bps: f.bps ? Number(f.bps) : undefined,
     equityRatio: f.equityRatio ? Number(f.equityRatio) : undefined,
     debtToEquity: f.debtToEquity ? Number(f.debtToEquity) : undefined,
+    cashAndEquivalents: f.cashAndEquivalents ? Number(f.cashAndEquivalents) : undefined,
     dividendPerShare: dividendByYear.get(f.fiscalYear),
     isForecast: f.isForecast,
   }));
@@ -52,29 +55,55 @@ async function loadStockInputs(stockCode: string) {
   return { merged, priceBars };
 }
 
-async function evaluateStock(
-  stock: { code: string; name: string; sector33: string | null; currentPrice: unknown },
-  criteria: ScreeningCriteria
-): Promise<StockScreeningResult | null> {
+type StockForScreening = {
+  code: string;
+  name: string;
+  sector33: string | null;
+  currentPrice: unknown;
+  forwardDividendPerShare: unknown;
+  marketCap: unknown;
+};
+
+function num(v: unknown): number | null {
+  if (v === null || v === undefined) return null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
+/** 評価期間(月)ぶん前の終値と比べた騰落率 (%) */
+function priceChangeOverMonths(priceBars: PriceBar[], months: number, currentPrice: number | null): number | null {
+  if (!currentPrice || priceBars.length === 0) return null;
+  const cutoff = new Date();
+  cutoff.setMonth(cutoff.getMonth() - months);
+  const cutoffStr = cutoff.toISOString().slice(0, 10);
+  const base = priceBars.find((b) => b.date >= cutoffStr);
+  if (!base || !base.close) return null;
+  return Math.round(((currentPrice - base.close) / base.close) * 1000) / 10;
+}
+
+async function evaluateStock(stock: StockForScreening, criteria: ScreeningCriteria): Promise<StockScreeningResult | null> {
   const { merged, priceBars } = await loadStockInputs(stock.code);
   if (merged.length === 0) return null;
 
-  const currentPrice = stock.currentPrice ? Number(stock.currentPrice) : null;
+  const currentPrice = num(stock.currentPrice);
   const latestFinancial = merged[merged.length - 1];
 
   const cutResult = evaluateDividendCutFreeYears(merged, criteria.specialDividendSpikeRatio);
   const epsTrend = evaluateEpsTrend(merged);
-  const dividendYield = evaluateDividendYield(currentPrice, latestFinancial?.dividendPerShare);
-  const yieldRange = evaluateYieldRangePercentile(priceBars, merged, currentPrice);
-  const financialHealth = evaluateFinancialHealth(
-    latestFinancial?.equityRatio,
-    latestFinancial?.debtToEquity,
+  const dividendYield = evaluateDividendYieldCheck(
+    currentPrice,
+    latestFinancial?.dividendPerShare,
+    num(stock.forwardDividendPerShare),
     criteria
   );
+  const yieldRange = evaluateYieldRangePercentile(priceBars, merged, currentPrice);
+  const financialHealth = evaluateFinancialHealth(latestFinancial?.equityRatio, latestFinancial?.debtToEquity, criteria);
+  const valuation = evaluateValuation(currentPrice, latestFinancial?.eps, criteria);
+  const cash = evaluateCash(latestFinancial?.cashAndEquivalents, num(stock.marketCap), criteria);
 
   const passed = passesCriteria(
     {
-      dividendYield,
+      dividendYieldPass: dividendYield.pass,
       cutFreeYears: cutResult.cutFreeYears,
       financialHealthPass: financialHealth.pass,
       epsScore: epsTrend.score,
@@ -87,24 +116,23 @@ async function evaluateStock(
     cutFreeYears: cutResult.cutFreeYears,
     financialHealth,
     epsScore: epsTrend.score,
+    valuation,
+    cash,
     yieldPercentile: yieldRange.percentileInRange,
   });
 
   const breakdown: RuleBreakdown = {
-    dividendYield: {
-      value: dividendYield,
-      pass:
-        dividendYield !== null &&
-        dividendYield >= criteria.minDividendYield &&
-        dividendYield <= criteria.maxDividendYield,
-    },
+    dividendYield,
     dividendCutFree: {
       years: cutResult.cutFreeYears,
       pass: cutResult.cutFreeYears >= criteria.minDividendCutFreeYears,
     },
     financialHealth,
     epsTrend: { ...epsTrend, pass: epsTrend.score >= criteria.minEpsTrendScore },
+    valuation,
+    cash,
     yieldRange,
+    priceChangeOverHorizon: priceChangeOverMonths(priceBars, criteria.evaluationHorizonMonths, currentPrice),
     specialDividendYears: cutResult.normalizedSeries.filter((s) => s.wasSpecial).map((s) => s.fiscalYear),
   };
 
@@ -207,6 +235,8 @@ export async function runScreeningAndPersist(
       dividendCutFreeYears: r.breakdown.dividendCutFree.years,
       equityRatio: r.breakdown.financialHealth.metric === "equityRatio" ? r.breakdown.financialHealth.value : null,
       debtToEquity: r.breakdown.financialHealth.metric === "debtToEquity" ? r.breakdown.financialHealth.value : null,
+      per: r.breakdown.valuation.per,
+      cashToMarketCap: r.breakdown.cash.cashToMarketCap,
       yieldRangePercentile: r.breakdown.yieldRange.percentileInRange,
       passedAllRules: r.passedAllRules,
       compositeScore: r.compositeScore,

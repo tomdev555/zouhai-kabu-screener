@@ -128,6 +128,9 @@ export interface YahooFundamentals {
   returnOnEquity: number | null;
   fiscalYearEnd: string | null; // YYYY-MM-DD
   annualNetIncome: { endDate: string; netIncome: number }[];
+  totalCash: number | null; // 現金及び現金同等物 (円)
+  forwardDividendRate: number | null; // 会社予想ベースの今期年間配当 (円/株)
+  marketCap: number | null; // 時価総額 (円)
 }
 
 interface RawValue {
@@ -140,7 +143,7 @@ export async function fetchFundamentals(code: string): Promise<YahooFundamentals
   const { cookie, crumb } = await getAuth();
 
   const url = new URL(`${QUOTE_SUMMARY_BASE}/${toYahooSymbol(code)}`);
-  url.searchParams.set("modules", "defaultKeyStatistics,financialData,incomeStatementHistory");
+  url.searchParams.set("modules", "defaultKeyStatistics,financialData,incomeStatementHistory,summaryDetail");
   url.searchParams.set("crumb", crumb);
 
   const res = await fetch(url.toString(), {
@@ -169,6 +172,7 @@ function parseFundamentals(json: unknown): YahooFundamentals | null {
 
   const ks = (result.defaultKeyStatistics ?? {}) as Record<string, RawValue | undefined>;
   const fd = (result.financialData ?? {}) as Record<string, RawValue | undefined>;
+  const sd = (result.summaryDetail ?? {}) as Record<string, RawValue | undefined>;
   const ish = (result.incomeStatementHistory ?? {}) as {
     incomeStatementHistory?: { endDate?: RawValue & { fmt?: string }; netIncome?: RawValue }[];
   };
@@ -184,6 +188,9 @@ function parseFundamentals(json: unknown): YahooFundamentals | null {
     debtToEquity,
     returnOnEquity: fd.returnOnEquity?.raw ?? null,
     fiscalYearEnd: ks.lastFiscalYearEnd?.fmt ?? null,
+    totalCash: fd.totalCash?.raw ?? null,
+    forwardDividendRate: sd.dividendRate?.raw ?? null,
+    marketCap: sd.marketCap?.raw ?? null,
     annualNetIncome: (ish.incomeStatementHistory ?? [])
       .map((s) => ({ endDate: s.endDate?.fmt ?? "", netIncome: s.netIncome?.raw ?? NaN }))
       .filter((s) => s.endDate && Number.isFinite(s.netIncome)),
