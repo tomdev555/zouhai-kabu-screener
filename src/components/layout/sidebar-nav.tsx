@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutGrid, Star, Wallet, Settings, TrendingUp, Briefcase } from "lucide-react";
+import { LayoutGrid, Star, Wallet, Settings, TrendingUp, Briefcase, Sparkles } from "lucide-react";
 
 const NAV_ITEMS = [
   { href: "/", label: "スクリーニング", icon: LayoutGrid },
@@ -13,13 +13,22 @@ const NAV_ITEMS = [
 ];
 
 // 個人モードでだけ表示するメニュー (公開ビルドには含まれない)
-const PERSONAL_ITEMS = [{ href: "/my", label: "マイポートフォリオ", icon: Briefcase }];
+const PERSONAL_ITEMS = [
+  { href: "/my/reviews", label: "AI総評 (上位10社)", icon: Sparkles },
+  { href: "/my", label: "マイポートフォリオ", icon: Briefcase },
+];
 
 export function SidebarNav({ personal = false }: { personal?: boolean }) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
+
+  // /my と /my/reviews のように前方一致が重なる場合は、最も長く一致したものだけを選択中にする
+  const allItems = personal ? [...NAV_ITEMS, ...PERSONAL_ITEMS] : NAV_ITEMS;
+  const activeHref = allItems
+    .filter((i) => (i.href === "/" ? pathname === "/" : pathname === i.href || pathname.startsWith(i.href + "/")))
+    .sort((a, b) => b.href.length - a.href.length)[0]?.href;
 
   const renderItem = (item: (typeof NAV_ITEMS)[number]) => {
-    const active = item.href === "/" ? pathname === "/" : pathname?.startsWith(item.href);
+    const active = item.href === activeHref;
     const Icon = item.icon;
     return (
       <Link

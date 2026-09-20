@@ -29,6 +29,7 @@ model Stock {
   trades         Trade[]
   dividendReceipts DividendReceipt[]
   note           StockNote?
+  aiReview       AiReview?
 
   @@index([sector33])
 }
@@ -178,4 +179,18 @@ model StockNote {
   updatedAt DateTime @updatedAt
 
   stock     Stock    @relation(fields: [stockCode], references: [code], onDelete: Cascade)
+}
+
+// AIによる銘柄総評 (最新ニュースをWeb検索した上で生成)。銘柄ごとに最新1件を保持する。
+model AiReview {
+  stockCode   String   @id
+  generatedAt DateTime @default(now())
+  model       String
+  rankAtTime  Int? // 生成時点のスクリーニング順位
+  content     String // 構造化した総評(JSON文字列)
+  rawText     String? // JSONとして解釈できなかった場合の生テキスト
+  inputTokens Int?
+  outputTokens Int?
+
+  stock       Stock    @relation(fields: [stockCode], references: [code], onDelete: Cascade)
 }
