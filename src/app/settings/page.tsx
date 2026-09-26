@@ -73,6 +73,25 @@ export default async function SettingsPage() {
             </p>
           </div>
 
+          <div>
+            <h3 className="mb-1.5 font-medium">気になる点の表示</h3>
+            <p>
+              条件をすべて満たしている会社でも、内訳のどれかが弱いことがあります。
+              一覧の判定欄にある⚠のマークを押すと、その会社のどの数値がなぜ弱いのかを読めます
+              (銘柄ページでは「気になる点」として一覧で表示します)。
+            </p>
+          </div>
+
+          <div>
+            <h3 className="mb-1.5 font-medium">自分の優先順位で並べ替える</h3>
+            <p>
+              一覧の「優先順位」ボタンから、8つの評価項目それぞれの重視度を6段階で決められます。
+              決めた重みで計算し直した点数が「マイスコア」列に出て、並び替えの「マイスコア順」で使えます。
+              たとえば利回りを最重視して減配なし年数を下げる、といった調整ができます。
+              設定はお使いのブラウザにだけ保存されます。
+            </p>
+          </div>
+
           <div className="rounded-md bg-amber-50 p-3 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300">
             <h3 className="mb-1 font-medium">注意</h3>
             <ul className="list-disc space-y-1 pl-5">

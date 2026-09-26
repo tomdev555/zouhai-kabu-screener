@@ -77,6 +77,7 @@ export default async function ScreenerPage() {
 
       <ScreenerTable
         results={results}
+        criteria={criteria}
         reviewedCodes={reviewedCodes}
         reviewHrefBase={personal ? "/my/reviews/" : "/ai-reviews/#"}
         ownedPositions={ownedPositions}

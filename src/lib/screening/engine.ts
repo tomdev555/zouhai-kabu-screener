@@ -144,17 +144,6 @@ async function evaluateStock(stock: StockForScreening, criteria: ScreeningCriter
     criteria
   );
 
-  const score = compositeScore({
-    dividendYield,
-    cutFreeYears: cutResult.cutFreeYears,
-    financialHealth,
-    epsScore: epsTrend.score,
-    valuation,
-    cash,
-    earningsMomentum,
-    yieldPercentile: yieldRange.percentileInRange,
-  });
-
   const breakdown: RuleBreakdown = {
     dividendYield,
     dividendCutFree: {
@@ -170,6 +159,8 @@ async function evaluateStock(stock: StockForScreening, criteria: ScreeningCriter
     priceChangeOverHorizon: priceChangeOverMonths(priceBars, criteria.evaluationHorizonMonths, currentPrice),
     specialDividendYears: cutResult.normalizedSeries.filter((s) => s.wasSpecial).map((s) => s.fiscalYear),
   };
+
+  const score = compositeScore(breakdown);
 
   return {
     code: stock.code,

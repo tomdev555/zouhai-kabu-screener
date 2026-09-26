@@ -2,7 +2,10 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Sparkles, Star, Wallet } from "lucide-react";
+import { AlertTriangle, SlidersHorizontal, Sparkles, Star, Wallet } from "lucide-react";
+import { Popover } from "@/components/ui/popover";
+import { DEFAULT_PRIORITIES, PriorityPanel, type Priorities } from "./priority-panel";
+import { collectConcerns, weightedScore, type Concern, type FactorKey } from "@/lib/screening/factors";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,7 +20,9 @@ import {
 import { formatPercent, formatYen, cn } from "@/lib/utils";
 import { useLocalStorage } from "@/lib/use-local-storage";
 import { WATCHLIST_KEY } from "@/lib/storage-keys";
-import type { StockScreeningResult } from "@/lib/screening/types";
+import type { ScreeningCriteria, StockScreeningResult } from "@/lib/screening/types";
+
+const PRIORITIES_KEY = "zouhai:priorities";
 
 type SortKey =
   | "rank"
@@ -26,9 +31,60 @@ type SortKey =
   | "epsScore"
   | "cutFreeYears"
   | "growthYears"
+  | "myScore"
   | "financialHealth"
   | "per"
   | "cash";
+
+/**
+ * 「条件クリアだが、この数値は弱い」を出す吹き出し。
+ * 総合の判定が良くても、内訳で気になる数値があれば理由を読めるようにする。
+ */
+function ConcernsPopover({ name, concerns }: { name: string; concerns: Concern[] }) {
+  if (concerns.length === 0) return null;
+  const blocking = concerns.filter((c) => c.blocking).length;
+
+  return (
+    <Popover
+      label={`${name}の気になる点を見る`}
+      trigger={
+        <span
+          className={cn(
+            "inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[11px] font-medium",
+            blocking > 0
+              ? "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300"
+              : "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+          )}
+        >
+          <AlertTriangle className="size-3" />
+          {concerns.length}
+        </span>
+      }
+    >
+      <p className="mb-2 font-medium text-slate-900 dark:text-slate-100">
+        {name} の気になる点 ({concerns.length}件)
+      </p>
+      <ul className="space-y-2">
+        {concerns.map((c) => (
+          <li key={c.key}>
+            <span
+              className={cn(
+                "mr-1.5 rounded px-1 py-0.5 text-[10px] font-medium",
+                c.blocking
+                  ? "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300"
+                  : "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+              )}
+            >
+              {c.blocking ? "基準未達" : "弱い"}
+            </span>
+            <span className="font-medium text-slate-800 dark:text-slate-100">{c.label}</span>
+            <span className="mt-0.5 block text-slate-600 dark:text-slate-300">{c.reason}</span>
+          </li>
+        ))}
+      </ul>
+    </Popover>
+  );
+}
 
 /**
  * 増収増益の状態を1マスで示す。
@@ -112,11 +168,14 @@ export interface OwnedPosition {
 
 export function ScreenerTable({
   results,
+  criteria,
   reviewedCodes = [],
   reviewHrefBase = "/ai-reviews/#",
   ownedPositions = [],
 }: {
   results: StockScreeningResult[];
+  /** 「悪い数値」の理由を組み立てるのに使う判定基準 */
+  criteria: ScreeningCriteria;
   reviewedCodes?: string[];
   /** AIバッジのリンク先の前半 (末尾に銘柄コードが付く) */
   reviewHrefBase?: string;
@@ -126,6 +185,24 @@ export function ScreenerTable({
   const reviewed = useMemo(() => new Set(reviewedCodes), [reviewedCodes]);
   const owned = useMemo(() => new Map(ownedPositions.map((p) => [p.code, p])), [ownedPositions]);
   const [query, setQuery] = useState("");
+  const [showPriorities, setShowPriorities] = useState(false);
+  const { value: priorities, setValue: setPriorities } = useLocalStorage<Priorities>(
+    PRIORITIES_KEY,
+    DEFAULT_PRIORITIES
+  );
+  // 既定と違う重みを付けているときだけ「マイスコア」列を出す
+  const customized = useMemo(
+    () => Object.entries(DEFAULT_PRIORITIES).some(([k, v]) => (priorities[k as FactorKey] ?? v) !== v),
+    [priorities]
+  );
+  const myScoreOf = useMemo(
+    () => (r: StockScreeningResult) => weightedScore(r.breakdown, priorities),
+    [priorities]
+  );
+  const concernsOf = useMemo(
+    () => (r: StockScreeningResult) => collectConcerns(r.breakdown, criteria),
+    [criteria]
+  );
   const [onlyOwned, setOnlyOwned] = useState(false);
   const [onlyPassed, setOnlyPassed] = useState(true);
   const [sortKey, setSortKey] = useState<SortKey>("rank");
@@ -143,12 +220,12 @@ export function ScreenerTable({
       );
     }
     const sorted = [...list].sort((a, b) => {
-      const va = sortValue(a, sortKey);
-      const vb = sortValue(b, sortKey);
+      const va = sortKey === "myScore" ? myScoreOf(a) : sortValue(a, sortKey);
+      const vb = sortKey === "myScore" ? myScoreOf(b) : sortValue(b, sortKey);
       return vb - va;
     });
     return sorted;
-  }, [results, onlyOwned, onlyPassed, owned, query, sortKey]);
+  }, [results, onlyOwned, onlyPassed, owned, query, sortKey, myScoreOf]);
 
   function toggleWatch(code: string) {
     setWatchedCodes((prev) =>
@@ -181,12 +258,21 @@ export function ScreenerTable({
             保有中のみ ({ownedPositions.length})
           </Button>
         )}
+        <Button
+          variant={showPriorities || customized ? "default" : "outline"}
+          size="sm"
+          onClick={() => setShowPriorities((v) => !v)}
+        >
+          <SlidersHorizontal className="size-3.5" />
+          優先順位{customized ? " (設定中)" : ""}
+        </Button>
         <select
           className="h-8 rounded-md border border-slate-300 bg-white px-2 text-sm dark:border-slate-700 dark:bg-slate-900"
           value={sortKey}
           onChange={(e) => setSortKey(e.target.value as SortKey)}
         >
           <option value="rank">総合スコアで並び替え</option>
+          <option value="myScore">マイスコア (自分の優先順位) で並び替え</option>
           <option value="dividendYield">配当利回りで並び替え</option>
           <option value="epsScore">EPS成長性で並び替え</option>
           <option value="cutFreeYears">減配なし年数で並び替え</option>
@@ -196,6 +282,15 @@ export function ScreenerTable({
           <option value="cash">現金比率が高い順</option>
         </select>
       </div>
+
+      {showPriorities && (
+        <PriorityPanel
+          priorities={priorities}
+          onChange={(key, level) => setPriorities({ ...priorities, [key]: level })}
+          onReset={() => setPriorities(DEFAULT_PRIORITIES)}
+          onClose={() => setShowPriorities(false)}
+        />
+      )}
 
       <div className="rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
         <Table>
@@ -213,6 +308,7 @@ export function ScreenerTable({
               <TableHead className="text-right">PER</TableHead>
               <TableHead className="text-right">現金/時価</TableHead>
               <TableHead className="text-right">総合スコア</TableHead>
+              {customized && <TableHead className="text-right">マイスコア</TableHead>}
               <TableHead>判定</TableHead>
               <TableHead className="w-10" />
             </TableRow>
@@ -269,12 +365,20 @@ export function ScreenerTable({
                   {r.breakdown.cash.cashToMarketCap !== null ? formatPercent(r.breakdown.cash.cashToMarketCap, 0) : "-"}
                 </TableCell>
                 <TableCell className="text-right font-medium">{r.compositeScore.toFixed(1)}</TableCell>
+                {customized && (
+                  <TableCell className="text-right font-medium text-emerald-800 dark:text-emerald-400">
+                    {myScoreOf(r).toFixed(1)}
+                  </TableCell>
+                )}
                 <TableCell>
-                  {r.passedAllRules ? (
-                    <Badge variant="success">条件クリア</Badge>
-                  ) : (
-                    <Badge variant="outline">基準未達</Badge>
-                  )}
+                  <span className="flex items-center gap-1.5">
+                    {r.passedAllRules ? (
+                      <Badge variant="success">条件クリア</Badge>
+                    ) : (
+                      <Badge variant="outline">基準未達</Badge>
+                    )}
+                    <ConcernsPopover name={r.name} concerns={concernsOf(r)} />
+                  </span>
                 </TableCell>
                 <TableCell>
                   <button
@@ -333,5 +437,8 @@ function sortValue(r: StockScreeningResult, key: SortKey): number {
       return r.breakdown.valuation.per !== null ? -r.breakdown.valuation.per : -Infinity;
     case "cash":
       return r.breakdown.cash.cashToMarketCap ?? -1;
+    case "myScore":
+      // マイスコアは重みが要るため呼び出し側で計算する
+      return r.compositeScore;
   }
 }

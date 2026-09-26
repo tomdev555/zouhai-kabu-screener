@@ -3,6 +3,7 @@
 // 特別配当の除外・配当利回りの3年レンジ確認)をコード化したもの。
 
 import type { FinancialYearRecord, PriceBar } from "../data-sources/types";
+import { defaultCompositeScore } from "./factors";
 import type { QuarterlyResultRecord } from "../data-sources/types";
 import type {
   CashCheck,
@@ -12,6 +13,7 @@ import type {
   EpsTrendResult,
   FinancialHealthCheck,
   PeriodPerformance,
+  RuleBreakdown,
   ScreeningCriteria,
   ValuationCheck,
   YieldRangeResult,
@@ -512,39 +514,9 @@ export function passesCriteria(
   return true;
 }
 
-export function compositeScore(values: {
-  dividendYield: DividendYieldCheck;
-  cutFreeYears: number;
-  financialHealth: FinancialHealthCheck;
-  epsScore: number;
-  valuation: ValuationCheck;
-  cash: CashCheck;
-  earningsMomentum: EarningsMomentumCheck;
-  yieldPercentile: number | null;
-}): number {
-  const cutScore = clamp((values.cutFreeYears / 15) * 100, 0, 100);
-  const healthScore = financialHealthScore(values.financialHealth);
-  const rangeScore = values.yieldPercentile ?? 50;
-
-  // 重み付け: 減配なし年数・EPS成長性を軸に、増収増益(業績モメンタム)・利回り(4%目標)・
-  // PER(15倍基準)・現金確保を加える
-  return round2(
-    cutScore * 0.2 +
-      values.epsScore * 0.15 +
-      values.earningsMomentum.score * 0.15 +
-      values.dividendYield.score * 0.15 +
-      healthScore * 0.12 +
-      values.valuation.score * 0.1 +
-      values.cash.score * 0.08 +
-      rangeScore * 0.05
-  );
-}
-
-/** 財務健全性を0-100のスコアに正規化する (自己資本比率は高いほど、D/E比率は低いほど高得点) */
-function financialHealthScore(health: FinancialHealthCheck): number {
-  if (health.value === null) return 0;
-  if (health.metric === "equityRatio") return clamp((health.value / 60) * 100, 0, 100);
-  return clamp(100 - (health.value / 200) * 100, 0, 100);
+export function compositeScore(breakdown: RuleBreakdown): number {
+  // 重み付けは factors.ts の FACTORS に集約している (一覧の「マイ優先度」と同じ定義を使う)
+  return defaultCompositeScore(breakdown);
 }
 
 function clamp(n: number, min: number, max: number): number {

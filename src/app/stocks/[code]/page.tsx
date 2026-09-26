@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Wallet } from "lucide-react";
+import { AlertTriangle, Wallet } from "lucide-react";
 import { loadPublishedProfiles, loadPublishedReviews, loadScreeningSnapshot, loadStockDetail } from "@/lib/static-data";
 import { ReviewCard } from "@/components/ai/review-card";
 import { CompanyProfileCard } from "@/components/ai/company-profile-card";
@@ -11,6 +11,7 @@ import { EpsDividendChart } from "@/components/charts/eps-dividend-chart";
 import { WatchButton } from "@/components/screener/watch-button";
 import { formatPercent, formatYen } from "@/lib/utils";
 import type { RuleBreakdown } from "@/lib/screening/types";
+import { collectConcerns } from "@/lib/screening/factors";
 
 /** 静的書き出しの対象: スクリーニング上位にランクインした銘柄のみ */
 export async function generateStaticParams() {
@@ -36,6 +37,8 @@ export default async function StockDetailPage({
   const criteria = snapshot.criteria;
   const screening = detail.screening;
   const health = screening.breakdown.financialHealth;
+  // 総合の判定が良くても、内訳で弱い数値があれば理由を並べる
+  const concerns = collectConcerns(screening.breakdown, criteria);
 
   const CompanyProfile = personal?.CompanyProfileSection ?? null;
   const AiReviewTeaser = personal?.AiReviewTeaser ?? null;
@@ -122,6 +125,35 @@ export default async function StockDetailPage({
           <EpsDividendChart data={detail.epsDividend} />
         </CardContent>
       </Card>
+
+      {concerns.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <AlertTriangle className="size-4 text-amber-600" />
+              気になる点 ({concerns.length}件)
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              {screening.passedAllRules
+                ? "条件はすべて満たしていますが、内訳のうち次の数値は弱めです。"
+                : "次の数値が基準に届いていません。"}
+            </p>
+            <ul className="space-y-2">
+              {concerns.map((c) => (
+                <li key={c.key} className="rounded-md border border-slate-100 p-2 text-sm dark:border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <Badge variant={c.blocking ? "danger" : "warning"}>{c.blocking ? "基準未達" : "弱い"}</Badge>
+                    <span className="font-medium text-slate-800 dark:text-slate-100">{c.label}</span>
+                  </div>
+                  <p className="mt-1 text-slate-600 dark:text-slate-300">{c.reason}</p>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardHeader>
