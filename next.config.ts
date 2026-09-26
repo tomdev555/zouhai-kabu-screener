@@ -17,6 +17,7 @@ const publicStubs: Record<string, string> = personal
   ? {}
   : {
       "@/components/personal/personal-sections": "./src/components/personal/personal-sections.public.ts",
+      "@/components/personal/owned-ui": "./src/components/personal/owned-ui.public.ts",
     };
 
 const nextConfig: NextConfig = {

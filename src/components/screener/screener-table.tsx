@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { AlertTriangle, SlidersHorizontal, Sparkles, Star, Wallet } from "lucide-react";
+import { AlertTriangle, SlidersHorizontal, Sparkles, Star } from "lucide-react";
+import { OwnedBadge, OwnedFilterButton, type OwnedPosition } from "@/components/personal/owned-ui";
 import { Popover } from "@/components/ui/popover";
 import { DEFAULT_PRIORITIES, PriorityPanel, type Priorities } from "./priority-panel";
 import { collectConcerns, weightedScore, type Concern, type FactorKey } from "@/lib/screening/factors";
@@ -130,28 +131,6 @@ function GrowthCell({ momentum: m }: { momentum: StockScreeningResult["breakdown
   );
 }
 
-/** 実際に買った銘柄に付ける印。数量と平均取得単価、含み損益をツールチップに出す */
-function OwnedBadge({ position }: { position: OwnedPosition }) {
-  const pnl = position.unrealizedPnlPct;
-  const title = [
-    `保有 ${position.quantity.toLocaleString()}株`,
-    `平均取得単価 ${Math.round(position.averageCost).toLocaleString()}円`,
-    pnl === null ? null : `評価損益 ${pnl >= 0 ? "+" : ""}${pnl}%`,
-  ]
-    .filter(Boolean)
-    .join(" / ");
-
-  return (
-    <Link
-      href="/my"
-      title={title}
-      className="ml-2 inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-medium text-amber-900 hover:bg-amber-200 dark:bg-amber-900/40 dark:text-amber-200 dark:hover:bg-amber-900/60"
-    >
-      <Wallet className="size-3" /> 保有
-    </Link>
-  );
-}
-
 /** 自己資本比率(高いほど良い) と D/E比率(低いほど良い) のどちらでも読めるように整形する */
 function formatFinancialHealth(health: StockScreeningResult["breakdown"]["financialHealth"]): string {
   if (health.value === null) return "-";
@@ -159,12 +138,7 @@ function formatFinancialHealth(health: StockScreeningResult["breakdown"]["financ
   return `D/E ${formatPercent(health.value)}`;
 }
 
-export interface OwnedPosition {
-  code: string;
-  quantity: number;
-  averageCost: number;
-  unrealizedPnlPct: number | null;
-}
+export type { OwnedPosition };
 
 export function ScreenerTable({
   results,
@@ -252,11 +226,12 @@ export function ScreenerTable({
         >
           {onlyPassed ? `上位${results.filter((r) => r.rank !== null).length}社のみ表示中` : "全銘柄表示中"}
         </Button>
-        {ownedPositions.length > 0 && (
-          <Button variant={onlyOwned ? "default" : "outline"} size="sm" onClick={() => setOnlyOwned((v) => !v)}>
-            <Wallet className="size-3.5" />
-            保有中のみ ({ownedPositions.length})
-          </Button>
+        {OwnedFilterButton && (
+          <OwnedFilterButton
+            count={ownedPositions.length}
+            active={onlyOwned}
+            onClick={() => setOnlyOwned((v) => !v)}
+          />
         )}
         <Button
           variant={showPriorities || customized ? "default" : "outline"}
@@ -321,7 +296,7 @@ export function ScreenerTable({
                   <Link href={`/stocks/${r.code}`} className="font-medium text-emerald-800 hover:underline dark:text-emerald-400">
                     {r.name}
                   </Link>
-                  {owned.has(r.code) && <OwnedBadge position={owned.get(r.code)!} />}
+                  {OwnedBadge && owned.has(r.code) && <OwnedBadge position={owned.get(r.code)!} />}
                   {reviewed.has(r.code) && (
                     <Link
                       href={`${reviewHrefBase}${r.code}`}

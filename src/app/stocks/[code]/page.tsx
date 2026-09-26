@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AlertTriangle, Wallet } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 import { loadPublishedProfiles, loadPublishedReviews, loadScreeningSnapshot, loadStockDetail } from "@/lib/static-data";
 import { ReviewCard } from "@/components/ai/review-card";
 import { CompanyProfileCard } from "@/components/ai/company-profile-card";
@@ -42,6 +41,7 @@ export default async function StockDetailPage({
 
   const CompanyProfile = personal?.CompanyProfileSection ?? null;
   const AiReviewTeaser = personal?.AiReviewTeaser ?? null;
+  const { OwnedHoldingBadge } = await import("@/components/personal/owned-ui");
   // 実際に買っている銘柄なら、保有数と平均取得単価を見出しに出す
   const position = personal ? (await personal.ownedPositions()).find((p) => p.code === code) ?? null : null;
   const [publishedReview, publishedProfile] = personal
@@ -69,22 +69,7 @@ export default async function StockDetailPage({
           ) : (
             <Badge variant="outline">基準未達</Badge>
           )}
-          {position && (
-            <Link
-              href="/my"
-              title={`平均取得単価 ${Math.round(position.averageCost).toLocaleString()}円`}
-              className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-sm font-medium text-amber-900 hover:bg-amber-200 dark:bg-amber-900/40 dark:text-amber-200 dark:hover:bg-amber-900/60"
-            >
-              <Wallet className="size-4" />
-              保有中 {position.quantity.toLocaleString()}株
-              {position.unrealizedPnlPct !== null && (
-                <span className={position.unrealizedPnlPct >= 0 ? "text-emerald-700 dark:text-emerald-400" : "text-red-700 dark:text-red-400"}>
-                  {position.unrealizedPnlPct >= 0 ? "+" : ""}
-                  {position.unrealizedPnlPct}%
-                </span>
-              )}
-            </Link>
-          )}
+          {OwnedHoldingBadge && position && <OwnedHoldingBadge position={position} />}
           <WatchButton code={code} />
         </div>
       </div>
