@@ -271,6 +271,68 @@ function toPerformance(
   };
 }
 
+/**
+ * 通期の売上が、直近4期の四半期売上の合計とかけ離れていないかを見る。
+ * Yahoo Financeは持株会社の通期を親会社単体 (売上のほとんどが子会社からの受取配当) で返すことがあり、
+ * 連結ベースの四半期と混ぜると「増収62%」のような誤った判定になる。
+ */
+function detectAnnualBasisMismatch(
+  sortedQuarters: QuarterlyResultRecord[],
+  annualRevenue: number | null
+): string | null {
+  if (annualRevenue === null || annualRevenue <= 0) return null;
+  const last4 = sortedQuarters.slice(-4).filter((q) => typeof q.revenue === "number" && q.revenue > 0);
+  if (last4.length < 4) return null;
+
+  const quarterSum = last4.reduce((sum, q) => sum + (q.revenue ?? 0), 0);
+  if (quarterSum <= 0) return null;
+
+  const ratio = annualRevenue / quarterSum;
+  if (ratio >= 0.6 && ratio <= 1.6) return null;
+  return `提供元の通期データが四半期の合計と一致しません (通期は連結ではなく親会社単体の可能性)。通期は判定から除外しています`;
+}
+
+/**
+ * 直近年度からさかのぼって、増収増益(および増収だけ・増益だけ)が何年続いているかを数える。
+ * 比較できる年が尽きたらそこで打ち切る (データソースの保有年数が上限)。
+ */
+function countGrowthStreaks(
+  ascending: { fiscalYear: number; revenue: number | null; profit: number | null }[]
+): { both: number; revenue: number; profit: number } {
+  let both = 0;
+  let revenue = 0;
+  let profit = 0;
+  let bothOpen = true;
+  let revenueOpen = true;
+  let profitOpen = true;
+
+  for (let i = ascending.length - 1; i >= 1; i--) {
+    const cur = ascending[i];
+    const prev = ascending[i - 1];
+    const revUp = cur.revenue !== null && prev.revenue !== null && prev.revenue > 0 && cur.revenue > prev.revenue;
+    const profitUp = cur.profit !== null && prev.profit !== null && prev.profit > 0 && cur.profit > prev.profit;
+    // 比較できない年に当たったら、そこから先は「続いている」と言えないため打ち切る
+    const revComparable = cur.revenue !== null && prev.revenue !== null && prev.revenue > 0;
+    const profitComparable = cur.profit !== null && prev.profit !== null && prev.profit > 0;
+
+    if (bothOpen) {
+      if (revComparable && profitComparable && revUp && profitUp) both++;
+      else bothOpen = false;
+    }
+    if (revenueOpen) {
+      if (revComparable && revUp) revenue++;
+      else revenueOpen = false;
+    }
+    if (profitOpen) {
+      if (profitComparable && profitUp) profit++;
+      else profitOpen = false;
+    }
+    if (!bothOpen && !revenueOpen && !profitOpen) break;
+  }
+
+  return { both, revenue, profit };
+}
+
 /** 自前で前年同期比を出せなかった項目だけ、データソース算出値で埋める */
 function withReportedFallback(
   p: PeriodPerformance,
@@ -354,14 +416,23 @@ export function evaluateEarningsMomentum(
   const sortedAnnual = [...annualSeries].sort((a, b) => a.fiscalYear - b.fiscalYear);
   const latestAnnual = sortedAnnual[sortedAnnual.length - 1] ?? null;
   const priorAnnual = sortedAnnual[sortedAnnual.length - 2] ?? null;
-  const annual = latestAnnual
-    ? toPerformance(
-        `${latestAnnual.fiscalYear}年度(通期)`,
-        latestAnnual.endDate,
-        { revenue: latestAnnual.revenue, profit: latestAnnual.profit },
-        priorAnnual ? { revenue: priorAnnual.revenue, profit: priorAnnual.profit } : null
-      )
-    : null;
+
+  // 通期と直近4期の四半期合計がかけ離れていたら、両者の集計基準が違う (持株会社の親会社単体など)。
+  // そのまま比べると実態とかけ離れた増収率になるため、通期は判定から外す。
+  const annualDataIssue = detectAnnualBasisMismatch(sortedQuarters, latestAnnual?.revenue ?? null);
+
+  const annual =
+    latestAnnual && !annualDataIssue
+      ? toPerformance(
+          `${latestAnnual.fiscalYear}年度(通期)`,
+          latestAnnual.endDate,
+          { revenue: latestAnnual.revenue, profit: latestAnnual.profit },
+          priorAnnual ? { revenue: priorAnnual.revenue, profit: priorAnnual.profit } : null
+        )
+      : null;
+
+  // --- 増収増益の連続年数 (直近年度からさかのぼる) ---
+  const streaks = annualDataIssue ? { both: 0, revenue: 0, profit: 0 } : countGrowthStreaks(sortedAnnual);
 
   // --- 減点 ---
   const negatives: string[] = [];
@@ -411,6 +482,11 @@ export function evaluateEarningsMomentum(
     latestQuarter,
     annual,
     isGrowingBoth,
+    consecutiveGrowthYears: streaks.both,
+    consecutiveRevenueGrowthYears: streaks.revenue,
+    consecutiveProfitGrowthYears: streaks.profit,
+    comparableYears: annualDataIssue ? 0 : Math.max(sortedAnnual.length - 1, 0),
+    annualDataIssue,
     hasSevereAnnualDrop,
     negatives,
     score,

@@ -12,6 +12,19 @@ export default async function ScreenerPage() {
     ? await (await import("@/components/personal/personal-sections")).reviewedStockCodes()
     : (await loadPublishedReviews()).map((r) => r.stockCode);
 
+  // 実際に買った銘柄に「保有」バッジを付ける (個人モードのみ。公開サイトでは常に空)
+  const ownedPositions = personal
+    ? await (await import("@/components/personal/personal-sections")).ownedPositions()
+    : [];
+
+  // 上位50社に入っていない保有銘柄も一覧から追えるように足す
+  const shown = new Set(snapshot.results.map((r) => r.code));
+  const missingOwned = ownedPositions.map((p) => p.code).filter((c) => !shown.has(c));
+  const extraResults = personal
+    ? await (await import("@/components/personal/personal-sections")).screeningResultsForCodes(missingOwned)
+    : [];
+  const results = [...snapshot.results, ...extraResults];
+
   if (snapshot.results.length === 0) {
     return (
       <div className="p-6">
@@ -29,7 +42,7 @@ export default async function ScreenerPage() {
       <div>
         <h1 className="text-xl font-semibold">増配株スクリーニング</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          EPS成長性・減配履歴・財務健全性・配当利回り(4%前後が理想)で足切りし、PER(15倍基準)と現金確保を加味したスコアで上位{criteria.targetCount}社をランキングします。
+          EPS成長性・減配履歴・財務健全性・増収増益・配当利回り(4%前後が理想)で足切りし、PER(15倍基準)と現金確保を加味したスコアで上位{criteria.targetCount}社をランキングします。
         </p>
       </div>
 
@@ -62,7 +75,12 @@ export default async function ScreenerPage() {
         </Card>
       </div>
 
-      <ScreenerTable results={snapshot.results} reviewedCodes={reviewedCodes} reviewHrefBase={personal ? "/my/reviews/" : "/ai-reviews/#"} />
+      <ScreenerTable
+        results={results}
+        reviewedCodes={reviewedCodes}
+        reviewHrefBase={personal ? "/my/reviews/" : "/ai-reviews/#"}
+        ownedPositions={ownedPositions}
+      />
     </div>
   );
 }

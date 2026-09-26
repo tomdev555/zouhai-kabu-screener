@@ -98,6 +98,8 @@ checkpoints に読者が自分で確認すべき点として書いてくださ�
 - strengths: 強み・安心材料
 - hiddenRisks: スクリーニングの数字だけでは見えないリスク。severity は high/medium/low
 - recentNews: 渡されたニュース一覧の中で投資判断に関係するもの。date と url は渡された値をそのまま使う。takeaway は投資判断への含意
+- 増収増益の連続年数はデータの保有年数で頭打ちになる。年数に触れるときは「取得できる範囲で」と添え、
+  それ以上は続いていないと断定しない
 - earningsDiagnosis: 増収増益かどうかの診断。status は直近決算と通期をあわせた判定、
   cause は減っている(または伸びている)原因、isTemporary はその要因の性質、dividendImpact は増配余力への影響
 - checkpoints: 買う前に読者自身が確認すべきこと
@@ -225,6 +227,13 @@ function formatPerformance(m: EarningsMomentumCheck | null): string {
   };
 
   const lines = [line(m.annual), line(m.latestQuarter)].filter(Boolean);
+  if (m.annualDataIssue) lines.push(`注意: ${m.annualDataIssue}。通期の増減には言及しないでください`);
+  if (m.comparableYears > 0) {
+    lines.push(
+      `通期の増収増益: ${m.consecutiveGrowthYears}年連続 (増収${m.consecutiveRevenueGrowthYears}年 / 増益${m.consecutiveProfitGrowthYears}年)。` +
+        `データは${m.comparableYears + 1}年分しかないため、連続年数は最大${m.comparableYears}年までしか数えられない点に注意`
+    );
+  }
   if (m.negatives.length > 0) {
     lines.push(`マイナス評価の理由: ${m.negatives.join(" / ")}`);
     lines.push(

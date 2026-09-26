@@ -118,6 +118,23 @@ export interface EarningsMomentumCheck {
   annual: PeriodPerformance | null;
   /** 直近決算・通期ともに増収増益か */
   isGrowingBoth: boolean;
+  /** 通期で増収増益が何年連続しているか (直近年度からさかのぼって数える) */
+  consecutiveGrowthYears: number;
+  /** 増収だけの連続年数 */
+  consecutiveRevenueGrowthYears: number;
+  /** 増益だけの連続年数 */
+  consecutiveProfitGrowthYears: number;
+  /**
+   * 前年比を計算できた年数 (データソースの保有年数 - 1)。
+   * Yahoo Financeは通期4年分しか返さないため、今は最大3。日々の更新で少しずつ伸びる。
+   */
+  comparableYears: number;
+  /**
+   * 通期データを判定に使えないときの理由。
+   * 持株会社などは提供元の通期が親会社単体(売上がほぼ受取配当)で四半期の連結と基準が合わないため、
+   * そのまま前年比を取ると実態とかけ離れた増収率が出てしまう。検出したら通期は判定から外す。
+   */
+  annualDataIssue: string | null;
   /** 通期の減益が severeAnnualProfitDropPercent を超えた (AIに原因を調べさせる対象) */
   hasSevereAnnualDrop: boolean;
   /** 減点の理由。UIとAIへの入力にそのまま使う */

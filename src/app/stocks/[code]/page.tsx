@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Wallet } from "lucide-react";
 import { loadPublishedProfiles, loadPublishedReviews, loadScreeningSnapshot, loadStockDetail } from "@/lib/static-data";
 import { ReviewCard } from "@/components/ai/review-card";
 import { CompanyProfileCard } from "@/components/ai/company-profile-card";
@@ -22,18 +24,23 @@ export default async function StockDetailPage({
   params: Promise<{ code: string }>;
 }) {
   const { code } = await params;
-  const [detail, snapshot] = await Promise.all([loadStockDetail(code), loadScreeningSnapshot()]);
+  // 個人モードでは DB の会社概要・AI総評 (生成ボタン付き) を、公開サイトでは
+  // content/ai/*.json に書き出した公開用の総評・概要 (表示のみ) を出す
+  const personal = process.env.PERSONAL_MODE === "1" ? await import("@/components/personal/personal-sections") : null;
+
+  const [staticDetail, snapshot] = await Promise.all([loadStockDetail(code), loadScreeningSnapshot()]);
+  // 公開用JSONは上位50社ぶんしかないため、個人モードでは保有銘柄などをDBから組み立てて開けるようにする
+  const detail = staticDetail ?? (personal ? await personal.stockDetailFromDb(code) : null);
   if (!detail) notFound();
 
   const criteria = snapshot.criteria;
   const screening = detail.screening;
   const health = screening.breakdown.financialHealth;
 
-  // 個人モードでは DB の会社概要・AI総評 (生成ボタン付き) を、公開サイトでは
-  // content/ai/*.json に書き出した公開用の総評・概要 (表示のみ) を出す
-  const personal = process.env.PERSONAL_MODE === "1" ? await import("@/components/personal/personal-sections") : null;
   const CompanyProfile = personal?.CompanyProfileSection ?? null;
   const AiReviewTeaser = personal?.AiReviewTeaser ?? null;
+  // 実際に買っている銘柄なら、保有数と平均取得単価を見出しに出す
+  const position = personal ? (await personal.ownedPositions()).find((p) => p.code === code) ?? null : null;
   const [publishedReview, publishedProfile] = personal
     ? [null, null]
     : await Promise.all([
@@ -58,6 +65,22 @@ export default async function StockDetailPage({
             <Badge variant="success">スクリーニング条件クリア (順位 {screening.rank ?? "-"})</Badge>
           ) : (
             <Badge variant="outline">基準未達</Badge>
+          )}
+          {position && (
+            <Link
+              href="/my"
+              title={`平均取得単価 ${Math.round(position.averageCost).toLocaleString()}円`}
+              className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-sm font-medium text-amber-900 hover:bg-amber-200 dark:bg-amber-900/40 dark:text-amber-200 dark:hover:bg-amber-900/60"
+            >
+              <Wallet className="size-4" />
+              保有中 {position.quantity.toLocaleString()}株
+              {position.unrealizedPnlPct !== null && (
+                <span className={position.unrealizedPnlPct >= 0 ? "text-emerald-700 dark:text-emerald-400" : "text-red-700 dark:text-red-400"}>
+                  {position.unrealizedPnlPct >= 0 ? "+" : ""}
+                  {position.unrealizedPnlPct}%
+                </span>
+              )}
+            </Link>
           )}
           <WatchButton code={code} />
         </div>
@@ -155,6 +178,24 @@ export default async function StockDetailPage({
                     </span>
                   </div>
                 ))}
+              {screening.breakdown.earningsMomentum.annualDataIssue && (
+                <p className="text-amber-700 dark:text-amber-400">
+                  {screening.breakdown.earningsMomentum.annualDataIssue}
+                </p>
+              )}
+              {screening.breakdown.earningsMomentum.comparableYears > 0 && (
+                <p className="text-slate-500 dark:text-slate-400">
+                  通期の増収増益: {screening.breakdown.earningsMomentum.consecutiveGrowthYears}年連続
+                  {screening.breakdown.earningsMomentum.consecutiveGrowthYears >=
+                    screening.breakdown.earningsMomentum.comparableYears && "以上"}
+                  {" "}(増収{screening.breakdown.earningsMomentum.consecutiveRevenueGrowthYears}年 / 増益
+                  {screening.breakdown.earningsMomentum.consecutiveProfitGrowthYears}年)
+                  <span className="ml-1 text-xs">
+                    ※データソースの保有年数が{screening.breakdown.earningsMomentum.comparableYears + 1}年のため
+                    最大{screening.breakdown.earningsMomentum.comparableYears}年まで
+                  </span>
+                </p>
+              )}
               {screening.breakdown.earningsMomentum.negatives.length > 0 && (
                 <p className="text-amber-700 dark:text-amber-400">
                   {screening.breakdown.earningsMomentum.negatives.join(" / ")}
@@ -215,7 +256,13 @@ function InfoRow({ label, value }: { label: string; value: string }) {
 
 /** 増収増益の状態を短い日本語にする */
 function momentumLabel(m: RuleBreakdown["earningsMomentum"]): string {
-  if (m.isGrowingBoth) return "増収増益";
+  const streak =
+    m.consecutiveGrowthYears > 0
+      ? `増収増益${m.consecutiveGrowthYears}年連続${m.consecutiveGrowthYears >= m.comparableYears ? "+" : ""}`
+      : null;
+  if (m.annualDataIssue && m.negatives.length === 0) return "直近決算のみで判定";
+  if (m.isGrowingBoth) return streak ?? "増収増益";
+  if (streak && m.negatives.length > 0) return `${streak} (直近は減速)`;
   if (m.negatives.length === 0) return "判定材料なし";
   const hasProfitDown = m.negatives.some((n) => n.includes("減益"));
   const hasRevenueDown = m.negatives.some((n) => n.includes("減収"));

@@ -57,7 +57,7 @@ export function SidebarNav({ personalItems = [] }: { personalItems?: NavItem[] }
     <aside className="hidden w-56 shrink-0 border-r border-slate-200 bg-white md:flex md:flex-col dark:border-slate-800 dark:bg-slate-950">
       <div className="flex items-center gap-2 px-4 py-4 border-b border-slate-200 dark:border-slate-800">
         <TrendingUp className="size-5 text-emerald-700" />
-        <span className="font-semibold text-slate-900 dark:text-slate-100">増配株ナビ</span>
+        <span className="font-semibold text-slate-900 dark:text-slate-100">増配株ピックアップMe</span>
       </div>
       <nav className="flex flex-col gap-1 p-3">{NAV_ITEMS.map(renderItem)}</nav>
       {personal && (

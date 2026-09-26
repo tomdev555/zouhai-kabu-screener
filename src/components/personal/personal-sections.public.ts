@@ -10,3 +10,17 @@ export const AiReviewTeaser = null;
 export async function reviewedStockCodes(): Promise<string[]> {
   return [];
 }
+
+export async function screeningResultsForCodes(): Promise<never[]> {
+  return [];
+}
+
+export async function stockDetailFromDb(): Promise<null> {
+  return null;
+}
+
+export async function ownedPositions(): Promise<
+  { code: string; quantity: number; averageCost: number; unrealizedPnlPct: number | null }[]
+> {
+  return [];
+}

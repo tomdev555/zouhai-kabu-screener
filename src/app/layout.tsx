@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "増配株ナビ",
+  title: "増配株ピックアップMe",
   description: "日本株の優良な増配株を毎朝スクリーニングし、AI総評とあわせて表示するサイト",
 };
 
