@@ -3,7 +3,31 @@
 
 import { fetchJpxListedStocks } from "./jpx-listing";
 import { fetchChart, fetchFundamentals } from "./yahoo-finance";
-import type { DataProvider, FinancialYearRecord, PriceBar, StockMasterRecord } from "./types";
+import type {
+  DataProvider,
+  FinancialYearRecord,
+  PriceBar,
+  QuarterlyResults,
+  StockMasterRecord,
+} from "./types";
+
+// fetchFinancialHistory と fetchQuarterlyResults は同じ quoteSummary レスポンスを使うため、
+// 銘柄ごとに1回だけ取得して使い回す (全銘柄でリクエストが倍にならないようにする)。
+type Fundamentals = Awaited<ReturnType<typeof fetchFundamentals>>;
+const fundamentalsCache = new Map<string, Promise<Fundamentals>>();
+
+function getFundamentals(code: string): Promise<Fundamentals> {
+  const cached = fundamentalsCache.get(code);
+  if (cached) return cached;
+  const p = fetchFundamentals(code).catch(() => null);
+  // 並列数ぶんの銘柄を保持できれば十分なので、増えすぎたら古いものから捨てる
+  if (fundamentalsCache.size > 64) {
+    const oldest = fundamentalsCache.keys().next().value;
+    if (oldest !== undefined) fundamentalsCache.delete(oldest);
+  }
+  fundamentalsCache.set(code, p);
+  return p;
+}
 
 // 対象銘柄数を絞りたい場合に使う (未設定なら全銘柄)。初回の動作確認用。
 function universeLimit(): number | null {
@@ -44,13 +68,21 @@ export class YahooFinanceProvider implements DataProvider {
     // 配当は取得可能な全期間(range=max、20年以上遡れることが多い)を取る。
     const [chart, fundamentals] = await Promise.all([
       fetchChart(code, "max", "1mo"),
-      fetchFundamentals(code).catch(() => null),
+      getFundamentals(code),
     ]);
     if (!chart) return [];
 
     const fiscalYearEndMonth = parseFiscalYearEndMonth(fundamentals?.fiscalYearEnd) ?? 3;
     const dividendByYear = aggregateDividendsByFiscalYear(chart.dividends, fiscalYearEndMonth);
     const epsByYear = estimateEpsByFiscalYear(fundamentals, fiscalYearEndMonth);
+    // 「増収増益が基本」の判定に使う通期の売上・純利益 (直近4年分)
+    const resultsByYear = new Map<number, { revenue: number | null; netIncome: number | null }>();
+    for (const r of fundamentals?.annualResults ?? []) {
+      resultsByYear.set(toFiscalYear(r.endDate, fiscalYearEndMonth), {
+        revenue: r.revenue,
+        netIncome: r.netIncome,
+      });
+    }
 
     const years = new Set<number>([...dividendByYear.keys(), ...epsByYear.keys()]);
     const latestYear = Math.max(...years, 0);
@@ -61,6 +93,8 @@ export class YahooFinanceProvider implements DataProvider {
         fiscalYear,
         fiscalPeriodEndDate: formatFiscalPeriodEnd(fiscalYear, fiscalYearEndMonth),
         eps: epsByYear.get(fiscalYear),
+        netSales: resultsByYear.get(fiscalYear)?.revenue ?? undefined,
+        netIncome: resultsByYear.get(fiscalYear)?.netIncome ?? undefined,
         bps: fiscalYear === latestYear ? fundamentals?.bookValuePerShare ?? undefined : undefined,
         // Yahoo Financeからは自己資本比率が取れないため、D/E比率を負債の指標として使う
         debtToEquity: fiscalYear === latestYear ? fundamentals?.debtToEquity ?? undefined : undefined,
@@ -71,6 +105,28 @@ export class YahooFinanceProvider implements DataProvider {
         marketCap: fiscalYear === latestYear ? fundamentals?.marketCap ?? undefined : undefined,
       }));
   }
+
+  async fetchQuarterlyResults(code: string): Promise<QuarterlyResults> {
+    const fundamentals = await getFundamentals(code);
+    const pct = (v: number | null | undefined) =>
+      v === null || v === undefined ? null : Math.round(v * 1000) / 10;
+    return {
+      records: (fundamentals?.quarterlyResults ?? []).map((r) => ({
+        endDate: r.endDate,
+        revenue: r.revenue ?? undefined,
+        profit: r.netIncome ?? undefined,
+      })),
+      reportedRevenueYoYPercent: pct(fundamentals?.quarterlyRevenueGrowth),
+      reportedProfitYoYPercent: pct(fundamentals?.quarterlyEarningsGrowth),
+    };
+  }
+}
+
+/** 決算期末日("2026-03-31")を決算年度に変換する。決算月より後に終わる期は翌年度扱い */
+function toFiscalYear(endDate: string, fiscalYearEndMonth: number): number {
+  const year = Number(endDate.slice(0, 4));
+  const month = Number(endDate.slice(5, 7));
+  return month > fiscalYearEndMonth ? year + 1 : year;
 }
 
 /** "2026-03-31" -> 3 */

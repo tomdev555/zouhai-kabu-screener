@@ -4,6 +4,7 @@ import {
   evaluateCash,
   evaluateDividendCutFreeYears,
   evaluateDividendYieldCheck,
+  evaluateEarningsMomentum,
   evaluateEpsTrend,
   evaluateFinancialHealth,
   evaluateValuation,
@@ -11,10 +12,10 @@ import {
   passesCriteria,
 } from "./rules";
 import { DEFAULT_CRITERIA, type RuleBreakdown, type ScreeningCriteria, type StockScreeningResult } from "./types";
-import type { FinancialYearRecord, PriceBar } from "../data-sources/types";
+import type { FinancialYearRecord, PriceBar, QuarterlyResultRecord } from "../data-sources/types";
 
 async function loadStockInputs(stockCode: string) {
-  const [financials, dividends, prices] = await Promise.all([
+  const [financials, dividends, prices, quarterlyRows] = await Promise.all([
     prisma.financialStatement.findMany({
       where: { stockCode },
       orderBy: { fiscalYear: "asc" },
@@ -26,6 +27,10 @@ async function loadStockInputs(stockCode: string) {
     prisma.priceDaily.findMany({
       where: { stockCode },
       orderBy: { date: "asc" },
+    }),
+    prisma.quarterlyResult.findMany({
+      where: { stockCode },
+      orderBy: { periodEnd: "asc" },
     }),
   ]);
 
@@ -39,8 +44,16 @@ async function loadStockInputs(stockCode: string) {
     equityRatio: f.equityRatio ? Number(f.equityRatio) : undefined,
     debtToEquity: f.debtToEquity ? Number(f.debtToEquity) : undefined,
     cashAndEquivalents: f.cashAndEquivalents ? Number(f.cashAndEquivalents) : undefined,
+    netSales: f.netSales ? Number(f.netSales) : undefined,
+    netIncome: f.netIncome ? Number(f.netIncome) : undefined,
     dividendPerShare: dividendByYear.get(f.fiscalYear),
     isForecast: f.isForecast,
+  }));
+
+  const quarterly: QuarterlyResultRecord[] = quarterlyRows.map((q) => ({
+    endDate: q.periodEnd.toISOString().slice(0, 10),
+    revenue: q.revenue ? Number(q.revenue) : undefined,
+    profit: q.profit ? Number(q.profit) : undefined,
   }));
 
   const priceBars: PriceBar[] = prices.map((p) => ({
@@ -52,7 +65,7 @@ async function loadStockInputs(stockCode: string) {
     volume: Number(p.volume),
   }));
 
-  return { merged, priceBars };
+  return { merged, priceBars, quarterly };
 }
 
 type StockForScreening = {
@@ -62,6 +75,8 @@ type StockForScreening = {
   currentPrice: unknown;
   forwardDividendPerShare: unknown;
   marketCap: unknown;
+  reportedRevenueYoY?: unknown;
+  reportedProfitYoY?: unknown;
 };
 
 function num(v: unknown): number | null {
@@ -82,7 +97,7 @@ function priceChangeOverMonths(priceBars: PriceBar[], months: number, currentPri
 }
 
 async function evaluateStock(stock: StockForScreening, criteria: ScreeningCriteria): Promise<StockScreeningResult | null> {
-  const { merged, priceBars } = await loadStockInputs(stock.code);
+  const { merged, priceBars, quarterly } = await loadStockInputs(stock.code);
   if (merged.length === 0) return null;
 
   const currentPrice = num(stock.currentPrice);
@@ -100,6 +115,23 @@ async function evaluateStock(stock: StockForScreening, criteria: ScreeningCriter
   const financialHealth = evaluateFinancialHealth(latestFinancial?.equityRatio, latestFinancial?.debtToEquity, criteria);
   const valuation = evaluateValuation(currentPrice, latestFinancial?.eps, criteria);
   const cash = evaluateCash(latestFinancial?.cashAndEquivalents, num(stock.marketCap), criteria);
+  // 「増収増益が基本」。通期は年度レコードの売上・純利益から、直近決算は四半期テーブルから見る
+  const earningsMomentum = evaluateEarningsMomentum(
+    quarterly,
+    merged
+      .filter((f) => f.netSales !== undefined || f.netIncome !== undefined)
+      .map((f) => ({
+        fiscalYear: f.fiscalYear,
+        endDate: f.fiscalPeriodEndDate,
+        revenue: f.netSales ?? null,
+        profit: f.netIncome ?? null,
+      })),
+    criteria,
+    {
+      revenueYoYPercent: num(stock.reportedRevenueYoY),
+      profitYoYPercent: num(stock.reportedProfitYoY),
+    }
+  );
 
   const passed = passesCriteria(
     {
@@ -107,6 +139,7 @@ async function evaluateStock(stock: StockForScreening, criteria: ScreeningCriter
       cutFreeYears: cutResult.cutFreeYears,
       financialHealthPass: financialHealth.pass,
       epsScore: epsTrend.score,
+      earningsMomentumScore: earningsMomentum.score,
     },
     criteria
   );
@@ -118,6 +151,7 @@ async function evaluateStock(stock: StockForScreening, criteria: ScreeningCriter
     epsScore: epsTrend.score,
     valuation,
     cash,
+    earningsMomentum,
     yieldPercentile: yieldRange.percentileInRange,
   });
 
@@ -131,6 +165,7 @@ async function evaluateStock(stock: StockForScreening, criteria: ScreeningCriter
     epsTrend: { ...epsTrend, pass: epsTrend.score >= criteria.minEpsTrendScore },
     valuation,
     cash,
+    earningsMomentum,
     yieldRange,
     priceChangeOverHorizon: priceChangeOverMonths(priceBars, criteria.evaluationHorizonMonths, currentPrice),
     specialDividendYears: cutResult.normalizedSeries.filter((s) => s.wasSpecial).map((s) => s.fiscalYear),
@@ -237,6 +272,7 @@ export async function runScreeningAndPersist(
       debtToEquity: r.breakdown.financialHealth.metric === "debtToEquity" ? r.breakdown.financialHealth.value : null,
       per: r.breakdown.valuation.per,
       cashToMarketCap: r.breakdown.cash.cashToMarketCap,
+      earningsMomentumScore: r.breakdown.earningsMomentum.score,
       yieldRangePercentile: r.breakdown.yieldRange.percentileInRange,
       passedAllRules: r.passedAllRules,
       compositeScore: r.compositeScore,

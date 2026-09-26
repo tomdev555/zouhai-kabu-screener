@@ -78,6 +78,25 @@ export function ReviewCard({
             <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-200">{r.summary}</p>
           </Section>
 
+          {r.earningsDiagnosis && (
+            <Section title="増収増益かどうか">
+              <div className="rounded-md border border-slate-100 p-3 text-sm dark:border-slate-800">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge variant={statusVariant(r.earningsDiagnosis.status)}>{r.earningsDiagnosis.status}</Badge>
+                  {r.earningsDiagnosis.isTemporary !== "不明" && (
+                    <Badge variant="outline">
+                      {r.earningsDiagnosis.isTemporary === "一時的" ? "一時的な要因" : "構造的な要因"}
+                    </Badge>
+                  )}
+                </div>
+                <p className="mt-2 text-slate-700 dark:text-slate-200">{r.earningsDiagnosis.cause}</p>
+                <p className="mt-1 text-slate-600 dark:text-slate-300">
+                  増配余力への影響: {r.earningsDiagnosis.dividendImpact}
+                </p>
+              </div>
+            </Section>
+          )}
+
           <div className="grid gap-5 lg:grid-cols-2">
             <Section title="強み・安心材料">
               <ul className="space-y-1 text-sm text-slate-700 dark:text-slate-200">
@@ -182,6 +201,13 @@ export function StanceBadge({ stance }: { stance: string }) {
   const variant =
     stance === "候補として有力" ? "success" : stance === "条件付きで検討" ? "warning" : stance === "見送り" ? "danger" : "default";
   return <Badge variant={variant}>{stance}</Badge>;
+}
+
+function statusVariant(status: string) {
+  if (status === "増収増益") return "success" as const;
+  if (status === "減収減益") return "danger" as const;
+  if (status === "判定不能") return "default" as const;
+  return "warning" as const;
 }
 
 function SeverityBadge({ severity }: { severity: "high" | "medium" | "low" }) {

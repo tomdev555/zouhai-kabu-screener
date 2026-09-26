@@ -3,7 +3,7 @@
 
 import { promises as fs } from "fs";
 import path from "path";
-import type { ScreeningCriteria, StockScreeningResult } from "./screening/types";
+import type { EarningsMomentumCheck, ScreeningCriteria, StockScreeningResult } from "./screening/types";
 import type { ProfileRecord, ReviewRecord } from "./ai/schemas";
 
 const DATA_DIR = path.join(process.cwd(), "public", "data");
@@ -43,10 +43,30 @@ const EMPTY_SNAPSHOT: ScreeningSnapshot = {
   results: [],
 };
 
+/**
+ * 業績モメンタム(増収増益の判定)は後から追加した項目なので、
+ * それ以前に書き出したJSONを読んでも画面が壊れないように補う。
+ */
+const EMPTY_MOMENTUM: EarningsMomentumCheck = {
+  latestQuarter: null,
+  annual: null,
+  isGrowingBoth: false,
+  hasSevereAnnualDrop: false,
+  negatives: [],
+  score: 0,
+  pass: true,
+};
+
+function withMomentum(result: StockScreeningResult): StockScreeningResult {
+  if (result.breakdown?.earningsMomentum) return result;
+  return { ...result, breakdown: { ...result.breakdown, earningsMomentum: EMPTY_MOMENTUM } };
+}
+
 export async function loadScreeningSnapshot(): Promise<ScreeningSnapshot> {
   try {
     const text = await fs.readFile(path.join(DATA_DIR, "screening.json"), "utf-8");
-    return JSON.parse(text) as ScreeningSnapshot;
+    const snapshot = JSON.parse(text) as ScreeningSnapshot;
+    return { ...snapshot, results: (snapshot.results ?? []).map(withMomentum) };
   } catch {
     return EMPTY_SNAPSHOT;
   }
@@ -55,7 +75,8 @@ export async function loadScreeningSnapshot(): Promise<ScreeningSnapshot> {
 export async function loadStockDetail(code: string): Promise<StockDetail | null> {
   try {
     const text = await fs.readFile(path.join(DATA_DIR, "stocks", `${code}.json`), "utf-8");
-    return JSON.parse(text) as StockDetail;
+    const detail = JSON.parse(text) as StockDetail;
+    return detail.screening ? { ...detail, screening: withMomentum(detail.screening) } : detail;
   } catch {
     return null;
   }

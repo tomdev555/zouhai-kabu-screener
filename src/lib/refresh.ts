@@ -8,7 +8,12 @@ import { fetchLongHistoryFinancials } from "./data-sources/edinet-history";
 import { detectSpecialDividendYears } from "./screening/rules";
 import { DEFAULT_CRITERIA } from "./screening/types";
 import { runScreeningAndPersist } from "./screening/engine";
-import type { FinancialYearRecord, PriceBar, StockMasterRecord } from "./data-sources/types";
+import type {
+  FinancialYearRecord,
+  PriceBar,
+  QuarterlyResults,
+  StockMasterRecord,
+} from "./data-sources/types";
 
 export interface RefreshSummary {
   provider: string;
@@ -40,17 +45,21 @@ export async function refreshAllData(
             provider.fetchFinancialHistory(m.code),
           ]);
           const financials = await supplementWithEdinetIfNeeded(m.code, providerFinancials);
-          return { master: m, prices, financials };
+          // 四半期決算は対応しているデータソースだけ (未対応なら空配列)
+          const quarterly: QuarterlyResults = provider.fetchQuarterlyResults
+            ? await provider.fetchQuarterlyResults(m.code).catch(() => ({ records: [] }))
+            : { records: [] };
+          return { master: m, prices, financials, quarterly };
         } catch (err) {
           console.warn(`[refresh] ${m.code} の取得に失敗:`, err instanceof Error ? err.message : err);
-          return { master: m, prices: [], financials: [] };
+          return { master: m, prices: [], financials: [], quarterly: { records: [] } as QuarterlyResults };
         }
       })
     );
 
     // 2) 書き込みは直列
-    for (const { master: m, prices, financials } of fetched) {
-      await persistStock(m, prices, financials);
+    for (const { master: m, prices, financials, quarterly } of fetched) {
+      await persistStock(m, prices, financials, quarterly);
       done++;
       onProgress?.(done, masters.length);
     }
@@ -71,7 +80,8 @@ export async function refreshAllData(
 async function persistStock(
   m: StockMasterRecord,
   prices: PriceBar[],
-  financials: FinancialYearRecord[]
+  financials: FinancialYearRecord[],
+  quarterly: QuarterlyResults = { records: [] }
 ): Promise<void> {
   {
     await prisma.stock.upsert({
@@ -202,6 +212,35 @@ async function persistStock(
         );
 
       await prisma.$transaction([...financialUpserts, ...dividendUpserts]);
+    }
+
+    if (
+      quarterly.reportedRevenueYoYPercent !== undefined ||
+      quarterly.reportedProfitYoYPercent !== undefined
+    ) {
+      await prisma.stock.update({
+        where: { code: m.code },
+        data: {
+          reportedRevenueYoY: quarterly.reportedRevenueYoYPercent,
+          reportedProfitYoY: quarterly.reportedProfitYoYPercent,
+        },
+      });
+    }
+
+    if (quarterly.records.length > 0) {
+      await prisma.$transaction(
+        quarterly.records
+          .filter((q) => !Number.isNaN(new Date(q.endDate).getTime()))
+          .map((q) => {
+            const periodEnd = new Date(q.endDate);
+            const data = { revenue: q.revenue, profit: q.profit };
+            return prisma.quarterlyResult.upsert({
+              where: { stockCode_periodEnd: { stockCode: m.code, periodEnd } },
+              create: { stockCode: m.code, periodEnd, ...data },
+              update: data,
+            });
+          })
+      );
     }
   }
 }

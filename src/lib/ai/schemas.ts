@@ -26,6 +26,21 @@ export const ReviewSchema = z.object({
       })
     )
     .describe("直近のニュース・開示"),
+  earningsDiagnosis: z
+    .object({
+      status: z
+        .enum(["増収増益", "増収減益", "減収増益", "減収減益", "判定不能"])
+        .describe("直近決算と通期をあわせた業績の状態"),
+      cause: z
+        .string()
+        .describe("減収・減益がある場合、会社の開示やニュースから読み取れる原因。増収増益なら伸びている理由"),
+      isTemporary: z
+        .enum(["一時的", "構造的", "不明"])
+        .describe("その要因が一時的なものか、続きそうな構造的なものか"),
+      dividendImpact: z.string().describe("増配の継続余力への影響 (2〜3文)"),
+    })
+    .optional()
+    .describe("増収増益かどうかの診断。減っている場合は原因まで踏み込む"),
   checkpoints: z.array(z.string()).describe("買う前に自分で確認すべきこと"),
   stance: z.enum(["候補として有力", "条件付きで検討", "様子見", "見送り"]),
   stanceReason: z.string(),
@@ -34,6 +49,12 @@ export const ReviewSchema = z.object({
 });
 
 export type Review = z.infer<typeof ReviewSchema>;
+
+/**
+ * 生成時に使うスキーマ。earningsDiagnosis を必須にしてAIに必ず書かせる。
+ * 保存済みの古い総評にはこの項目が無いため、読み込み側の ReviewSchema では任意にしている。
+ */
+export const ReviewGenerationSchema = ReviewSchema.required({ earningsDiagnosis: true });
 
 export const ProfileSchema = z.object({
   tokushoku: z.string().describe("四季報の【特色】欄のような60〜90字の要約"),

@@ -12,7 +12,12 @@ import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
 import { prisma } from "../db";
 import { computeScreeningForStock, loadLatestScreeningResults } from "../screening/engine";
-import { DEFAULT_CRITERIA, type StockScreeningResult } from "../screening/types";
+import {
+  DEFAULT_CRITERIA,
+  type EarningsMomentumCheck,
+  type PeriodPerformance,
+  type StockScreeningResult,
+} from "../screening/types";
 import { fetchStockNews, type NewsItem } from "./news";
 import { generateCompanyProfile, isProfileFresh, loadCompanyProfile } from "./company-profile";
 
@@ -28,7 +33,7 @@ const NEWS_DAYS = 180;
 const NEWS_LIMIT = 20;
 
 export { ReviewSchema, type Review } from "../ai/schemas";
-import { ReviewSchema, type Review } from "../ai/schemas";
+import { ReviewGenerationSchema, ReviewSchema, type Review } from "../ai/schemas";
 
 export interface StoredReview {
   stockCode: string;
@@ -51,6 +56,8 @@ const SYSTEM_PROMPT = `あなたは日本株の配当投資に精通したアナ
 機械的なスクリーニングで上位に入った銘柄について、数字だけでは分からない実態とリスクを整理してください。
 このサイトの評価基準: 半年程度先までを主な評価期間とし、PERは15倍を基準に割安・割高を判断し、
 現金を厚く持つ会社を高く評価します。利回りは高すぎても(減配リスク)低すぎても(買われすぎ)よくないと考えます。
+そして「増収増益が基本」です。直近の決算(短信)や通期が減収・減益ならマイナス評価とし、
+特に通期の減益が大きい場合は重く見ます。増配を続けられるかは利益が伸びているかで決まるためです。
 
 文章は不特定多数の閲覧者が読みます。「ユーザー」「あなた」といった特定の相手を指す言い方は使わず、
 基準に触れるときは「本サイトの基準」と書いてください。
@@ -62,7 +69,20 @@ const SYSTEM_PROMPT = `あなたは日本株の配当投資に精通したアナ
 checkpoints に読者が自分で確認すべき点として書いてください。
 数値データで「-」となっている項目はデータ未取得であり、その項目については言及しないか「未取得」と書いてください。
 
+業績が落ちているときの扱い (最重要):
+- 【業績】欄に減収または減益が示されている場合、その原因を必ず突き止めてください。
+  ニュース見出しの中から会社自身が出した説明 (決算短信、業績予想の修正、決算説明会の内容、特別損失の計上など)
+  を探し、何が起きたのかを earningsDiagnosis.cause に具体的に書きます。
+- 原因が分かったら、それが一時的なもの (一過性の特別損失、前年の反動、一時的なコスト増) か、
+  構造的なもの (主力事業の縮小、競争激化、価格転嫁できない原材料高) かを isTemporary で区別してください。
+  構造的だと判断した場合は hiddenRisks にも severity: high で挙げ、stance を下げます。
+- 見出しから原因が分からない場合は cause に「開示から特定できず」と書き、isTemporary は「不明」、
+  confidence を下げ、checkpoints に「決算短信のどこを見れば分かるか」を具体的に書いてください。
+  分からないことを推測で埋めないでください。
+- 増収増益の場合も、何が伸ばしているのか (数量、単価、新製品、M&A) を cause に書きます。
+
 重視する視点:
+- 増収増益が続いているか。減っているならその原因と、一時的か構造的か
 - 増配が今後も続く根拠はあるか (利益成長・配当性向・キャッシュフロー・経営方針)
 - 過去の増配実績が「たまたま」でないか (一時的な利益、資産売却、特別配当の可能性)
 - 数字に表れない構造的リスク (主要顧客への依存、業界の縮小、規制、後継者問題、円安/円高の影響、
@@ -78,6 +98,8 @@ checkpoints に読者が自分で確認すべき点として書いてくださ�
 - strengths: 強み・安心材料
 - hiddenRisks: スクリーニングの数字だけでは見えないリスク。severity は high/medium/low
 - recentNews: 渡されたニュース一覧の中で投資判断に関係するもの。date と url は渡された値をそのまま使う。takeaway は投資判断への含意
+- earningsDiagnosis: 増収増益かどうかの診断。status は直近決算と通期をあわせた判定、
+  cause は減っている(または伸びている)原因、isTemporary はその要因の性質、dividendImpact は増配余力への影響
 - checkpoints: 買う前に読者自身が確認すべきこと
 - stance: 候補として有力 / 条件付きで検討 / 様子見 / 見送り のいずれか
 - stanceReason: そのスタンスの理由 (2〜3文)
@@ -130,7 +152,9 @@ async function buildStockContext(
     screening.rank = saved?.rank ?? null;
   }
 
-  const news = await fetchStockNews(stock.name, stock.code, NEWS_DAYS, NEWS_LIMIT);
+  // 減収・減益が出ている銘柄は、原因を報じた記事や会社の開示も追加で探す
+  const needsCauseSearch = (screening?.breakdown.earningsMomentum.negatives.length ?? 0) > 0;
+  const news = await fetchStockNews(stock.name, stock.code, NEWS_DAYS, NEWS_LIMIT, needsCauseSearch);
 
   const closes = prices.map((p) => Number(p.close));
   const current = closes[0] ?? null;
@@ -164,6 +188,9 @@ async function buildStockContext(
     `財務健全性: ${b?.financialHealth.metric === "debtToEquity" ? `D/E比率 ${b.financialHealth.value}%` : `自己資本比率 ${b?.financialHealth.value ?? "-"}%`}`,
     `EPS成長性スコア: ${b?.epsTrend.score ?? "-"}点 (CAGR ${b?.epsTrend.cagrPercent ?? "-"}%, 下降年 ${b?.epsTrend.downYears ?? "-"}回)`,
     `直近3年の配当利回りレンジ内の位置: ${b?.yieldRange.percentileInRange ?? "-"}% (100に近いほど過去比で割安)`,
+    ``,
+    `【業績 (増収増益が基本。減っていれば原因を調べる)】`,
+    formatPerformance(b?.earningsMomentum ?? null),
     `特別配当と判定した年: ${b?.specialDividendYears.join(", ") || "なし"}`,
     ``,
     `【株価】`,
@@ -184,6 +211,32 @@ async function buildStockContext(
   ].join("\n");
 
   return { text, screening, news };
+}
+
+/** 業績モメンタムを人が読める形にしてプロンプトに渡す */
+function formatPerformance(m: EarningsMomentumCheck | null): string {
+  if (!m) return "データなし";
+
+  const line = (p: PeriodPerformance | null): string | null => {
+    if (!p) return null;
+    const oku = (n: number | null) => (n === null ? "-" : `${Math.round(n / 1e8).toLocaleString()}億円`);
+    const pct = (n: number | null) => (n === null ? "前年比不明" : `前年比 ${n >= 0 ? "+" : ""}${n}%`);
+    return `${p.label}: 売上 ${oku(p.revenue)} (${pct(p.revenueYoYPercent)}) / 純利益 ${oku(p.profit)} (${pct(p.profitYoYPercent)})`;
+  };
+
+  const lines = [line(m.annual), line(m.latestQuarter)].filter(Boolean);
+  if (m.negatives.length > 0) {
+    lines.push(`マイナス評価の理由: ${m.negatives.join(" / ")}`);
+    lines.push(
+      m.hasSevereAnnualDrop
+        ? "→ 通期の減益幅が大きい。会社の開示から原因を必ず特定してください"
+        : "→ 減収または減益の原因を、会社の開示・ニュースから特定してください"
+    );
+  } else if (m.isGrowingBoth) {
+    lines.push("増収増益 (本サイトの基本条件を満たす)");
+  }
+  lines.push(`業績スコア: ${m.score}点 (100点満点。減収・減益で減点)`);
+  return lines.join("\n");
 }
 
 /** 応答テキストからJSONを取り出す。コードブロック記号や前後の文があっても最初の { から最後の } までを解釈する */
@@ -212,7 +265,7 @@ export async function generateReviewForStock(code: string): Promise<StoredReview
   const t0 = Date.now();
   const { text: context, screening, news } = await buildStockContext(code);
   const tNews = Date.now();
-  const responseJsonSchema = z.toJSONSchema(ReviewSchema);
+  const responseJsonSchema = z.toJSONSchema(ReviewGenerationSchema);
 
   let response: Awaited<ReturnType<typeof ai.models.generateContent>> | null = null;
   let usedModel = MODEL_CANDIDATES[0];
@@ -258,7 +311,7 @@ export async function generateReviewForStock(code: string): Promise<StoredReview
   const rawText = response.text ?? "";
   if (!rawText.trim()) throw new Error("モデルから空の応答が返りました");
 
-  const parsed = ReviewSchema.safeParse(extractJson(rawText));
+  const parsed = ReviewGenerationSchema.safeParse(extractJson(rawText));
   let review: Review | null = null;
   if (parsed.success) {
     review = parsed.data;

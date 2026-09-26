@@ -128,6 +128,13 @@ export interface YahooFundamentals {
   returnOnEquity: number | null;
   fiscalYearEnd: string | null; // YYYY-MM-DD
   annualNetIncome: { endDate: string; netIncome: number }[];
+  // 「増収増益が基本」の判定に使う。決算短信ベースの売上・純利益
+  annualResults: { endDate: string; revenue: number | null; netIncome: number | null }[];
+  quarterlyResults: { endDate: string; revenue: number | null; netIncome: number | null }[];
+  // Yahoo算出の直近四半期の前年同期比 (小数。0.018 = +1.8%)。
+  // 四半期開示の会社は手元の4期分では前年同期が揃わないため、その場合のフォールバックに使う
+  quarterlyRevenueGrowth: number | null;
+  quarterlyEarningsGrowth: number | null;
   totalCash: number | null; // 現金及び現金同等物 (円)
   forwardDividendRate: number | null; // 会社予想ベースの今期年間配当 (円/株)
   marketCap: number | null; // 時価総額 (円)
@@ -143,7 +150,10 @@ export async function fetchFundamentals(code: string): Promise<YahooFundamentals
   const { cookie, crumb } = await getAuth();
 
   const url = new URL(`${QUOTE_SUMMARY_BASE}/${toYahooSymbol(code)}`);
-  url.searchParams.set("modules", "defaultKeyStatistics,financialData,incomeStatementHistory,summaryDetail");
+  url.searchParams.set(
+    "modules",
+    "defaultKeyStatistics,financialData,incomeStatementHistory,incomeStatementHistoryQuarterly,summaryDetail"
+  );
   url.searchParams.set("crumb", crumb);
 
   const res = await fetch(url.toString(), {
@@ -174,7 +184,10 @@ function parseFundamentals(json: unknown): YahooFundamentals | null {
   const fd = (result.financialData ?? {}) as Record<string, RawValue | undefined>;
   const sd = (result.summaryDetail ?? {}) as Record<string, RawValue | undefined>;
   const ish = (result.incomeStatementHistory ?? {}) as {
-    incomeStatementHistory?: { endDate?: RawValue & { fmt?: string }; netIncome?: RawValue }[];
+    incomeStatementHistory?: IncomeStatementRow[];
+  };
+  const ishq = (result.incomeStatementHistoryQuarterly ?? {}) as {
+    incomeStatementHistory?: IncomeStatementRow[];
   };
 
   // 無借金企業は debtToEquity が空で返ってくるため、有利子負債0を確認できる場合は0とみなす。
@@ -194,7 +207,29 @@ function parseFundamentals(json: unknown): YahooFundamentals | null {
     annualNetIncome: (ish.incomeStatementHistory ?? [])
       .map((s) => ({ endDate: s.endDate?.fmt ?? "", netIncome: s.netIncome?.raw ?? NaN }))
       .filter((s) => s.endDate && Number.isFinite(s.netIncome)),
+    annualResults: toResults(ish.incomeStatementHistory),
+    quarterlyResults: toResults(ishq.incomeStatementHistory),
+    quarterlyRevenueGrowth: fd.revenueGrowth?.raw ?? null,
+    quarterlyEarningsGrowth: fd.earningsGrowth?.raw ?? null,
   };
+}
+
+interface IncomeStatementRow {
+  endDate?: RawValue & { fmt?: string };
+  totalRevenue?: RawValue;
+  netIncome?: RawValue;
+}
+
+function toResults(
+  rows: IncomeStatementRow[] | undefined
+): { endDate: string; revenue: number | null; netIncome: number | null }[] {
+  return (rows ?? [])
+    .map((r) => ({
+      endDate: r.endDate?.fmt ?? "",
+      revenue: Number.isFinite(r.totalRevenue?.raw) ? (r.totalRevenue?.raw as number) : null,
+      netIncome: Number.isFinite(r.netIncome?.raw) ? (r.netIncome?.raw as number) : null,
+    }))
+    .filter((r) => r.endDate && (r.revenue !== null || r.netIncome !== null));
 }
 
 export interface YahooCompanyProfile {

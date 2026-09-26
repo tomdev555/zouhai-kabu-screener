@@ -23,6 +23,12 @@ export interface ScreeningCriteria {
   // --- 現金確保 ---
   cashRatioFullScore: number; // % - 現預金÷時価総額がこの値以上で満点
 
+  // --- 業績モメンタム: 「増収増益が基本」 ---
+  // 直近の決算(四半期)と通期の前年比で、減収・減益をマイナス評価する。
+  // 通期の減益はいちばん重く見る (増配の原資が細るため)。
+  minEarningsMomentumScore: number; // 0-100 - この点数を下回る(=減収減益が大きい)と足切り
+  severeAnnualProfitDropPercent: number; // % - 通期の減益がこの幅を超えたら「大きなマイナス」とみなす
+
   targetCount: number; // 最終的に選定する銘柄数
 }
 
@@ -44,6 +50,9 @@ export const DEFAULT_CRITERIA: ScreeningCriteria = {
   basePer: 15,
 
   cashRatioFullScore: 30,
+
+  minEarningsMomentumScore: 40,
+  severeAnnualProfitDropPercent: 20,
 
   targetCount: 50,
 };
@@ -88,6 +97,35 @@ export interface ValuationCheck {
   score: number; // 0-100。basePer で基準点、安いほど高得点
 }
 
+/** 1期分の業績 (売上と純利益の前年同期比) */
+export interface PeriodPerformance {
+  label: string; // 「2026年6月期(四半期)」など、人が読める期間名
+  endDate: string; // YYYY-MM-DD
+  revenue: number | null;
+  profit: number | null; // 純利益
+  revenueYoYPercent: number | null;
+  profitYoYPercent: number | null;
+  isIncreasingRevenue: boolean | null;
+  isIncreasingProfit: boolean | null;
+}
+
+/**
+ * 業績モメンタムの判定。「増収増益が基本」という方針を点数にする。
+ * 直近の決算(四半期)と通期のそれぞれで減収・減益に減点し、通期の減益をいちばん重くする。
+ */
+export interface EarningsMomentumCheck {
+  latestQuarter: PeriodPerformance | null;
+  annual: PeriodPerformance | null;
+  /** 直近決算・通期ともに増収増益か */
+  isGrowingBoth: boolean;
+  /** 通期の減益が severeAnnualProfitDropPercent を超えた (AIに原因を調べさせる対象) */
+  hasSevereAnnualDrop: boolean;
+  /** 減点の理由。UIとAIへの入力にそのまま使う */
+  negatives: string[];
+  score: number; // 0-100。増収増益で満点
+  pass: boolean;
+}
+
 export interface CashCheck {
   cash: number | null; // 現預金 (円)
   marketCap: number | null; // 時価総額 (円)
@@ -102,6 +140,7 @@ export interface RuleBreakdown {
   epsTrend: EpsTrendResult & { pass: boolean };
   valuation: ValuationCheck;
   cash: CashCheck;
+  earningsMomentum: EarningsMomentumCheck;
   yieldRange: YieldRangeResult;
   priceChangeOverHorizon: number | null; // 評価期間(既定6ヶ月)の株価騰落率 (%)。参考表示
   specialDividendYears: number[];

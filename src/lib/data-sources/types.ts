@@ -45,9 +45,31 @@ export interface FinancialYearRecord {
   marketCap?: number; // 時価総額 (円)
 }
 
+/**
+ * 決算短信ベースの四半期(会社によっては半期)業績。
+ * 「増収増益が基本」の判定で、直近決算の前年同期比を見るために使う。
+ */
+export interface QuarterlyResultRecord {
+  endDate: string; // YYYY-MM-DD (決算期末)
+  revenue?: number; // 売上高 (円)
+  profit?: number; // 純利益 (円)
+}
+
+export interface QuarterlyResults {
+  records: QuarterlyResultRecord[];
+  /**
+   * データソースが算出済みの直近決算の前年同期比 (%)。
+   * 四半期開示の会社は手元の4期分では前年同期が揃わないため、その場合に使う。
+   */
+  reportedRevenueYoYPercent?: number | null;
+  reportedProfitYoYPercent?: number | null;
+}
+
 export interface DataProvider {
   readonly name: string;
   fetchAllStockMaster(): Promise<StockMasterRecord[]>;
   fetchPriceHistory(code: string, fromDate?: string): Promise<PriceBar[]>;
   fetchFinancialHistory(code: string): Promise<FinancialYearRecord[]>;
+  /** 四半期決算。取得できないデータソースは空配列を返す */
+  fetchQuarterlyResults?(code: string): Promise<QuarterlyResults>;
 }

@@ -8,6 +8,7 @@ import { PriceChart } from "@/components/charts/price-chart";
 import { EpsDividendChart } from "@/components/charts/eps-dividend-chart";
 import { WatchButton } from "@/components/screener/watch-button";
 import { formatPercent, formatYen } from "@/lib/utils";
+import type { RuleBreakdown } from "@/lib/screening/types";
 
 /** 静的書き出しの対象: スクリーニング上位にランクインした銘柄のみ */
 export async function generateStaticParams() {
@@ -128,6 +129,11 @@ export default async function StockDetailPage({
             pass={screening.breakdown.epsTrend.pass}
             value={`${screening.breakdown.epsTrend.score.toFixed(0)}点 (CAGR ${screening.breakdown.epsTrend.cagrPercent ?? "-"}%)`}
           />
+          <RuleRow
+            label="増収増益 (直近決算と通期)"
+            pass={screening.breakdown.earningsMomentum.pass}
+            value={`${momentumLabel(screening.breakdown.earningsMomentum)} ・ ${screening.breakdown.earningsMomentum.score.toFixed(0)}点`}
+          />
           <InfoRow
             label={`PER (${criteria.basePer}倍を基準に加減点)`}
             value={`${screening.breakdown.valuation.per !== null ? `${screening.breakdown.valuation.per.toFixed(1)}倍` : "-"} ・ ${screening.breakdown.valuation.score.toFixed(0)}点`}
@@ -136,6 +142,26 @@ export default async function StockDetailPage({
             label="現金確保 (現預金 ÷ 時価総額)"
             value={`${screening.breakdown.cash.cashToMarketCap !== null ? formatPercent(screening.breakdown.cash.cashToMarketCap, 1) : "-"} ・ ${screening.breakdown.cash.score.toFixed(0)}点`}
           />
+          {(screening.breakdown.earningsMomentum.annual ||
+            screening.breakdown.earningsMomentum.latestQuarter) && (
+            <div className="sm:col-span-2 space-y-1 rounded-md border border-slate-100 px-3 py-2 text-sm dark:border-slate-800">
+              {[screening.breakdown.earningsMomentum.annual, screening.breakdown.earningsMomentum.latestQuarter]
+                .filter((p) => p !== null)
+                .map((p) => (
+                  <div key={p!.label} className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    <span className="text-slate-500 dark:text-slate-400">{p!.label}</span>
+                    <span>
+                      売上 <YoY value={p!.revenueYoYPercent} /> ・ 純利益 <YoY value={p!.profitYoYPercent} />
+                    </span>
+                  </div>
+                ))}
+              {screening.breakdown.earningsMomentum.negatives.length > 0 && (
+                <p className="text-amber-700 dark:text-amber-400">
+                  {screening.breakdown.earningsMomentum.negatives.join(" / ")}
+                </p>
+              )}
+            </div>
+          )}
           <div className="sm:col-span-2 text-sm text-slate-500 dark:text-slate-400">
             直近{criteria.evaluationHorizonMonths}ヶ月の株価騰落率:{" "}
             {screening.breakdown.priceChangeOverHorizon !== null
@@ -184,6 +210,29 @@ function InfoRow({ label, value }: { label: string; value: string }) {
       <span className="text-sm text-slate-600 dark:text-slate-300">{label}</span>
       <span className="text-sm font-medium">{value}</span>
     </div>
+  );
+}
+
+/** 増収増益の状態を短い日本語にする */
+function momentumLabel(m: RuleBreakdown["earningsMomentum"]): string {
+  if (m.isGrowingBoth) return "増収増益";
+  if (m.negatives.length === 0) return "判定材料なし";
+  const hasProfitDown = m.negatives.some((n) => n.includes("減益"));
+  const hasRevenueDown = m.negatives.some((n) => n.includes("減収"));
+  if (hasProfitDown && hasRevenueDown) return "減収減益";
+  if (hasProfitDown) return "減益";
+  return "減収";
+}
+
+/** 前年比を符号付きで色分けして表示する */
+function YoY({ value }: { value: number | null }) {
+  if (value === null) return <span className="text-slate-400">-</span>;
+  const cls = value >= 0 ? "text-emerald-700 dark:text-emerald-400" : "text-red-600 dark:text-red-400";
+  return (
+    <span className={`font-medium ${cls}`}>
+      {value >= 0 ? "+" : ""}
+      {value}%
+    </span>
   );
 }
 

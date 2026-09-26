@@ -25,6 +25,10 @@ model Stock {
   prices         PriceDaily[]
   financials     FinancialStatement[]
   dividends      DividendRecord[]
+  quarterlyResults QuarterlyResult[]
+  /// データソース算出の直近決算の前年同期比 (%)。四半期開示で前年同期が手元に無い場合のフォールバック
+  reportedRevenueYoY  Decimal?
+  reportedProfitYoY   Decimal?
   screeningRuns  ScreeningResult[]
   watchlist      WatchlistItem[]
   trades         Trade[]
@@ -80,6 +84,20 @@ model FinancialStatement {
 }
 
 // 配当履歴 (年次、1株当たり配当)
+/// 決算短信ベースの四半期(会社によっては半期)業績。「増収増益が基本」の判定に使う
+model QuarterlyResult {
+  id          Int      @id @default(autoincrement())
+  stockCode   String
+  periodEnd   DateTime // 決算期末
+  revenue     Decimal? // 売上高
+  profit      Decimal? // 純利益
+
+  stock       Stock    @relation(fields: [stockCode], references: [code], onDelete: Cascade)
+
+  @@unique([stockCode, periodEnd])
+  @@index([stockCode, periodEnd])
+}
+
 model DividendRecord {
   id                Int      @id @default(autoincrement())
   stockCode         String
@@ -114,6 +132,7 @@ model ScreeningResult {
   debtToEquity          Decimal?
   per                   Decimal?
   cashToMarketCap       Decimal? // 現預金÷時価総額 (%)
+  earningsMomentumScore Decimal? // 増収増益スコア (直近決算と通期の前年比。減収減益で減点)
   yieldRangePercentile  Decimal? // 直近3年配当利回りレンジの中での現在位置 (0-100)
   passedAllRules        Boolean  @default(false)
   compositeScore        Decimal? // 総合スコア (ランキング用)

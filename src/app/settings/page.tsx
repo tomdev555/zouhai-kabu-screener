@@ -34,6 +34,9 @@ export default async function SettingsPage() {
               <li><b>利益 (EPS) が伸びている</b></li>
               <li><b>借金が少ない</b> (有利子負債が自己資本の{((criteria?.maxDebtToEquity ?? 150) / 100).toFixed(1)}倍以下)</li>
               <li>
+                <b>増収増益が基本</b> (直近の決算や通期で大きく減収・減益になっていない)
+              </li>
+              <li>
                 <b>配当利回りが{criteria?.minDividendYield ?? 2.5}〜{criteria?.maxDividendYield ?? 6}%</b>
                 (会社の今期予想ベース。予想がない会社は直近1年の実績)
               </li>
@@ -49,6 +52,9 @@ export default async function SettingsPage() {
               </li>
               <li><b>PERは{criteria?.basePer ?? 15}倍を基準</b>に、安いほど加点</li>
               <li><b>現金を多く持っている</b>会社を加点</li>
+              <li>
+                <b>直近の決算と通期が増収増益</b>なら満点。減収・減益は減点し、とくに通期の減益は重く見ます
+              </li>
               <li>減配なしの年数が長いほど、利益の伸びが大きいほど加点</li>
             </ul>
           </div>
@@ -58,6 +64,8 @@ export default async function SettingsPage() {
             <p>
               上位の会社ごとに、直近半年のニュース・開示の見出しと財務データをAIが読んで「数字だけでは見えないリスク」をまとめています
               (証券会社の格下げ、主力商品の問題、業績の下方修正など)。
+              減収・減益になっている会社については、会社が出した説明を探して原因を突き止め、
+              それが一時的なものか構造的なものかを判定します。
               スタンス (候補として有力／条件付き／様子見／見送り) は目安です。
               AIは記事の本文までは読んでおらず、生成後に順位や状況が変わることもあります。
             </p>
@@ -116,6 +124,11 @@ export default async function SettingsPage() {
               <li>
                 特別配当判定: 前後の年の平均に対して{criteria.specialDividendSpikeRatio}倍を超えたら
                 一時的な特別配当とみなし、減配判定から除外
+              </li>
+              <li>
+                増収増益: 直近決算(短信)と通期の前年比。減収・減益で減点し、通期の減益をいちばん重く見る。
+                スコア{criteria.minEarningsMomentumScore}点未満 (通期で{criteria.severeAnnualProfitDropPercent}%を
+                大きく超える減益など) は足切り
               </li>
               <li>PER: {criteria.basePer}倍を基準に、安いほど加点・割高なほど減点 (足切りなし)</li>
               <li>現金確保: 現預金÷時価総額が{criteria.cashRatioFullScore}%以上で満点 (足切りなし)</li>

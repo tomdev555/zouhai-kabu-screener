@@ -3,12 +3,15 @@
 // 特別配当の除外・配当利回りの3年レンジ確認)をコード化したもの。
 
 import type { FinancialYearRecord, PriceBar } from "../data-sources/types";
+import type { QuarterlyResultRecord } from "../data-sources/types";
 import type {
   CashCheck,
   DividendCutResult,
   DividendYieldCheck,
+  EarningsMomentumCheck,
   EpsTrendResult,
   FinancialHealthCheck,
+  PeriodPerformance,
   ScreeningCriteria,
   ValuationCheck,
   YieldRangeResult,
@@ -242,12 +245,186 @@ export function evaluateCash(
   };
 }
 
+/** 前年同期比 (%) 。前年の値が0以下だと比率が意味を持たないためnullにする */
+function yoyPercent(current: number | null, previous: number | null): number | null {
+  if (current === null || previous === null || previous <= 0) return null;
+  return round2(((current - previous) / previous) * 100);
+}
+
+function toPerformance(
+  label: string,
+  endDate: string,
+  current: { revenue: number | null; profit: number | null },
+  previous: { revenue: number | null; profit: number | null } | null
+): PeriodPerformance {
+  const revenueYoYPercent = previous ? yoyPercent(current.revenue, previous.revenue) : null;
+  const profitYoYPercent = previous ? yoyPercent(current.profit, previous.profit) : null;
+  return {
+    label,
+    endDate,
+    revenue: current.revenue,
+    profit: current.profit,
+    revenueYoYPercent,
+    profitYoYPercent,
+    isIncreasingRevenue: revenueYoYPercent === null ? null : revenueYoYPercent >= 0,
+    isIncreasingProfit: profitYoYPercent === null ? null : profitYoYPercent >= 0,
+  };
+}
+
+/** 自前で前年同期比を出せなかった項目だけ、データソース算出値で埋める */
+function withReportedFallback(
+  p: PeriodPerformance,
+  reported?: { revenueYoYPercent?: number | null; profitYoYPercent?: number | null }
+): PeriodPerformance {
+  if (!reported) return p;
+  const revenueYoYPercent = p.revenueYoYPercent ?? reported.revenueYoYPercent ?? null;
+  const profitYoYPercent = p.profitYoYPercent ?? reported.profitYoYPercent ?? null;
+  return {
+    ...p,
+    revenueYoYPercent,
+    profitYoYPercent,
+    isIncreasingRevenue: revenueYoYPercent === null ? null : revenueYoYPercent >= 0,
+    isIncreasingProfit: profitYoYPercent === null ? null : profitYoYPercent >= 0,
+  };
+}
+
+/** 同じ決算期(月)の1年前のレコードを探す。四半期・半期どちらの開示サイクルでも当たるよう±45日の幅を持たせる */
+function findYearAgo(
+  records: QuarterlyResultRecord[],
+  target: QuarterlyResultRecord
+): QuarterlyResultRecord | null {
+  const targetTime = new Date(target.endDate).getTime();
+  if (!Number.isFinite(targetTime)) return null;
+  const oneYearAgo = targetTime - 365 * 24 * 3600 * 1000;
+  const tolerance = 45 * 24 * 3600 * 1000;
+
+  let best: QuarterlyResultRecord | null = null;
+  let bestGap = Infinity;
+  for (const r of records) {
+    const t = new Date(r.endDate).getTime();
+    if (!Number.isFinite(t)) continue;
+    const gap = Math.abs(t - oneYearAgo);
+    if (gap <= tolerance && gap < bestGap) {
+      best = r;
+      bestGap = gap;
+    }
+  }
+  return best;
+}
+
+function quarterLabel(endDate: string): string {
+  const d = new Date(endDate);
+  if (!Number.isFinite(d.getTime())) return "直近決算";
+  return `${d.getUTCFullYear()}年${d.getUTCMonth() + 1}月期`;
+}
+
+/**
+ * 「増収増益が基本」という方針を点数にする。
+ * - 直近の決算(短信)が減収・減益ならマイナス
+ * - 通期が減収・減益ならさらに大きなマイナス (増配の原資に直結するため)
+ * 減益幅が大きいほど減点も大きくなる。
+ */
+export function evaluateEarningsMomentum(
+  quarterlyResults: QuarterlyResultRecord[],
+  annualSeries: { fiscalYear: number; endDate: string; revenue: number | null; profit: number | null }[],
+  criteria: ScreeningCriteria,
+  /**
+   * データソースが算出済みの直近決算の前年同期比 (%)。
+   * 四半期開示の会社はYahooの4期分では前年同期が揃わないため、そのときだけ使う。
+   */
+  reported?: { revenueYoYPercent?: number | null; profitYoYPercent?: number | null }
+): EarningsMomentumCheck {
+  // --- 直近の決算(四半期または半期) ---
+  const sortedQuarters = [...quarterlyResults].sort((a, b) => a.endDate.localeCompare(b.endDate));
+  const latestRaw = sortedQuarters[sortedQuarters.length - 1] ?? null;
+  const quarterAgo = latestRaw ? findYearAgo(sortedQuarters.slice(0, -1), latestRaw) : null;
+  const latestQuarter = latestRaw
+    ? withReportedFallback(
+        toPerformance(
+          `${quarterLabel(latestRaw.endDate)}(直近決算)`,
+          latestRaw.endDate,
+          { revenue: latestRaw.revenue ?? null, profit: latestRaw.profit ?? null },
+          quarterAgo ? { revenue: quarterAgo.revenue ?? null, profit: quarterAgo.profit ?? null } : null
+        ),
+        reported
+      )
+    : null;
+
+  // --- 通期 ---
+  const sortedAnnual = [...annualSeries].sort((a, b) => a.fiscalYear - b.fiscalYear);
+  const latestAnnual = sortedAnnual[sortedAnnual.length - 1] ?? null;
+  const priorAnnual = sortedAnnual[sortedAnnual.length - 2] ?? null;
+  const annual = latestAnnual
+    ? toPerformance(
+        `${latestAnnual.fiscalYear}年度(通期)`,
+        latestAnnual.endDate,
+        { revenue: latestAnnual.revenue, profit: latestAnnual.profit },
+        priorAnnual ? { revenue: priorAnnual.revenue, profit: priorAnnual.profit } : null
+      )
+    : null;
+
+  // --- 減点 ---
+  const negatives: string[] = [];
+  let penalty = 0;
+
+  const annualProfitYoY = annual?.profitYoYPercent ?? null;
+  const annualRevenueYoY = annual?.revenueYoYPercent ?? null;
+  const quarterProfitYoY = latestQuarter?.profitYoYPercent ?? null;
+  const quarterRevenueYoY = latestQuarter?.revenueYoYPercent ?? null;
+
+  if (annualProfitYoY !== null && annualProfitYoY < 0) {
+    const drop = Math.abs(annualProfitYoY);
+    penalty += clamp(10 + drop * 1.2, 0, 45);
+    negatives.push(`通期が減益 (前年比 ${annualProfitYoY}%)`);
+  }
+  if (annualRevenueYoY !== null && annualRevenueYoY < 0) {
+    const drop = Math.abs(annualRevenueYoY);
+    penalty += clamp(5 + drop * 0.8, 0, 20);
+    negatives.push(`通期が減収 (前年比 ${annualRevenueYoY}%)`);
+  }
+  if (quarterProfitYoY !== null && quarterProfitYoY < 0) {
+    const drop = Math.abs(quarterProfitYoY);
+    penalty += clamp(5 + drop * 0.4, 0, 20);
+    negatives.push(`直近決算が減益 (前年同期比 ${quarterProfitYoY}%)`);
+  }
+  if (quarterRevenueYoY !== null && quarterRevenueYoY < 0) {
+    const drop = Math.abs(quarterRevenueYoY);
+    penalty += clamp(4 + drop * 0.6, 0, 15);
+    negatives.push(`直近決算が減収 (前年同期比 ${quarterRevenueYoY}%)`);
+  }
+
+  // 前年比がまったく取れない場合は判断材料がないため、満点にも0点にもせず中立の60点に置く
+  const hasAnyComparison =
+    annualProfitYoY !== null || annualRevenueYoY !== null || quarterProfitYoY !== null || quarterRevenueYoY !== null;
+  const score = hasAnyComparison ? round2(clamp(100 - penalty, 0, 100)) : 60;
+
+  const isGrowingBoth =
+    hasAnyComparison &&
+    negatives.length === 0 &&
+    (annual?.isIncreasingRevenue ?? true) &&
+    (annual?.isIncreasingProfit ?? true);
+
+  const hasSevereAnnualDrop =
+    annualProfitYoY !== null && annualProfitYoY <= -criteria.severeAnnualProfitDropPercent;
+
+  return {
+    latestQuarter,
+    annual,
+    isGrowingBoth,
+    hasSevereAnnualDrop,
+    negatives,
+    score,
+    pass: score >= criteria.minEarningsMomentumScore,
+  };
+}
+
 export function passesCriteria(
   values: {
     dividendYieldPass: boolean;
     cutFreeYears: number;
     financialHealthPass: boolean;
     epsScore: number;
+    earningsMomentumScore: number;
   },
   criteria: ScreeningCriteria
 ): boolean {
@@ -255,6 +432,7 @@ export function passesCriteria(
   if (values.cutFreeYears < criteria.minDividendCutFreeYears) return false;
   if (!values.financialHealthPass) return false;
   if (values.epsScore < criteria.minEpsTrendScore) return false;
+  if (values.earningsMomentumScore < criteria.minEarningsMomentumScore) return false;
   return true;
 }
 
@@ -265,20 +443,23 @@ export function compositeScore(values: {
   epsScore: number;
   valuation: ValuationCheck;
   cash: CashCheck;
+  earningsMomentum: EarningsMomentumCheck;
   yieldPercentile: number | null;
 }): number {
   const cutScore = clamp((values.cutFreeYears / 15) * 100, 0, 100);
   const healthScore = financialHealthScore(values.financialHealth);
   const rangeScore = values.yieldPercentile ?? 50;
 
-  // 重み付け: 減配なし年数・EPS成長性を軸に、利回り(4%目標)・PER(15倍基準)・現金確保を加える
+  // 重み付け: 減配なし年数・EPS成長性を軸に、増収増益(業績モメンタム)・利回り(4%目標)・
+  // PER(15倍基準)・現金確保を加える
   return round2(
-    values.epsScore * 0.2 +
-      cutScore * 0.25 +
-      healthScore * 0.15 +
+    cutScore * 0.2 +
+      values.epsScore * 0.15 +
+      values.earningsMomentum.score * 0.15 +
       values.dividendYield.score * 0.15 +
+      healthScore * 0.12 +
       values.valuation.score * 0.1 +
-      values.cash.score * 0.1 +
+      values.cash.score * 0.08 +
       rangeScore * 0.05
   );
 }
